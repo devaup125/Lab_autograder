@@ -1,0 +1,22 @@
+{% extends "base_admin.html" %}
+{% block content %}
+
+<h3>Add New Problem</h3>
+
+<form method="post" action="/admin/add_problem" onsubmit="return validateProblem()">
+
+    <input type="text" id="title" name="title" placeholder="Problem Title" required>
+
+    <textarea id="description" name="description" rows="6" placeholder="Problem Description" required></textarea>
+
+    <select name="language" required>
+        <option value="">Select Language</option>
+        <option value="python">Python</option>
+        <option value="c">C</option>
+        <option value="cpp">C++</option>
+    </select>
+
+    <button type="submit">Save Problem</button>
+</form>
+
+{% endblock %}

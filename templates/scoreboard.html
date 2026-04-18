@@ -1,0 +1,24 @@
+{% extends "base_student.html" %}
+{% block content %}
+
+<h3>Leaderboard</h3>
+
+<table>
+    <tr>
+        <th>Rank</th>
+        <th>Username</th>
+        <th>Total Score</th>
+        <th>Attempts</th>
+    </tr>
+
+    {% for s in scores %}
+    <tr>
+        <td>{{loop.index}}</td>
+        <td>{{s.username}}</td>
+        <td>{{s.total_score or 0}}</td>
+        <td>{{s.attempts}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

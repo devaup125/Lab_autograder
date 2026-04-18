@@ -1,0 +1,25 @@
+{% extends "base_admin.html" %}
+{% block content %}
+
+<h3>Existing Problems</h3>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Title</th>
+<th>Language</th>
+<th>Action</th>
+</tr>
+
+{% for p in problems %}
+<tr>
+<td>{{p.id}}</td>
+<td>{{p.title}}</td>
+<td>{{p.language}}</td>
+<td><a href="/admin/add_testcase/{{p.id}}">Add Testcase</a></td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

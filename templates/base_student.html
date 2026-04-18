@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Programming Lab</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/script.js"></script>
+</head>
+<body>
+
+<header>
+    <h2>Programming Lab</h2>
+    <nav>
+        <a href="/problems">Problems</a>
+        <a href="/scoreboard">Scoreboard</a>
+        <a href="/history">History</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

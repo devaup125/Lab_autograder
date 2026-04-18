@@ -1,0 +1,24 @@
+{% extends "base_student.html" %}
+{% block content %}
+
+<h3>Your Submission History</h3>
+
+<table>
+    <tr>
+        <th>Problem</th>
+        <th>Score</th>
+        <th>Penalty</th>
+        <th>Date</th>
+    </tr>
+
+    {% for sub in subs %}
+    <tr>
+        <td>{{sub.title}}</td>
+        <td>{{sub.score}}</td>
+        <td>{{sub.penalty}}</td>
+        <td>{{sub.timestamp}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

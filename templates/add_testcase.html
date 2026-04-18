@@ -1,0 +1,15 @@
+{% extends "base_admin.html" %}
+{% block content %}
+
+<h3>Add Test Case</h3>
+
+<form method="post" action="/admin/add_testcase/{{pid}}" onsubmit="return validateTestcase()">
+
+    <textarea id="input" name="input" rows="4" placeholder="Input" required></textarea>
+
+    <textarea id="expected_output" name="expected_output" rows="4" placeholder="Expected Output" required></textarea>
+
+    <button type="submit">Save Test Case</button>
+</form>
+
+{% endblock %}
