@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, session, jsonify
-import sqlite3, subprocess, bcrypt, time
+import sqlite3, subprocess, bcrypt, time, os
 
 app = Flask(__name__)
 app.secret_key = "secret"
@@ -9,6 +9,53 @@ def get_db():
     conn = sqlite3.connect("lab.db")
     conn.row_factory = sqlite3.Row
     return conn
+
+
+# ---------------- DOCKER EXECUTION ----------------
+def run_code_docker(code, language, input_data=""):
+
+    if language == "python":
+        filename = "script.py"
+        image = "python:3.10"
+        run_cmd = ["python", filename]
+
+    elif language == "c":
+        filename = "main.c"
+        image = "gcc:latest"
+        run_cmd = ["bash", "-c", "gcc main.c -o main && ./main"]
+
+    elif language == "cpp":
+        filename = "main.cpp"
+        image = "gcc:latest"
+        run_cmd = ["bash", "-c", "g++ main.cpp -o main && ./main"]
+
+    else:
+        return "", "Unsupported language"
+
+    # Save code file
+    with open(filename, "w") as f:
+        f.write(code)
+
+    try:
+        result = subprocess.run(
+            [
+                "docker", "run", "--rm",
+                "-v", f"{os.getcwd()}:/app",
+                "-w", "/app",
+                "--memory=100m",
+                "--cpus=0.5",
+                image
+            ] + run_cmd,
+            input=input_data,
+            text=True,
+            capture_output=True,
+            timeout=5
+        )
+
+        return result.stdout.strip(), result.stderr.strip()
+
+    except subprocess.TimeoutExpired:
+        return "", "Time Limit Exceeded"
 
 
 # ---------------- LOGIN ----------------
@@ -24,7 +71,7 @@ def login():
         if user and bcrypt.checkpw(p.encode(), user['password_hash']):
             session['uid'] = user['id']
             session['username'] = user['username']
-            session['role'] = user['role']   # 🔥 IMPORTANT
+            session['role'] = user['role']
 
             if user['role'] == 'admin':
                 return redirect('/admin')
@@ -43,7 +90,6 @@ def register():
 
         conn = get_db()
 
-        # 🔥 CHECK IF USER EXISTS
         existing = conn.execute(
             "SELECT * FROM students WHERE username=?", (u,)
         ).fetchone()
@@ -51,7 +97,6 @@ def register():
         if existing:
             return render_template("register.html", error="Username already exists ❌")
 
-        # INSERT NEW USER
         conn.execute(
             "INSERT INTO students(username,password_hash,role) VALUES(?,?,?)",
             (u, p, 'student')
@@ -63,7 +108,7 @@ def register():
     return render_template('register.html')
 
 
-# ---------------- ADMIN DASHBOARD ----------------
+# ---------------- ADMIN ----------------
 @app.route('/admin')
 def admin():
     if session.get('role') != 'admin':
@@ -77,7 +122,6 @@ def admin():
         SELECT s.username,
                COUNT(sub.id) as attempts,
                SUM(sub.score) as total_score,
-               SUM(sub.penalty) as total_penalty,
                MAX(sub.timestamp) as last_submission
         FROM students s
         LEFT JOIN submissions sub ON s.id=sub.student_id
@@ -85,13 +129,13 @@ def admin():
         ORDER BY total_score DESC
     """).fetchall()
 
-    # 🔥 FIX: use proper template
     return render_template("base_admin.html",
                            problems=problems,
                            scores=scores)
+
+
 @app.route('/admin/add_problem', methods=['GET','POST'])
 def add_problem():
-
     if session.get('role') != 'admin':
         return redirect('/')
 
@@ -108,9 +152,10 @@ def add_problem():
         )
         conn.commit()
 
-        return redirect('/admin')   # go back to dashboard
+        return redirect('/admin')
 
     return render_template('add_problem.html')
+
 
 # ---------------- PROBLEMS ----------------
 @app.route('/problems')
@@ -127,7 +172,7 @@ def problem(pid):
     return render_template('problem.html', problem=p)
 
 
-# ---------------- SUBMIT ----------------
+# ---------------- SUBMIT (DOCKER) ----------------
 @app.route('/submit/<int:pid>', methods=['POST'])
 def submit(pid):
 
@@ -143,52 +188,16 @@ def submit(pid):
     total = len(testcases)
 
     for t in testcases:
+        output, error = run_code_docker(code, lang, t["input"])
 
-        try:
-            if lang == "python":
-                result = subprocess.run(
-                    ["python", "-c", code],
-                    input=t["input"],
-                    text=True,
-                    capture_output=True,
-                    timeout=3
-                )
+        if error:
+            return jsonify({"error": error})
 
-            elif lang == "c":
-                with open("temp.c", "w") as f:
-                    f.write(code)
-
-                subprocess.run(["gcc", "temp.c", "-o", "temp"])
-                result = subprocess.run(
-                    ["./temp"],
-                    input=t["input"],
-                    text=True,
-                    capture_output=True
-                )
-
-            elif lang == "cpp":
-                with open("temp.cpp", "w") as f:
-                    f.write(code)
-
-                subprocess.run(["g++", "temp.cpp", "-o", "temp"])
-                result = subprocess.run(
-                    ["./temp"],
-                    input=t["input"],
-                    text=True,
-                    capture_output=True
-                )
-
-            output = result.stdout.strip()
-
-            if output == t["output"].strip():
-                passed += 1
-
-        except:
-            return jsonify({"error": "Execution failed"})
+        if output.strip() == t["output"].strip():
+            passed += 1
 
     score = int((passed / total) * 10)
 
-    # SAVE
     conn.execute("""
         INSERT INTO submissions(student_id,problem_id,code,language,score,penalty)
         VALUES(?,?,?,?,?,?)
@@ -201,6 +210,7 @@ def submit(pid):
         "score": score
     })
 
+
 # ---------------- SCOREBOARD ----------------
 @app.route('/scoreboard')
 def scoreboard():
@@ -210,7 +220,6 @@ def scoreboard():
         SELECT s.username,
                COUNT(sub.id) as attempts,
                SUM(sub.score) as total_score,
-               SUM(sub.penalty) as total_penalty,
                MAX(sub.timestamp) as last_submission
         FROM students s
         LEFT JOIN submissions sub ON s.id=sub.student_id
@@ -230,7 +239,7 @@ def history():
     conn = get_db()
 
     data = conn.execute("""
-        SELECT p.title, sub.score, sub.penalty, sub.timestamp
+        SELECT p.title, sub.score, sub.timestamp
         FROM submissions sub
         JOIN problems p ON p.id = sub.problem_id
         WHERE sub.student_id=?
