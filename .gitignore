@@ -4,5 +4,3 @@ __pycache__/
 .env
 .vscode/
 node_modules/
-*.sqlite3
-*.db
