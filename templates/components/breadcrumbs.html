@@ -1,0 +1,62 @@
+<!-- ================= BREADCRUMB COMPONENT ================= -->
+
+<nav aria-label="breadcrumb" class="mb-4">
+
+    <ol class="breadcrumb bg-white shadow-sm rounded-3 px-3 py-2">
+
+        <!-- Home -->
+
+        <li class="breadcrumb-item">
+
+            <a href="{{ url_for('home') }}"
+               class="text-decoration-none">
+
+                <i class="fas fa-home"></i>
+
+                Home
+
+            </a>
+
+        </li>
+
+        <!-- Parent Page -->
+
+        {% if parent %}
+
+        <li class="breadcrumb-item">
+
+            {% if parent_url %}
+
+            <a href="{{ parent_url }}"
+               class="text-decoration-none">
+
+                {{ parent }}
+
+            </a>
+
+            {% else %}
+
+            {{ parent }}
+
+            {% endif %}
+
+        </li>
+
+        {% endif %}
+
+        <!-- Current Page -->
+
+        {% if current %}
+
+        <li class="breadcrumb-item active"
+            aria-current="page">
+
+            {{ current }}
+
+        </li>
+
+        {% endif %}
+
+    </ol>
+
+</nav>

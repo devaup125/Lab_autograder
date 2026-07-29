@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Student Registration | Lab Auto Grader</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/auth.css') }}">
+
+</head>
+
+<body>
+
+<div class="container py-5">
+
+<div class="row justify-content-center">
+
+<div class="col-lg-10">
+
+<div class="card shadow-lg border-0 rounded-4">
+
+<div class="card-body p-5">
+
+<!-- Header -->
+
+<div class="text-center mb-5">
+
+<i class="fas fa-user-graduate fa-5x text-primary mb-3"></i>
+
+<h2 class="fw-bold">
+
+Student Registration
+
+</h2>
+
+<p class="text-muted">
+
+Create your Programming Lab Account
+
+</p>
+
+</div>
+
+<!-- Flash Messages -->
+
+{% with messages=get_flashed_messages(with_categories=true) %}
+
+{% if messages %}
+
+{% for category,message in messages %}
+
+<div class="alert alert-{{category}} alert-dismissible fade show">
+
+{{message}}
+
+<button
+class="btn-close"
+data-bs-dismiss="alert">
+
+</button>
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+{% endwith %}
+
+<form
+method="POST"
+action="{{ url_for('auth.register_student') }}"
+enctype="multipart/form-data">
+
+<!-- ================= PERSONAL INFORMATION ================= -->
+
+<h4 class="mb-4">
+
+<i class="fas fa-user text-primary"></i>
+
+Personal Information
+
+</h4>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Full Name
+
+</label>
+
+<input
+
+type="text"
+
+name="name"
+
+class="form-control"
+
+placeholder="Enter Full Name"
+
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Roll Number
+
+</label>
+
+<input
+
+type="text"
+
+name="roll_number"
+
+class="form-control"
+
+placeholder="e.g. CSE23045"
+
+required>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Email Address
+
+</label>
+
+<input
+
+type="email"
+
+name="email"
+
+class="form-control"
+
+placeholder="example@email.com"
+
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Phone Number
+
+</label>
+
+<input
+
+type="tel"
+
+name="phone"
+
+class="form-control"
+
+placeholder="10 Digit Mobile Number"
+
+required>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Gender
+
+</label>
+
+<select
+name="gender"
+class="form-select"
+required>
+
+<option value="">Select Gender</option>
+
+<option>Male</option>
+
+<option>Female</option>
+
+<option>Other</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Date of Birth
+
+</label>
+
+<input
+
+type="date"
+
+name="dob"
+
+class="form-control"
+
+required>
+
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<label class="form-label">
+
+Upload Profile Photo
+
+</label>
+
+<input
+
+type="file"
+
+name="photo"
+
+class="form-control"
+
+accept="image/*">
+
+</div>
+
+<hr class="my-4">
+
+<!-- ================= ACADEMIC INFORMATION ================= -->
+
+<h4 class="mb-4">
+
+<i class="fas fa-graduation-cap text-success"></i>
+
+Academic Information
+
+</h4>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+College Name
+
+</label>
+
+<input
+
+type="text"
+
+name="college"
+
+class="form-control"
+
+placeholder="College Name"
+
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+University
+
+</label>
+
+<input
+
+type="text"
+
+name="university"
+
+class="form-control"
+
+placeholder="University Name"
+
+required>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Branch
+
+</label>
+
+<select
+name="branch"
+class="form-select"
+required>
+
+<option value="">Select Branch</option>
+
+<option>CSE</option>
+
+<option>IT</option>
+
+<option>ECE</option>
+
+<option>EE</option>
+
+<option>ME</option>
+
+<option>CE</option>
+
+</select>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Semester
+
+</label>
+
+<select
+name="semester"
+class="form-select"
+required>
+
+<option value="">Semester</option>
+
+{% for i in range(1,9) %}
+
+<option>{{i}}</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Section
+
+</label>
+
+<input
+
+type="text"
+
+name="section"
+
+class="form-control"
+
+placeholder="A">
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Enrollment Number
+
+</label>
+
+<input
+
+type="text"
+
+name="enrollment"
+
+class="form-control"
+
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Batch
+
+</label>
+
+<input
+
+type="text"
+
+name="batch"
+
+class="form-control"
+
+placeholder="2024-2028"
+
+required>
+
+</div>
+
+</div>
+
+<hr class="my-4">
+<!-- ================= ACCOUNT INFORMATION ================= -->
+
+<h4 class="mb-4">
+
+<i class="fas fa-user-lock text-primary"></i>
+
+Account Information
+
+</h4>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Username
+
+</label>
+
+<input
+type="text"
+name="username"
+class="form-control"
+placeholder="Choose Username"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Student ID
+
+</label>
+
+<input
+type="text"
+name="student_id"
+class="form-control"
+placeholder="Auto / Manual ID">
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Password
+
+</label>
+
+<div class="input-group">
+
+<input
+type="password"
+id="password"
+name="password"
+class="form-control"
+placeholder="Create Password"
+required>
+
+<button
+type="button"
+class="btn btn-outline-secondary"
+onclick="togglePassword('password','eye1')">
+
+<i id="eye1" class="fas fa-eye"></i>
+
+</button>
+
+</div>
+
+<div class="progress mt-2" style="height:8px;">
+
+<div
+id="passwordStrength"
+class="progress-bar"
+style="width:0%">
+
+</div>
+
+</div>
+
+<small id="strengthText" class="text-muted">
+
+Password Strength
+
+</small>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Confirm Password
+
+</label>
+
+<div class="input-group">
+
+<input
+type="password"
+id="confirm_password"
+name="confirm_password"
+class="form-control"
+placeholder="Confirm Password"
+required>
+
+<button
+type="button"
+class="btn btn-outline-secondary"
+onclick="togglePassword('confirm_password','eye2')">
+
+<i id="eye2" class="fas fa-eye"></i>
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TERMS ================= -->
+
+<div class="form-check mb-4">
+
+<input
+class="form-check-input"
+type="checkbox"
+id="terms"
+required>
+
+<label
+class="form-check-label"
+for="terms">
+
+I agree to the
+
+<a href="#">
+
+Terms & Conditions
+
+</a>
+
+and
+
+<a href="#">
+
+Privacy Policy
+
+</a>
+
+</label>
+
+</div>
+
+<!-- ================= BUTTONS ================= -->
+
+<div class="d-grid">
+
+<button
+type="submit"
+class="btn btn-primary btn-lg">
+
+<i class="fas fa-user-plus"></i>
+
+Create Student Account
+
+</button>
+
+</div>
+
+<div class="text-center mt-4">
+
+<p>
+
+Already have an account?
+
+<a href="{{ url_for('auth.student_login') }}">
+
+Login Here
+
+</a>
+
+</p>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="text-center mt-4">
+
+<small class="text-muted">
+
+© 2026 Programming Lab Auto Grader System
+
+<br>
+
+Developed by
+
+<strong>Devanshu Ranjan Upadhyay</strong>
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Bootstrap -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ================= PASSWORD TOGGLE ================= -->
+
+<script>
+
+function togglePassword(id, eye){
+
+const input=document.getElementById(id);
+
+const icon=document.getElementById(eye);
+
+if(input.type==="password"){
+
+input.type="text";
+
+icon.classList.replace("fa-eye","fa-eye-slash");
+
+}else{
+
+input.type="password";
+
+icon.classList.replace("fa-eye-slash","fa-eye");
+
+}
+
+}
+
+</script>
+
+<!-- ================= PASSWORD STRENGTH ================= -->
+
+<script>
+
+const password=document.getElementById("password");
+
+const bar=document.getElementById("passwordStrength");
+
+const text=document.getElementById("strengthText");
+
+password.addEventListener("keyup",function(){
+
+let value=password.value;
+
+let strength=0;
+
+if(value.length>=8) strength+=25;
+
+if(/[A-Z]/.test(value)) strength+=25;
+
+if(/[0-9]/.test(value)) strength+=25;
+
+if(/[^A-Za-z0-9]/.test(value)) strength+=25;
+
+bar.style.width=strength+"%";
+
+if(strength<=25){
+
+bar.className="progress-bar bg-danger";
+
+text.innerHTML="Weak Password";
+
+}
+
+else if(strength<=50){
+
+bar.className="progress-bar bg-warning";
+
+text.innerHTML="Medium Password";
+
+}
+
+else if(strength<=75){
+
+bar.className="progress-bar bg-info";
+
+text.innerHTML="Good Password";
+
+}
+
+else{
+
+bar.className="progress-bar bg-success";
+
+text.innerHTML="Strong Password";
+
+}
+
+});
+
+</script>
+
+<!-- ================= FORM VALIDATION ================= -->
+
+<script>
+
+document.querySelector("form").addEventListener("submit",function(e){
+
+const pass=document.getElementById("password").value;
+
+const confirm=document.getElementById("confirm_password").value;
+
+if(pass!==confirm){
+
+e.preventDefault();
+
+alert("Passwords do not match.");
+
+}
+
+});
+
+</script>
+
+</body>
+
+</html>

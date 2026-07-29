@@ -1,0 +1,4448 @@
+{% extends "teacher/base_teacher.html" %}
+
+{% block title %}
+Add Problem
+{% endblock %}
+
+{% block page_title %}
+Add New Programming Problem
+{% endblock %}
+
+{% block breadcrumb %}
+
+<li class="breadcrumb-item">
+    <a href="{{ url_for('teacher.dashboard') }}">
+        Dashboard
+    </a>
+</li>
+
+<li class="breadcrumb-item">
+    <a href="{{ url_for('teacher.problems') }}">
+        Problems
+    </a>
+</li>
+
+<li class="breadcrumb-item active">
+    Add Problem
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+<form
+id="problemForm"
+method="POST"
+enctype="multipart/form-data">
+
+<!-- ================= HEADER ================= -->
+
+<div class="card border-0 shadow mb-4">
+
+<div class="card-body">
+
+<div class="row align-items-center">
+
+<div class="col-lg-8">
+
+<h2 class="fw-bold">
+
+<i class="fas fa-plus-circle text-primary me-2"></i>
+
+Create New Programming Problem
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Create coding challenges with descriptions,
+constraints, test cases, and execution settings.
+
+</p>
+
+</div>
+
+<div class="col-lg-4 text-end">
+
+<button
+type="submit"
+class="btn btn-success me-2"
+id="publishBtn">
+
+<i class="fas fa-upload me-2"></i>
+
+Publish
+
+</button>
+
+<button
+type="button"
+class="btn btn-outline-primary"
+id="saveDraftBtn">
+
+<i class="fas fa-save me-2"></i>
+
+Save Draft
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= BASIC INFORMATION ================= -->
+
+<div class="row">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-info-circle me-2"></i>
+
+Basic Information
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Problem Title
+<span class="text-danger">*</span>
+
+</label>
+
+<input
+
+type="text"
+
+name="title"
+
+class="form-control"
+
+placeholder="Example: Two Sum"
+
+required>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Short Description
+
+</label>
+
+<textarea
+
+name="short_description"
+
+class="form-control"
+
+rows="3"
+
+placeholder="Write a brief summary of the programming problem...">
+
+</textarea>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Difficulty
+
+</label>
+
+<select
+
+name="difficulty"
+
+class="form-select">
+
+<option value="Easy">
+
+Easy
+
+</option>
+
+<option value="Medium" selected>
+
+Medium
+
+</option>
+
+<option value="Hard">
+
+Hard
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="col-md-6">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Category
+
+</label>
+
+<select
+
+name="category"
+
+class="form-select">
+
+<option>
+
+Arrays
+
+</option>
+
+<option>
+
+Strings
+
+</option>
+
+<option>
+
+Linked List
+
+</option>
+
+<option>
+
+Stack
+
+</option>
+
+<option>
+
+Queue
+
+</option>
+
+<option>
+
+Tree
+
+</option>
+
+<option>
+
+Graph
+
+</option>
+
+<option>
+
+Dynamic Programming
+
+</option>
+
+<option>
+
+Greedy
+
+</option>
+
+<option>
+
+Backtracking
+
+</option>
+
+<option>
+
+Sorting
+
+</option>
+
+<option>
+
+Searching
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Tags
+
+</label>
+
+<input
+
+type="text"
+
+name="tags"
+
+class="form-control"
+
+placeholder="arrays, hashing, two-pointers">
+
+<div class="form-text">
+
+Separate tags using commas.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK SUMMARY ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-bar me-2"></i>
+
+Problem Summary
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>Status</span>
+
+<span class="badge bg-warning text-dark">
+
+Draft
+
+</span>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>Difficulty</span>
+
+<span id="difficultyPreview">
+
+Medium
+
+</span>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>Category</span>
+
+<span id="categoryPreview">
+
+Arrays
+
+</span>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>Estimated Time</span>
+
+<span>
+
+20 Minutes
+
+</span>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="progress">
+
+<div
+class="progress-bar bg-success"
+style="width:15%;">
+
+15%
+
+</div>
+
+</div>
+
+<small class="text-muted">
+
+Problem completion progress
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= PROBLEM STATEMENT ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-file-alt me-2"></i>
+
+Problem Statement
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-4">
+
+<label class="form-label">
+
+Full Problem Description
+<span class="text-danger">*</span>
+
+</label>
+
+<textarea
+
+name="description"
+
+id="problemDescription"
+
+class="form-control"
+
+rows="15"
+
+placeholder="Write the complete programming problem statement here..."
+
+required></textarea>
+
+<div class="form-text">
+
+Supports HTML/Markdown if enabled in your backend.
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Hints (Optional)
+
+</label>
+
+<textarea
+
+name="hints"
+
+class="form-control"
+
+rows="4"
+
+placeholder="Provide hints that students can view if enabled...">
+
+</textarea>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Editorial / Solution Notes (Teacher Only)
+
+</label>
+
+<textarea
+
+name="editorial"
+
+class="form-control"
+
+rows="5"
+
+placeholder="Internal explanation or expected solution...">
+
+</textarea>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= EXECUTION SETTINGS ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-cogs me-2"></i>
+
+Execution Settings
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Time Limit (Seconds)
+
+</label>
+
+<input
+
+type="number"
+
+class="form-control"
+
+name="time_limit"
+
+value="1"
+
+min="1"
+
+max="10">
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Memory Limit (MB)
+
+</label>
+
+<input
+
+type="number"
+
+class="form-control"
+
+name="memory_limit"
+
+value="256"
+
+min="32"
+
+max="2048">
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Maximum Score
+
+</label>
+
+<input
+
+type="number"
+
+class="form-control"
+
+name="max_score"
+
+value="100"
+
+min="1">
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Allowed Attempts
+
+</label>
+
+<select
+
+class="form-select"
+
+name="attempt_limit">
+
+<option value="-1">
+
+Unlimited
+
+</option>
+
+<option value="1">
+
+1 Attempt
+
+</option>
+
+<option value="3">
+
+3 Attempts
+
+</option>
+
+<option value="5">
+
+5 Attempts
+
+</option>
+
+<option value="10">
+
+10 Attempts
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= VISIBILITY SETTINGS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-eye me-2"></i>
+
+Visibility
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="form-check form-switch mb-3">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+id="isPublished"
+
+name="is_published"
+
+checked>
+
+<label class="form-check-label" for="isPublished">
+
+Publish Immediately
+
+</label>
+
+</div>
+
+<div class="form-check form-switch mb-3">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+id="showLeaderboard"
+
+checked>
+
+<label class="form-check-label" for="showLeaderboard">
+
+Show on Leaderboard
+
+</label>
+
+</div>
+
+<div class="form-check form-switch mb-3">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+id="allowDiscussion"
+
+checked>
+
+<label class="form-check-label" for="allowDiscussion">
+
+Allow Student Discussion
+
+</label>
+
+</div>
+
+<div class="form-check form-switch">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+id="showHints">
+
+<label class="form-check-label" for="showHints">
+
+Allow Students to View Hints
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= LIVE SUMMARY ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-info-circle me-2"></i>
+
+Problem Preview
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th width="45%">
+
+Difficulty
+
+</th>
+
+<td id="previewDifficulty">
+
+Medium
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Time Limit
+
+</th>
+
+<td>
+
+1 Second
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Memory Limit
+
+</th>
+
+<td>
+
+256 MB
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Score
+
+</th>
+
+<td>
+
+100 Points
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Status
+
+</th>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Draft
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Visibility
+
+</th>
+
+<td>
+
+Public
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= INPUT / OUTPUT ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-sign-in-alt me-2"></i>
+
+Input Format
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Input Description
+
+</label>
+
+<textarea
+
+class="form-control"
+
+name="input_format"
+
+rows="8"
+
+placeholder="Describe the input format..."></textarea>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Input Example
+
+</label>
+
+<textarea
+
+class="form-control"
+
+name="sample_input"
+
+rows="5"
+
+placeholder="Example:
+5
+1 2 3 4 5"></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= OUTPUT FORMAT ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-sign-out-alt me-2"></i>
+
+Output Format
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Output Description
+
+</label>
+
+<textarea
+
+class="form-control"
+
+name="output_format"
+
+rows="8"
+
+placeholder="Describe the expected output..."></textarea>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Output Example
+
+</label>
+
+<textarea
+
+class="form-control"
+
+name="sample_output"
+
+rows="5"
+
+placeholder="Example:
+15"></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= CONSTRAINTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-exclamation-triangle me-2"></i>
+
+Constraints
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+
+class="form-control"
+
+name="constraints"
+
+rows="8"
+
+placeholder="Example:
+
+1 ≤ N ≤ 100000
+
+1 ≤ Ai ≤ 10^9
+
+Time Complexity: O(N)
+
+Memory Limit: 256 MB"></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PROBLEM NOTES ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-sticky-note me-2"></i>
+
+Notes
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+
+class="form-control"
+
+name="notes"
+
+rows="8"
+
+placeholder="Additional notes for students (optional)..."></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= EDGE CASES ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bug me-2"></i>
+
+Edge Cases
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+
+class="form-control"
+
+name="edge_cases"
+
+rows="7"
+
+placeholder="Mention important edge cases that students should consider..."></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ADDITIONAL INSTRUCTIONS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-secondary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-info me-2"></i>
+
+Additional Instructions
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+
+class="form-control"
+
+name="instructions"
+
+rows="7"
+
+placeholder="Any additional instructions or restrictions for solving the problem..."></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= AUTHOR INFORMATION ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-user-edit me-2"></i>
+
+Author Information
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-4">
+
+<label class="form-label">
+
+Author Name
+
+</label>
+
+<input
+
+type="text"
+
+class="form-control"
+
+name="author"
+
+value="{{ current_user.full_name if current_user else '' }}"
+
+placeholder="Author name">
+
+</div>
+
+<div class="col-md-4">
+
+<label class="form-label">
+
+Reference
+
+</label>
+
+<input
+
+type="text"
+
+class="form-control"
+
+name="reference"
+
+placeholder="Book, Website, Contest, etc.">
+
+</div>
+
+<div class="col-md-4">
+
+<label class="form-label">
+
+Estimated Solve Time
+
+</label>
+
+<input
+
+type="number"
+
+class="form-control"
+
+name="estimated_time"
+
+value="20"
+
+min="1">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= SAMPLE TEST CASE ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-keyboard me-2"></i>
+
+Sample Input
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+
+class="form-control font-monospace"
+
+name="sample_input_1"
+
+rows="10"
+
+placeholder="Example:
+
+4
+2 7 11 15
+9"></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-terminal me-2"></i>
+
+Sample Output
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+
+class="form-control font-monospace"
+
+name="sample_output_1"
+
+rows="10"
+
+placeholder="Example:
+
+0 1"></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= EXPLANATION ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-lightbulb me-2"></i>
+
+Explanation
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+
+class="form-control"
+
+name="sample_explanation"
+
+rows="8"
+
+placeholder="Explain how the sample input produces the sample output..."></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= WALKTHROUGH ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-route me-2"></i>
+
+Example Walkthrough
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+
+class="form-control"
+
+name="walkthrough"
+
+rows="10"
+
+placeholder="Provide a step-by-step explanation of the algorithm using the sample input..."></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= LIVE PREVIEW ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-eye me-2"></i>
+
+Problem Preview
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="border rounded p-3 bg-light">
+
+<h4 id="previewTitle">
+
+Problem Title
+
+</h4>
+
+<hr>
+
+<p id="previewDescription">
+
+The problem description will appear here while you type.
+
+</p>
+
+<hr>
+
+<h6>
+
+Sample Input
+
+</h6>
+
+<pre class="bg-white border rounded p-2" id="previewInput">
+
+--
+
+</pre>
+
+<h6>
+
+Sample Output
+
+</h6>
+
+<pre class="bg-white border rounded p-2" id="previewOutput">
+
+--
+
+</pre>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PROBLEM METADATA ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-layer-group fa-3x text-primary mb-3"></i>
+
+<h3 id="previewCategoryCard">
+
+Arrays
+
+</h3>
+
+<p class="text-muted">
+
+Category
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-star fa-3x text-warning mb-3"></i>
+
+<h3 id="previewDifficultyCard">
+
+Medium
+
+</h3>
+
+<p class="text-muted">
+
+Difficulty
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-clock fa-3x text-success mb-3"></i>
+
+<h3 id="previewTimeCard">
+
+20 Min
+
+</h3>
+
+<p class="text-muted">
+
+Estimated Solve Time
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PREVIEW SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-primary border-0 shadow">
+
+<h5>
+
+<i class="fas fa-info-circle me-2"></i>
+
+Preview Information
+
+</h5>
+
+<p class="mb-0">
+
+The live preview helps you verify how students will see the problem. Review the title, description, examples, and metadata before publishing to ensure everything is correct.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= PUBLIC TEST CASES ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+
+<h5 class="mb-0">
+
+<i class="fas fa-vial me-2"></i>
+
+Public Test Cases
+
+</h5>
+
+<button
+type="button"
+class="btn btn-light btn-sm"
+id="addPublicTestCase">
+
+<i class="fas fa-plus me-1"></i>
+
+Add Test Case
+
+</button>
+
+</div>
+
+<div class="card-body">
+
+<p class="text-muted">
+
+Public test cases are visible to students and help them understand the expected behavior of their solutions.
+
+</p>
+
+<div id="publicTestCasesContainer">
+
+<!-- ================= TEST CASE 1 ================= -->
+
+<div class="card border mb-4 public-testcase">
+
+<div class="card-header bg-light">
+
+<strong>Public Test Case #1</strong>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Input
+
+</label>
+
+<textarea
+
+class="form-control font-monospace"
+
+name="public_input[]"
+
+rows="6"
+
+placeholder="Enter input..."></textarea>
+
+</div>
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Expected Output
+
+</label>
+
+<textarea
+
+class="form-control font-monospace"
+
+name="public_output[]"
+
+rows="6"
+
+placeholder="Expected output..."></textarea>
+
+</div>
+
+</div>
+
+<div class="row mt-3">
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Explanation (Optional)
+
+</label>
+
+<textarea
+
+class="form-control"
+
+name="public_explanation[]"
+
+rows="3"
+
+placeholder="Explain why this output is correct..."></textarea>
+
+</div>
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Weight
+
+</label>
+
+<input
+
+type="number"
+
+class="form-control"
+
+name="public_weight[]"
+
+value="10"
+
+min="1"
+
+max="100">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TEST CASE SUMMARY ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-list-check fa-3x text-success mb-3"></i>
+
+<h2 id="publicCaseCount">
+
+1
+
+</h2>
+
+<p class="text-muted">
+
+Public Test Cases
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-percentage fa-3x text-warning mb-3"></i>
+
+<h2>
+
+10
+
+</h2>
+
+<p class="text-muted">
+
+Default Weight
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-check-circle fa-3x text-primary mb-3"></i>
+
+<h2>
+
+Ready
+
+</h2>
+
+<p class="text-muted">
+
+Validation Status
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TEST CASE VALIDATION ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-info border-0 shadow">
+
+<h5>
+
+<i class="fas fa-shield-alt me-2"></i>
+
+Validation Guidelines
+
+</h5>
+
+<ul class="mb-0">
+
+<li>Each public test case should represent a common use case.</li>
+
+<li>Keep sample inputs simple and easy to understand.</li>
+
+<li>Verify expected outputs before publishing.</li>
+
+<li>Avoid exposing hidden evaluation logic.</li>
+
+<li>Use public cases for explanation, not complete coverage.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= HIDDEN TEST CASES ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+
+<h5 class="mb-0">
+
+<i class="fas fa-user-secret me-2"></i>
+
+Hidden Test Cases
+
+</h5>
+
+<button
+type="button"
+class="btn btn-light btn-sm"
+id="addHiddenTestCase">
+
+<i class="fas fa-plus me-1"></i>
+
+Add Hidden Test Case
+
+</button>
+
+</div>
+
+<div class="card-body">
+
+<div class="alert alert-warning">
+
+<i class="fas fa-lock me-2"></i>
+
+Hidden test cases are never shown to students and are used for final evaluation.
+
+</div>
+
+<div id="hiddenTestCasesContainer">
+
+<!-- Hidden Test Case 1 -->
+
+<div class="card border mb-4 hidden-testcase">
+
+<div class="card-header bg-light">
+
+<strong>Hidden Test Case #1</strong>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Hidden Input
+
+</label>
+
+<textarea
+class="form-control font-monospace"
+name="hidden_input[]"
+rows="6"
+placeholder="Hidden input..."></textarea>
+
+</div>
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Expected Output
+
+</label>
+
+<textarea
+class="form-control font-monospace"
+name="hidden_output[]"
+rows="6"
+placeholder="Expected output..."></textarea>
+
+</div>
+
+</div>
+
+<div class="row mt-3">
+
+<div class="col-md-4">
+
+<label class="form-label">
+
+Weight
+
+</label>
+
+<input
+type="number"
+class="form-control"
+name="hidden_weight[]"
+value="20"
+min="1"
+max="100">
+
+</div>
+
+<div class="col-md-4">
+
+<label class="form-label">
+
+Timeout (ms)
+
+</label>
+
+<input
+type="number"
+class="form-control"
+name="timeout[]"
+value="1000">
+
+</div>
+
+<div class="col-md-4">
+
+<label class="form-label">
+
+Memory (MB)
+
+</label>
+
+<input
+type="number"
+class="form-control"
+name="memory[]"
+value="256">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= BULK IMPORT ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-file-import me-2"></i>
+
+Bulk Import Test Cases
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<label class="form-label">
+
+Upload JSON / CSV / ZIP
+
+</label>
+
+<input
+
+type="file"
+
+class="form-control"
+
+accept=".json,.csv,.zip">
+
+<div class="form-text">
+
+Supported formats:
+JSON, CSV or ZIP containing input/output files.
+
+</div>
+
+<button
+class="btn btn-primary mt-3">
+
+<i class="fas fa-upload me-2"></i>
+
+Import Test Cases
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= VALIDATION RULES ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-check-double me-2"></i>
+
+Validation Rules
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="form-check form-switch mb-3">
+
+<input
+class="form-check-input"
+type="checkbox"
+checked
+id="trimWhitespace">
+
+<label class="form-check-label">
+
+Ignore Leading / Trailing Spaces
+
+</label>
+
+</div>
+
+<div class="form-check form-switch mb-3">
+
+<input
+class="form-check-input"
+type="checkbox"
+checked
+id="ignoreBlankLines">
+
+<label class="form-check-label">
+
+Ignore Blank Lines
+
+</label>
+
+</div>
+
+<div class="form-check form-switch mb-3">
+
+<input
+class="form-check-input"
+type="checkbox"
+checked
+id="caseSensitive">
+
+<label class="form-check-label">
+
+Case Sensitive Comparison
+
+</label>
+
+</div>
+
+<div class="form-check form-switch">
+
+<input
+class="form-check-input"
+type="checkbox"
+id="allowPartialScore">
+
+<label class="form-check-label">
+
+Allow Partial Scoring
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= EDGE CASE MANAGEMENT ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bug me-2"></i>
+
+Edge Case Checklist
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-4">
+
+<div class="form-check mb-2">
+
+<input
+class="form-check-input"
+type="checkbox"
+checked>
+
+<label class="form-check-label">
+
+Minimum Input
+
+</label>
+
+</div>
+
+<div class="form-check mb-2">
+
+<input
+class="form-check-input"
+type="checkbox"
+checked>
+
+<label class="form-check-label">
+
+Maximum Input
+
+</label>
+
+</div>
+
+<div class="form-check">
+
+<input
+class="form-check-input"
+type="checkbox">
+
+<label class="form-check-label">
+
+Negative Values
+
+</label>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="form-check mb-2">
+
+<input
+class="form-check-input"
+type="checkbox">
+
+<label class="form-check-label">
+
+Duplicate Values
+
+</label>
+
+</div>
+
+<div class="form-check mb-2">
+
+<input
+class="form-check-input"
+type="checkbox">
+
+<label class="form-check-label">
+
+Sorted Input
+
+</label>
+
+</div>
+
+<div class="form-check">
+
+<input
+class="form-check-input"
+type="checkbox">
+
+<label class="form-check-label">
+
+Random Input
+
+</label>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="form-check mb-2">
+
+<input
+class="form-check-input"
+type="checkbox">
+
+<label class="form-check-label">
+
+Overflow Cases
+
+</label>
+
+</div>
+
+<div class="form-check mb-2">
+
+<input
+class="form-check-input"
+type="checkbox">
+
+<label class="form-check-label">
+
+Empty Input
+
+</label>
+
+</div>
+
+<div class="form-check">
+
+<input
+class="form-check-input"
+type="checkbox">
+
+<label class="form-check-label">
+
+Large Dataset
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TEST CASE STATISTICS ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<h2 id="hiddenCount">
+
+1
+
+</h2>
+
+<p class="text-muted">
+
+Hidden Test Cases
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<h2>
+
+2
+
+</h2>
+
+<p class="text-muted">
+
+Total Test Cases
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<h2>
+
+100%
+
+</h2>
+
+<p class="text-muted">
+
+Coverage
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<h2>
+
+Ready
+
+</h2>
+
+<p class="text-muted">
+
+Validation
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= SUPPORTED LANGUAGES ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-code me-2"></i>
+
+Supported Programming Languages
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="form-check mb-3">
+
+<input class="form-check-input" type="checkbox" checked name="languages" value="python" id="langPython">
+
+<label class="form-check-label" for="langPython">
+
+Python 3.11
+
+</label>
+
+</div>
+
+<div class="form-check mb-3">
+
+<input class="form-check-input" type="checkbox" checked name="languages" value="cpp" id="langCpp">
+
+<label class="form-check-label" for="langCpp">
+
+C++17
+
+</label>
+
+</div>
+
+<div class="form-check mb-3">
+
+<input class="form-check-input" type="checkbox" checked name="languages" value="c" id="langC">
+
+<label class="form-check-label" for="langC">
+
+C17
+
+</label>
+
+</div>
+
+<div class="form-check mb-3">
+
+<input class="form-check-input" type="checkbox" checked name="languages" value="java" id="langJava">
+
+<label class="form-check-label" for="langJava">
+
+Java 21
+
+</label>
+
+</div>
+
+<div class="form-check">
+
+<input class="form-check-input" type="checkbox" name="languages" value="javascript" id="langJS">
+
+<label class="form-check-label" for="langJS">
+
+JavaScript (Node.js)
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= EXECUTION CONFIGURATION ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-server me-2"></i>
+
+Execution Configuration
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Judge Type
+
+</label>
+
+<select class="form-select" name="judge_type">
+
+<option selected>Standard Input / Output</option>
+
+<option>Function Based</option>
+
+<option>Interactive</option>
+
+</select>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Execution Environment
+
+</label>
+
+<select class="form-select" name="environment">
+
+<option selected>Docker Sandbox</option>
+
+<option>Native Execution</option>
+
+<option>Remote Worker</option>
+
+</select>
+
+</div>
+
+<div class="form-check form-switch mb-3">
+
+<input class="form-check-input"
+
+type="checkbox"
+
+checked
+
+id="enableSandbox">
+
+<label class="form-check-label" for="enableSandbox">
+
+Enable Secure Sandbox
+
+</label>
+
+</div>
+
+<div class="form-check form-switch">
+
+<input class="form-check-input"
+
+type="checkbox"
+
+checked
+
+id="enableLogging">
+
+<label class="form-check-label" for="enableLogging">
+
+Store Execution Logs
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= DOCKER SETTINGS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fab fa-docker me-2"></i>
+
+Docker Configuration
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Docker Image
+
+</label>
+
+<input
+
+type="text"
+
+class="form-control"
+
+name="docker_image"
+
+value="python:3.11-slim">
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+CPU Limit
+
+</label>
+
+<input
+
+type="number"
+
+class="form-control"
+
+value="1"
+
+name="cpu_limit">
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Memory Limit (MB)
+
+</label>
+
+<input
+
+type="number"
+
+class="form-control"
+
+value="256"
+
+name="docker_memory">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= FILE ATTACHMENTS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-paperclip me-2"></i>
+
+Problem Attachments
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Upload PDF
+
+</label>
+
+<input
+
+type="file"
+
+class="form-control"
+
+accept=".pdf"
+
+name="problem_pdf">
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Upload Image
+
+</label>
+
+<input
+
+type="file"
+
+class="form-control"
+
+accept=".png,.jpg,.jpeg"
+
+name="problem_image">
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Supporting ZIP Files
+
+</label>
+
+<input
+
+type="file"
+
+class="form-control"
+
+accept=".zip"
+
+name="problem_zip">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ADVANCED JUDGE SETTINGS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-sliders-h me-2"></i>
+
+Advanced Judge Configuration
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-4">
+
+<div class="form-check form-switch mb-3">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+checked
+
+id="compileBeforeRun">
+
+<label class="form-check-label">
+
+Compile Before Execution
+
+</label>
+
+</div>
+
+<div class="form-check form-switch">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+checked
+
+id="compareWhitespace">
+
+<label class="form-check-label">
+
+Ignore Trailing Whitespace
+
+</label>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="form-check form-switch mb-3">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+checked
+
+id="storeLogs">
+
+<label class="form-check-label">
+
+Save Compiler Logs
+
+</label>
+
+</div>
+
+<div class="form-check form-switch">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+checked
+
+id="saveSubmission">
+
+<label class="form-check-label">
+
+Store Student Source Code
+
+</label>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="form-check form-switch mb-3">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+checked
+
+id="antiCheat">
+
+<label class="form-check-label">
+
+Enable Anti-Plagiarism
+
+</label>
+
+</div>
+
+<div class="form-check form-switch">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+checked
+
+id="enableRanking">
+
+<label class="form-check-label">
+
+Include in Leaderboard
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= CONFIG SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-success border-0 shadow">
+
+<h5>
+
+<i class="fas fa-check-circle me-2"></i>
+
+Execution Configuration Summary
+
+</h5>
+
+<p class="mb-0">
+
+This problem will run inside a secure Docker sandbox with configurable resource limits, multiple language support, execution logging, plagiarism detection, and leaderboard integration.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= LIVE PREVIEW ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-eye me-2"></i>
+
+Live Problem Preview
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<h3 id="liveTitle">
+
+Problem Title
+
+</h3>
+
+<span class="badge bg-success mb-3" id="liveDifficulty">
+
+Medium
+
+</span>
+
+<hr>
+
+<h5>Description</h5>
+
+<div id="liveDescription" class="mb-4 text-muted">
+
+Problem description preview will appear here...
+
+</div>
+
+<h5>Input Format</h5>
+
+<pre class="bg-light border rounded p-3" id="liveInput">
+
+--
+
+</pre>
+
+<h5>Output Format</h5>
+
+<pre class="bg-light border rounded p-3" id="liveOutput">
+
+--
+
+</pre>
+
+<h5>Constraints</h5>
+
+<pre class="bg-light border rounded p-3" id="liveConstraints">
+
+--
+
+</pre>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= STATISTICS ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-bar me-2"></i>
+
+Problem Statistics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Status</th>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Draft
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Public Tests</th>
+
+<td id="publicStats">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Hidden Tests</th>
+
+<td id="hiddenStats">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Languages</th>
+
+<td>
+
+4
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Estimated Time</th>
+
+<td>
+
+20 Minutes
+
+</td>
+
+</tr>
+
+</table>
+
+<hr>
+
+<div class="progress">
+
+<div
+
+class="progress-bar bg-success"
+
+style="width:75%;"
+
+id="completionProgress">
+
+75%
+
+</div>
+
+</div>
+
+<small class="text-muted">
+
+Problem Completion Progress
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= REVIEW CHECKLIST ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-check-double me-2"></i>
+
+Pre-Publish Checklist
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-4">
+
+<div class="form-check mb-2">
+
+<input class="form-check-input" type="checkbox" checked disabled>
+
+<label class="form-check-label">
+
+Problem Title Added
+
+</label>
+
+</div>
+
+<div class="form-check mb-2">
+
+<input class="form-check-input" type="checkbox" checked disabled>
+
+<label class="form-check-label">
+
+Description Written
+
+</label>
+
+</div>
+
+<div class="form-check">
+
+<input class="form-check-input" type="checkbox" checked disabled>
+
+<label class="form-check-label">
+
+Input & Output Added
+
+</label>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="form-check mb-2">
+
+<input class="form-check-input" type="checkbox" checked disabled>
+
+<label class="form-check-label">
+
+Constraints Added
+
+</label>
+
+</div>
+
+<div class="form-check mb-2">
+
+<input class="form-check-input" type="checkbox" checked disabled>
+
+<label class="form-check-label">
+
+Sample Test Case
+
+</label>
+
+</div>
+
+<div class="form-check">
+
+<input class="form-check-input" type="checkbox">
+
+<label class="form-check-label">
+
+Hidden Test Cases Verified
+
+</label>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="form-check mb-2">
+
+<input class="form-check-input" type="checkbox">
+
+<label class="form-check-label">
+
+Editorial Added
+
+</label>
+
+</div>
+
+<div class="form-check mb-2">
+
+<input class="form-check-input" type="checkbox">
+
+<label class="form-check-label">
+
+Preview Reviewed
+
+</label>
+
+</div>
+
+<div class="form-check">
+
+<input class="form-check-input" type="checkbox">
+
+<label class="form-check-label">
+
+Ready to Publish
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SAVE DRAFT ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-save me-2"></i>
+
+Save Draft
+
+</h5>
+
+</div>
+
+<div class="card-body text-center">
+
+<p class="text-muted">
+
+Save your work and continue editing later.
+
+</p>
+
+<button
+
+type="button"
+
+class="btn btn-info text-white w-100"
+
+id="draftButton">
+
+<i class="fas fa-save me-2"></i>
+
+Save Draft
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK ACTIONS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bolt me-2"></i>
+
+Quick Actions
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="d-grid gap-2">
+
+<button type="button" class="btn btn-outline-primary">
+
+<i class="fas fa-copy me-2"></i>
+
+Duplicate Problem
+
+</button>
+
+<button type="button" class="btn btn-outline-success">
+
+<i class="fas fa-eye me-2"></i>
+
+Preview as Student
+
+</button>
+
+<button type="button" class="btn btn-outline-warning">
+
+<i class="fas fa-download me-2"></i>
+
+Export Problem
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PRE-PUBLISH SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-primary border-0 shadow">
+
+<h5>
+
+<i class="fas fa-rocket me-2"></i>
+
+Ready to Publish
+
+</h5>
+
+<p class="mb-0">
+
+Review the live preview, verify all public and hidden test cases,
+ensure execution settings are correct, and publish the problem when
+everything is complete.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= FINAL REVIEW ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-clipboard-check me-2"></i>
+
+Final Review
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="alert alert-success">
+
+<h6>
+
+<i class="fas fa-check-circle me-2"></i>
+
+Problem Validation Status
+
+</h6>
+
+<p class="mb-0">
+
+The system has validated all required fields. Please review the summary below before publishing.
+
+</p>
+
+</div>
+
+<table class="table table-hover">
+
+<tbody>
+
+<tr>
+
+<th width="35%">
+
+Problem Title
+
+</th>
+
+<td id="reviewTitle">
+
+Problem Title
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Difficulty
+
+</th>
+
+<td id="reviewDifficulty">
+
+Medium
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Category
+
+</th>
+
+<td id="reviewCategory">
+
+Arrays
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Public Test Cases
+
+</th>
+
+<td id="reviewPublicCases">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Hidden Test Cases
+
+</th>
+
+<td id="reviewHiddenCases">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Supported Languages
+
+</th>
+
+<td>
+
+Python, Java, C, C++
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Time Limit
+
+</th>
+
+<td>
+
+1 Second
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Memory Limit
+
+</th>
+
+<td>
+
+256 MB
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PUBLISH OPTIONS ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-upload me-2"></i>
+
+Publish Options
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="form-check form-switch mb-3">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+checked
+
+id="publishNow">
+
+<label class="form-check-label">
+
+Publish Immediately
+
+</label>
+
+</div>
+
+<div class="form-check form-switch mb-3">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+checked
+
+id="notifyStudents">
+
+<label class="form-check-label">
+
+Notify Students
+
+</label>
+
+</div>
+
+<div class="form-check form-switch mb-3">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+checked
+
+id="includeLeaderboard">
+
+<label class="form-check-label">
+
+Enable Leaderboard
+
+</label>
+
+</div>
+
+<div class="form-check form-switch">
+
+<input
+
+class="form-check-input"
+
+type="checkbox"
+
+checked
+
+id="allowResubmission">
+
+<label class="form-check-label">
+
+Allow Resubmissions
+
+</label>
+
+</div>
+
+<hr>
+
+<div class="d-grid">
+
+<button
+
+type="button"
+
+class="btn btn-success btn-lg"
+
+data-bs-toggle="modal"
+
+data-bs-target="#publishModal">
+
+<i class="fas fa-rocket me-2"></i>
+
+Publish Problem
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUCCESS ALERT ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-info border-0 shadow">
+
+<h5>
+
+<i class="fas fa-lightbulb me-2"></i>
+
+Publishing Tips
+
+</h5>
+
+<ul class="mb-0">
+
+<li>Verify that all hidden test cases pass successfully.</li>
+
+<li>Ensure time and memory limits are realistic.</li>
+
+<li>Double-check sample input/output formatting.</li>
+
+<li>Preview the problem as a student before publishing.</li>
+
+<li>Review plagiarism detection settings.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PUBLISH MODAL ================= -->
+
+<div
+
+class="modal fade"
+
+id="publishModal"
+
+tabindex="-1"
+
+aria-hidden="true">
+
+<div class="modal-dialog modal-lg">
+
+<div class="modal-content">
+
+<div class="modal-header bg-success text-white">
+
+<h5 class="modal-title">
+
+Publish Programming Problem
+
+</h5>
+
+<button
+
+type="button"
+
+class="btn-close btn-close-white"
+
+data-bs-dismiss="modal">
+
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<div class="text-center">
+
+<i class="fas fa-rocket fa-4x text-success mb-4"></i>
+
+<h4>
+
+Ready to Publish?
+
+</h4>
+
+<p class="text-muted">
+
+Once published, students will be able to access this problem according to the selected visibility settings.
+
+</p>
+
+</div>
+
+<div class="alert alert-warning">
+
+<strong>Checklist:</strong>
+
+<ul class="mb-0">
+
+<li>✔ Problem statement completed</li>
+
+<li>✔ Sample test cases added</li>
+
+<li>✔ Hidden test cases verified</li>
+
+<li>✔ Execution settings configured</li>
+
+<li>✔ Preview reviewed</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+
+type="button"
+
+class="btn btn-secondary"
+
+data-bs-dismiss="modal">
+
+Cancel
+
+</button>
+
+<button
+
+type="submit"
+
+class="btn btn-success"
+
+id="confirmPublishBtn">
+
+<i class="fas fa-check me-2"></i>
+
+Confirm Publish
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= READY MESSAGE ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-success border-0 shadow">
+
+<h5>
+
+<i class="fas fa-check-circle me-2"></i>
+
+Ready for Publication
+
+</h5>
+
+<p class="mb-0">
+
+Your programming problem is fully configured with metadata, execution settings, public and hidden test cases, language support, and judging configuration. You can now publish it to your students.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+{% endform %}
+
+{% block scripts %}
+
+<!-- ================= LIVE PREVIEW ================= -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const title = document.querySelector("input[name='title']");
+    const description = document.getElementById("problemDescription");
+    const difficulty = document.querySelector("select[name='difficulty']");
+    const category = document.querySelector("select[name='category']");
+    const sampleInput = document.querySelector("textarea[name='sample_input_1']");
+    const sampleOutput = document.querySelector("textarea[name='sample_output_1']");
+    const constraints = document.querySelector("textarea[name='constraints']");
+
+    function updatePreview() {
+
+        document.getElementById("liveTitle").textContent =
+            title.value || "Problem Title";
+
+        document.getElementById("previewTitle").textContent =
+            title.value || "Problem Title";
+
+        document.getElementById("liveDescription").textContent =
+            description.value || "Problem description preview...";
+
+        document.getElementById("previewDescription").textContent =
+            description.value || "Problem description preview...";
+
+        document.getElementById("liveInput").textContent =
+            sampleInput.value || "--";
+
+        document.getElementById("previewInput").textContent =
+            sampleInput.value || "--";
+
+        document.getElementById("liveOutput").textContent =
+            sampleOutput.value || "--";
+
+        document.getElementById("previewOutput").textContent =
+            sampleOutput.value || "--";
+
+        document.getElementById("liveConstraints").textContent =
+            constraints.value || "--";
+
+        document.getElementById("previewDifficulty").innerText =
+            difficulty.value;
+
+        document.getElementById("previewDifficultyCard").innerText =
+            difficulty.value;
+
+        document.getElementById("difficultyPreview").innerText =
+            difficulty.value;
+
+        document.getElementById("previewCategory").innerText =
+            category.value;
+
+        document.getElementById("previewCategoryCard").innerText =
+            category.value;
+
+    }
+
+    [title, description, difficulty, category,
+     sampleInput, sampleOutput, constraints]
+        .forEach(el => {
+
+            if(el){
+
+                el.addEventListener("input", updatePreview);
+
+                el.addEventListener("change", updatePreview);
+
+            }
+
+        });
+
+    updatePreview();
+
+});
+</script>
+
+<!-- ================= ADD PUBLIC TEST CASE ================= -->
+
+<script>
+
+document.getElementById("addPublicTestCase")?.addEventListener("click",function(){
+
+const container=document.getElementById("publicTestCasesContainer");
+
+const count=container.children.length+1;
+
+const card=document.createElement("div");
+
+card.className="card border mb-4";
+
+card.innerHTML=`
+
+<div class="card-header d-flex justify-content-between">
+
+<strong>Public Test Case #${count}</strong>
+
+<button type="button"
+class="btn btn-sm btn-danger remove-test">
+
+Remove
+
+</button>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-6">
+
+<textarea
+class="form-control font-monospace"
+rows="5"
+name="public_input[]"
+placeholder="Input"></textarea>
+
+</div>
+
+<div class="col-md-6">
+
+<textarea
+class="form-control font-monospace"
+rows="5"
+name="public_output[]"
+placeholder="Output"></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+document.getElementById("publicCaseCount").innerText=count;
+
+});
+
+</script>
+
+<!-- ================= ADD HIDDEN TEST CASE ================= -->
+
+<script>
+
+document.getElementById("addHiddenTestCase")?.addEventListener("click",function(){
+
+const container=document.getElementById("hiddenTestCasesContainer");
+
+const count=container.children.length+1;
+
+const card=document.createElement("div");
+
+card.className="card border mb-4";
+
+card.innerHTML=`
+
+<div class="card-header d-flex justify-content-between">
+
+<strong>Hidden Test Case #${count}</strong>
+
+<button type="button"
+class="btn btn-sm btn-danger remove-test">
+
+Remove
+
+</button>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-6">
+
+<textarea
+class="form-control font-monospace"
+rows="5"
+name="hidden_input[]"></textarea>
+
+</div>
+
+<div class="col-md-6">
+
+<textarea
+class="form-control font-monospace"
+rows="5"
+name="hidden_output[]"></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+document.getElementById("hiddenCount").innerText=count;
+
+});
+
+</script>
+
+<!-- ================= REMOVE TEST CASE ================= -->
+
+<script>
+
+document.addEventListener("click",function(e){
+
+if(e.target.classList.contains("remove-test")){
+
+e.target.closest(".card").remove();
+
+showToast("Test case removed.","warning");
+
+}
+
+});
+
+</script>
+
+<!-- ================= SAVE DRAFT ================= -->
+
+<script>
+
+document.getElementById("draftButton")?.addEventListener("click",function(){
+
+showToast("Draft saved successfully.","success");
+
+});
+
+</script>
+
+<!-- ================= PUBLISH ================= -->
+
+<script>
+
+document.getElementById("confirmPublishBtn")?.addEventListener("click",function(){
+
+showToast("Publishing problem...","primary");
+
+});
+
+</script>
+
+<!-- ================= TOAST ================= -->
+
+<script>
+
+function showToast(message,type="success"){
+
+const toast=document.createElement("div");
+
+toast.className=`toast align-items-center text-bg-${type} border-0 position-fixed`;
+
+toast.style.bottom="20px";
+
+toast.style.right="20px";
+
+toast.style.zIndex="99999";
+
+toast.innerHTML=`
+
+<div class="d-flex">
+
+<div class="toast-body">
+
+${message}
+
+</div>
+
+<button
+type="button"
+class="btn-close btn-close-white me-2 m-auto"
+data-bs-dismiss="toast">
+
+</button>
+
+</div>
+
+`;
+
+document.body.appendChild(toast);
+
+const bsToast=new bootstrap.Toast(toast);
+
+bsToast.show();
+
+toast.addEventListener("hidden.bs.toast",()=>toast.remove());
+
+}
+
+</script>
+
+<!-- ================= CARD ANIMATION ================= -->
+
+<script>
+
+const cards=document.querySelectorAll(".card");
+
+const observer=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.style.opacity="1";
+
+entry.target.style.transform="translateY(0)";
+
+observer.unobserve(entry.target);
+
+}
+
+});
+
+});
+
+cards.forEach(card=>{
+
+card.style.opacity="0";
+
+card.style.transform="translateY(20px)";
+
+card.style.transition=".35s";
+
+observer.observe(card);
+
+});
+
+</script>
+
+<!-- ================= CUSTOM CSS ================= -->
+
+<style>
+
+.card{
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-4px);
+box-shadow:0 15px 35px rgba(0,0,0,.12);
+}
+
+textarea{
+resize:vertical;
+}
+
+pre{
+background:#f8f9fa;
+padding:15px;
+border-radius:8px;
+}
+
+.progress{
+height:10px;
+}
+
+.modal-content{
+border-radius:14px;
+}
+
+</style>
+
+<script>
+
+window.addEventListener("load",function(){
+
+showToast("Add Problem page loaded.","success");
+
+});
+
+</script>
+
+{% endblock %}

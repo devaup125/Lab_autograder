@@ -1,0 +1,3680 @@
+{% extends "student/base_student.html" %}
+
+{% block title %}
+Submission History
+{% endblock %}
+
+{% block page_title %}
+Submission History
+{% endblock %}
+
+{% block breadcrumb %}
+
+<li class="breadcrumb-item">
+    <a href="{{ url_for('student.dashboard') }}">
+        Dashboard
+    </a>
+</li>
+
+<li class="breadcrumb-item active">
+    Submission History
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+
+<div class="card border-0 shadow mb-4">
+
+    <div class="card-body">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <h2 class="fw-bold">
+
+                    <i class="fas fa-history text-primary me-2"></i>
+
+                    Submission History
+
+                </h2>
+
+                <p class="text-muted mb-0">
+
+                    View all your submissions, execution statistics,
+                    and previous attempts.
+
+                </p>
+
+            </div>
+
+            <div class="col-lg-4 text-end">
+
+                <button
+                    class="btn btn-primary"
+                    id="exportHistoryBtn">
+
+                    <i class="fas fa-download me-2"></i>
+
+                    Export History
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= STATISTICS ================= -->
+
+<div class="row g-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-code fa-3x text-primary mb-3"></i>
+
+<h2>
+
+{{ total_submissions if total_submissions else 254 }}
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Total Submissions
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+
+<h2>
+
+{{ accepted_count if accepted_count else 198 }}
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Accepted
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-percentage fa-3x text-warning mb-3"></i>
+
+<h2>
+
+78%
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Success Rate
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-fire fa-3x text-danger mb-3"></i>
+
+<h2>
+
+15
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Current Streak
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SEARCH ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="input-group">
+
+<span class="input-group-text">
+
+<i class="fas fa-search"></i>
+
+</span>
+
+<input
+
+type="text"
+
+class="form-control"
+
+id="submissionSearch"
+
+placeholder="Search by problem name, language or status...">
+
+</div>
+
+</div>
+
+<div class="col-lg-4 text-end">
+
+<button
+class="btn btn-outline-secondary"
+id="refreshHistory">
+
+<i class="fas fa-sync-alt me-2"></i>
+
+Refresh
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK SUMMARY ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-line me-2"></i>
+
+Performance Summary
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>Acceptance Rate</span>
+
+<strong>78%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+class="progress-bar bg-success"
+style="width:78%;">
+
+78%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>Average Runtime</span>
+
+<strong>32 ms</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+class="progress-bar bg-primary"
+style="width:82%;">
+
+Excellent
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="d-flex justify-content-between">
+
+<span>Average Memory</span>
+
+<strong>15 MB</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+class="progress-bar bg-warning"
+style="width:88%;">
+
+Efficient
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-award me-2"></i>
+
+Latest Submission
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th width="40%">
+
+Problem
+
+</th>
+
+<td>
+
+Two Sum
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Language
+
+</th>
+
+<td>
+
+Python 3.11
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Status
+
+</th>
+
+<td>
+
+<span class="badge bg-success">
+
+Accepted
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Runtime
+
+</th>
+
+<td>
+
+28 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Submitted
+
+</th>
+
+<td>
+
+Today, 10:42 AM
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= FILTERS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-3 mb-3">
+
+<label class="form-label">
+
+Status
+
+</label>
+
+<select class="form-select" id="statusFilter">
+
+<option value="">All Status</option>
+
+<option>Accepted</option>
+
+<option>Wrong Answer</option>
+
+<option>Time Limit Exceeded</option>
+
+<option>Runtime Error</option>
+
+<option>Compilation Error</option>
+
+<option>Memory Limit Exceeded</option>
+
+</select>
+
+</div>
+
+<div class="col-lg-3 mb-3">
+
+<label class="form-label">
+
+Language
+
+</label>
+
+<select class="form-select" id="languageFilter">
+
+<option value="">All Languages</option>
+
+<option>Python 3.11</option>
+
+<option>Java 21</option>
+
+<option>C17</option>
+
+<option>C++17</option>
+
+</select>
+
+</div>
+
+<div class="col-lg-3 mb-3">
+
+<label class="form-label">
+
+Date Range
+
+</label>
+
+<input
+type="date"
+class="form-control"
+id="dateFilter">
+
+</div>
+
+<div class="col-lg-3 mb-3 d-flex align-items-end">
+
+<button
+class="btn btn-primary w-100"
+id="applyFilterBtn">
+
+<i class="fas fa-filter me-2"></i>
+
+Apply Filters
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ================= SUBMISSION TABLE ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-table me-2"></i>
+
+Submission Records
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table
+class="table table-hover align-middle"
+id="submissionTable">
+
+<thead class="table-light">
+
+<tr>
+
+<th>ID</th>
+
+<th>Problem</th>
+
+<th>Language</th>
+
+<th>Status</th>
+
+<th>Runtime</th>
+
+<th>Memory</th>
+
+<th>Score</th>
+
+<th>Date</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>#14582</td>
+
+<td>Two Sum</td>
+
+<td>Python 3.11</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Accepted
+
+</span>
+
+</td>
+
+<td>28 ms</td>
+
+<td>14 MB</td>
+
+<td>
+
+<strong>100</strong>
+
+</td>
+
+<td>14 Jul 2026</td>
+
+<td>
+
+<a
+href="{{ url_for('student.result') }}"
+class="btn btn-sm btn-outline-primary">
+
+View
+
+</a>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>#14570</td>
+
+<td>Binary Search</td>
+
+<td>Java 21</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Time Limit
+
+</span>
+
+</td>
+
+<td>1002 ms</td>
+
+<td>28 MB</td>
+
+<td>72</td>
+
+<td>13 Jul 2026</td>
+
+<td>
+
+<a
+href="{{ url_for('student.result') }}"
+class="btn btn-sm btn-outline-primary">
+
+View
+
+</a>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>#14561</td>
+
+<td>Merge Intervals</td>
+
+<td>C++17</td>
+
+<td>
+
+<span class="badge bg-danger">
+
+Wrong Answer
+
+</span>
+
+</td>
+
+<td>42 ms</td>
+
+<td>16 MB</td>
+
+<td>54</td>
+
+<td>13 Jul 2026</td>
+
+<td>
+
+<a
+href="{{ url_for('student.result') }}"
+class="btn btn-sm btn-outline-primary">
+
+View
+
+</a>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>#14549</td>
+
+<td>Longest Substring</td>
+
+<td>Python 3.11</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Accepted
+
+</span>
+
+</td>
+
+<td>31 ms</td>
+
+<td>15 MB</td>
+
+<td>100</td>
+
+<td>12 Jul 2026</td>
+
+<td>
+
+<a
+href="{{ url_for('student.result') }}"
+class="btn btn-sm btn-outline-primary">
+
+View
+
+</a>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>#14535</td>
+
+<td>Valid Parentheses</td>
+
+<td>C17</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Accepted
+
+</span>
+
+</td>
+
+<td>20 ms</td>
+
+<td>11 MB</td>
+
+<td>100</td>
+
+<td>11 Jul 2026</td>
+
+<td>
+
+<a
+href="{{ url_for('student.result') }}"
+class="btn btn-sm btn-outline-primary">
+
+View
+
+</a>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>#14510</td>
+
+<td>Graph BFS</td>
+
+<td>Python 3.11</td>
+
+<td>
+
+<span class="badge bg-danger">
+
+Runtime Error
+
+</span>
+
+</td>
+
+<td>--</td>
+
+<td>--</td>
+
+<td>25</td>
+
+<td>10 Jul 2026</td>
+
+<td>
+
+<a
+href="{{ url_for('student.result') }}"
+class="btn btn-sm btn-outline-primary">
+
+View
+
+</a>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= STATUS SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="alert alert-success text-center">
+
+<h4>198</h4>
+
+<p class="mb-0">
+
+Accepted
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="alert alert-danger text-center">
+
+<h4>26</h4>
+
+<p class="mb-0">
+
+Wrong Answer
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="alert alert-warning text-center">
+
+<h4>18</h4>
+
+<p class="mb-0">
+
+Time Limit
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="alert alert-info text-center">
+
+<h4>12</h4>
+
+<p class="mb-0">
+
+Runtime Error
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= SUBMISSION DETAILS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-file-code me-2"></i>
+
+Latest Submission Details
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th width="35%">
+
+Submission ID
+
+</th>
+
+<td>
+
+#14582
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Problem
+
+</th>
+
+<td>
+
+Two Sum
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Language
+
+</th>
+
+<td>
+
+Python 3.11
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Status
+
+</th>
+
+<td>
+
+<span class="badge bg-success">
+
+Accepted
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Submitted On
+
+</th>
+
+<td>
+
+14 July 2026, 10:42 AM
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Execution Time
+
+</th>
+
+<td>
+
+28 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Memory Usage
+
+</th>
+
+<td>
+
+14 MB
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Score
+
+</th>
+
+<td>
+
+<strong class="text-success">
+
+100 / 100
+
+</strong>
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= EXECUTION METRICS ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-line me-2"></i>
+
+Execution Metrics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>Runtime</span>
+
+<strong>94%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+class="progress-bar bg-success"
+style="width:94%;">
+
+94%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>Memory</span>
+
+<strong>91%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+class="progress-bar bg-primary"
+style="width:91%;">
+
+91%
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="d-flex justify-content-between">
+
+<span>Correctness</span>
+
+<strong>100%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+class="progress-bar bg-warning"
+style="width:100%;">
+
+100%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= CODE SUMMARY ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+
+<h5 class="mb-0">
+
+<i class="fas fa-code me-2"></i>
+
+Code Summary
+
+</h5>
+
+<button
+class="btn btn-sm btn-light"
+id="copyCodeBtn">
+
+<i class="fas fa-copy me-1"></i>
+
+Copy Code
+
+</button>
+
+</div>
+
+<div class="card-body">
+
+<pre id="submittedCode" class="bg-light rounded p-3" style="max-height:400px;overflow:auto;"><code class="language-python">
+class Solution:
+
+    def twoSum(self, nums, target):
+
+        seen = {}
+
+        for i, num in enumerate(nums):
+
+            diff = target - num
+
+            if diff in seen:
+
+                return [seen[diff], i]
+
+            seen[num] = i
+</code></pre>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TEST CASE SUMMARY ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-vial me-2"></i>
+
+Test Case Summary
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Total Test Cases</th>
+
+<td>15</td>
+
+</tr>
+
+<tr>
+
+<th>Passed</th>
+
+<td class="text-success">
+
+15
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Failed</th>
+
+<td class="text-danger">
+
+0
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Hidden Tests</th>
+
+<td>
+
+10
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= COMPILER OUTPUT ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-terminal me-2"></i>
+
+Compiler Output
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<pre class="bg-dark text-success rounded p-3 mb-0">
+Compilation Successful
+
+Running Test Cases...
+
+Passed 15 / 15
+
+Execution Completed
+
+Exit Code : 0
+</pre>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PERFORMANCE SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-success border-0 shadow">
+
+<h5>
+
+<i class="fas fa-trophy me-2"></i>
+
+Outstanding Performance
+
+</h5>
+
+<p class="mb-0">
+
+Your latest submission passed all visible and hidden test cases with excellent runtime and memory usage. Keep maintaining your coding streak and continue solving more challenging problems.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= PERFORMANCE ANALYTICS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-line me-2"></i>
+
+Performance Analytics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Acceptance Rate</span>
+
+<strong>78%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+class="progress-bar bg-success"
+style="width:78%;">
+
+78%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Average Runtime</span>
+
+<strong>32 ms</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+class="progress-bar bg-info"
+style="width:84%;">
+
+Excellent
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="d-flex justify-content-between">
+
+<span>Average Memory</span>
+
+<strong>15 MB</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+class="progress-bar bg-warning"
+style="width:88%;">
+
+Efficient
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= LANGUAGE STATISTICS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-code me-2"></i>
+
+Language Statistics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>Language</th>
+
+<th>Submissions</th>
+
+<th>Accepted</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Python</td>
+
+<td>170</td>
+
+<td>
+
+<span class="badge bg-success">
+
+145
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Java</td>
+
+<td>45</td>
+
+<td>
+
+<span class="badge bg-primary">
+
+32
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>C++</td>
+
+<td>24</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+16
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>C</td>
+
+<td>15</td>
+
+<td>
+
+<span class="badge bg-info">
+
+5
+
+</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= STATUS DISTRIBUTION ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-pie me-2"></i>
+
+Submission Status Distribution
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-2">
+
+<h2 class="text-success">
+
+198
+
+</h2>
+
+<p>
+
+Accepted
+
+</p>
+
+</div>
+
+<div class="col-md-2">
+
+<h2 class="text-danger">
+
+26
+
+</h2>
+
+<p>
+
+Wrong Answer
+
+</p>
+
+</div>
+
+<div class="col-md-2">
+
+<h2 class="text-warning">
+
+18
+
+</h2>
+
+<p>
+
+Time Limit
+
+</p>
+
+</div>
+
+<div class="col-md-2">
+
+<h2 class="text-info">
+
+12
+
+</h2>
+
+<p>
+
+Runtime Error
+
+</p>
+
+</div>
+
+<div class="col-md-2">
+
+<h2 class="text-secondary">
+
+4
+
+</h2>
+
+<p>
+
+Compilation Error
+
+</p>
+
+</div>
+
+<div class="col-md-2">
+
+<h2 class="text-primary">
+
+254
+
+</h2>
+
+<p>
+
+Total
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RUNTIME & MEMORY ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-stopwatch me-2"></i>
+
+Runtime Trend
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Best Runtime</th>
+
+<td class="text-success">
+
+18 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Average Runtime</th>
+
+<td>
+
+32 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Worst Runtime</th>
+
+<td class="text-danger">
+
+1001 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Performance Rank</th>
+
+<td>
+
+Top 10%
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-memory me-2"></i>
+
+Memory Trend
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Best Memory</th>
+
+<td class="text-success">
+
+11 MB
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Average Memory</th>
+
+<td>
+
+15 MB
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Highest Memory</th>
+
+<td class="text-danger">
+
+31 MB
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Memory Rank</th>
+
+<td>
+
+Top 12%
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ACHIEVEMENTS ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-trophy me-2"></i>
+
+Submission Achievements
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-3">
+
+<i class="fas fa-medal fa-3x text-warning mb-3"></i>
+
+<h5>
+
+100 Score
+
+</h5>
+
+<p>
+
+85 Times
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<i class="fas fa-fire fa-3x text-danger mb-3"></i>
+
+<h5>
+
+15-Day Streak
+
+</h5>
+
+<p>
+
+Unlocked
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<i class="fas fa-bolt fa-3x text-primary mb-3"></i>
+
+<h5>
+
+Fast Solver
+
+</h5>
+
+<p>
+
+Top 10%
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<i class="fas fa-award fa-3x text-success mb-3"></i>
+
+<h5>
+
+Champion
+
+</h5>
+
+<p>
+
+Level 7
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= SUBMISSION TIMELINE ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-history me-2"></i>
+
+Submission Timeline
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="list-group list-group-flush">
+
+<li class="list-group-item d-flex justify-content-between">
+
+<span>
+
+Submitted "Two Sum"
+
+</span>
+
+<span class="text-success">
+
+Today • Accepted
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+<span>
+
+Solved "Binary Search"
+
+</span>
+
+<span>
+
+Yesterday
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+<span>
+
+Attempted "Graph BFS"
+
+</span>
+
+<span class="text-danger">
+
+Wrong Answer
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+<span>
+
+Solved "Valid Parentheses"
+
+</span>
+
+<span>
+
+3 Days Ago
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+<span>
+
+Completed Weekly Challenge
+
+</span>
+
+<span class="text-primary">
+
+Last Week
+
+</span>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RECENT ACTIVITY ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-running me-2"></i>
+
+Recent Activity
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>Problems Solved This Week</span>
+
+<strong>12</strong>
+
+</div>
+
+<div class="progress mb-3">
+
+<div class="progress-bar bg-success"
+
+style="width:80%;">
+
+12
+
+</div>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>Submissions This Week</span>
+
+<strong>21</strong>
+
+</div>
+
+<div class="progress mb-3">
+
+<div class="progress-bar bg-primary"
+
+style="width:70%;">
+
+21
+
+</div>
+
+</div>
+
+<div class="d-flex justify-content-between">
+
+<span>Acceptance Rate</span>
+
+<strong>82%</strong>
+
+</div>
+
+<div class="progress">
+
+<div class="progress-bar bg-warning"
+
+style="width:82%;">
+
+82%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= IMPROVEMENT INSIGHTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-lightbulb me-2"></i>
+
+Performance Insights
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-4">
+
+<div class="alert alert-success">
+
+<h6>
+
+Strength
+
+</h6>
+
+<p class="mb-0">
+
+Excellent performance in Array and HashMap problems.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="alert alert-warning">
+
+<h6>
+
+Needs Improvement
+
+</h6>
+
+<p class="mb-0">
+
+Practice Dynamic Programming and Graph algorithms.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="alert alert-primary">
+
+<h6>
+
+Recommendation
+
+</h6>
+
+<p class="mb-0">
+
+Attempt 3 Medium problems daily to improve consistency.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= CODING STREAK ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-fire me-2"></i>
+
+Coding Streak
+
+</h5>
+
+</div>
+
+<div class="card-body text-center">
+
+<h1 class="display-4 text-danger">
+
+15
+
+</h1>
+
+<p>
+
+Current Coding Streak
+
+</p>
+
+<div class="progress">
+
+<div
+
+class="progress-bar bg-danger"
+
+style="width:75%;">
+
+15 Days
+
+</div>
+
+</div>
+
+<p class="mt-3 mb-0">
+
+Best Streak:
+
+<strong>28 Days</strong>
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= GOAL PROGRESS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bullseye me-2"></i>
+
+Goal Progress
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>
+
+100 Problems Goal
+
+</span>
+
+<strong>
+
+98 / 100
+
+</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+
+class="progress-bar bg-success"
+
+style="width:98%;">
+
+98%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>
+
+250 Submissions Goal
+
+</span>
+
+<strong>
+
+254 / 250
+
+</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+
+class="progress-bar bg-primary"
+
+style="width:100%;">
+
+Completed
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="d-flex justify-content-between">
+
+<span>
+
+Contest Participation
+
+</span>
+
+<strong>
+
+8 / 10
+
+</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+
+class="progress-bar bg-warning"
+
+style="width:80%;">
+
+80%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PERFORMANCE RECOMMENDATIONS ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-primary border-0 shadow">
+
+<h5>
+
+<i class="fas fa-chart-line me-2"></i>
+
+Recommendations
+
+</h5>
+
+<ul class="mb-0">
+
+<li>Solve at least one Dynamic Programming problem daily.</li>
+
+<li>Participate in the weekly coding contest.</li>
+
+<li>Maintain your coding streak above 20 days.</li>
+
+<li>Improve Java and C++ submissions for better language diversity.</li>
+
+<li>Target a 90% acceptance rate this month.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= EXPORT & DOWNLOAD ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-download me-2"></i>
+
+Export History
+
+</h5>
+
+</div>
+
+<div class="card-body text-center">
+
+<p class="text-muted">
+
+Download your complete submission history in CSV or PDF format.
+
+</p>
+
+<button
+class="btn btn-primary w-100 mb-2"
+id="exportCsvBtn">
+
+<i class="fas fa-file-csv me-2"></i>
+
+Export CSV
+
+</button>
+
+<button
+class="btn btn-outline-primary w-100"
+id="exportPdfBtn">
+
+<i class="fas fa-file-pdf me-2"></i>
+
+Export PDF
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= BULK ACTIONS ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-tasks me-2"></i>
+
+Bulk Actions
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="form-check mb-3">
+
+<input
+class="form-check-input"
+type="checkbox"
+id="selectAllSubmissions">
+
+<label class="form-check-label">
+
+Select All Submissions
+
+</label>
+
+</div>
+
+<button
+class="btn btn-success w-100 mb-2"
+id="downloadSelectedBtn">
+
+<i class="fas fa-download me-2"></i>
+
+Download Selected
+
+</button>
+
+<button
+class="btn btn-outline-danger w-100"
+id="deleteSelectedBtn">
+
+<i class="fas fa-trash me-2"></i>
+
+Delete Selected
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SHARE HISTORY ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-share-alt me-2"></i>
+
+Share History
+
+</h5>
+
+</div>
+
+<div class="card-body text-center">
+
+<p class="text-muted">
+
+Share your coding progress with mentors or classmates.
+
+</p>
+
+<button
+class="btn btn-info text-white w-100 mb-2"
+id="shareHistoryBtn">
+
+<i class="fas fa-share me-2"></i>
+
+Share History
+
+</button>
+
+<button
+class="btn btn-outline-secondary w-100"
+id="copyHistoryLinkBtn">
+
+<i class="fas fa-link me-2"></i>
+
+Copy Link
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= DOWNLOAD REPORTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-file-alt me-2"></i>
+
+Available Reports
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead>
+
+<tr>
+
+<th>Report</th>
+
+<th>Description</th>
+
+<th>Generated</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>
+
+Submission History Report
+
+</td>
+
+<td>
+
+Complete list of all submissions
+
+</td>
+
+<td>
+
+Today
+
+</td>
+
+<td>
+
+<button class="btn btn-sm btn-primary">
+
+Download
+
+</button>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+Performance Report
+
+</td>
+
+<td>
+
+Runtime, Memory and Acceptance Statistics
+
+</td>
+
+<td>
+
+Yesterday
+
+</td>
+
+<td>
+
+<button class="btn btn-sm btn-primary">
+
+Download
+
+</button>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+Contest Performance
+
+</td>
+
+<td>
+
+Contest participation summary
+
+</td>
+
+<td>
+
+Last Week
+
+</td>
+
+<td>
+
+<button class="btn btn-sm btn-primary">
+
+Download
+
+</button>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-success border-0 shadow">
+
+<h5>
+
+<i class="fas fa-check-circle me-2"></i>
+
+Submission Archive Ready
+
+</h5>
+
+<p class="mb-0">
+
+Your complete submission history can be exported, shared,
+or downloaded for academic records and interview preparation.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= PAGINATION ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<nav aria-label="Submission History Pagination">
+
+<ul class="pagination justify-content-center">
+
+<li class="page-item disabled">
+
+<a class="page-link" href="#">
+
+Previous
+
+</a>
+
+</li>
+
+<li class="page-item active">
+
+<a class="page-link" href="#">
+
+1
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link" href="#">
+
+2
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link" href="#">
+
+3
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link" href="#">
+
+Next
+
+</a>
+
+</li>
+
+</ul>
+
+</nav>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK VIEW MODAL ================= -->
+
+<div class="modal fade"
+
+id="submissionDetailModal"
+
+tabindex="-1"
+
+aria-hidden="true">
+
+<div class="modal-dialog modal-lg">
+
+<div class="modal-content">
+
+<div class="modal-header bg-primary text-white">
+
+<h5 class="modal-title">
+
+Submission Details
+
+</h5>
+
+<button
+
+type="button"
+
+class="btn-close btn-close-white"
+
+data-bs-dismiss="modal">
+
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<div class="row">
+
+<div class="col-md-6">
+
+<p>
+
+<strong>Submission ID:</strong>
+
+#14582
+
+</p>
+
+<p>
+
+<strong>Problem:</strong>
+
+Two Sum
+
+</p>
+
+<p>
+
+<strong>Language:</strong>
+
+Python 3.11
+
+</p>
+
+<p>
+
+<strong>Status:</strong>
+
+<span class="badge bg-success">
+
+Accepted
+
+</span>
+
+</p>
+
+</div>
+
+<div class="col-md-6">
+
+<p>
+
+<strong>Runtime:</strong>
+
+28 ms
+
+</p>
+
+<p>
+
+<strong>Memory:</strong>
+
+14 MB
+
+</p>
+
+<p>
+
+<strong>Score:</strong>
+
+100 / 100
+
+</p>
+
+<p>
+
+<strong>Submitted:</strong>
+
+14 Jul 2026
+
+</p>
+
+</div>
+
+</div>
+
+<hr>
+
+<h6>
+
+Submitted Code
+
+</h6>
+
+<pre class="bg-light rounded p-3" style="max-height:250px;overflow:auto;"><code>
+class Solution:
+
+    def twoSum(self, nums, target):
+
+        lookup = {}
+
+        for i, num in enumerate(nums):
+
+            diff = target - num
+
+            if diff in lookup:
+
+                return [lookup[diff], i]
+
+            lookup[num] = i
+</code></pre>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+
+class="btn btn-secondary"
+
+data-bs-dismiss="modal">
+
+Close
+
+</button>
+
+<a
+
+href="{{ url_for('student.result') }}"
+
+class="btn btn-primary">
+
+View Full Result
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= DELETE MODAL ================= -->
+
+<div class="modal fade"
+
+id="deleteSubmissionModal"
+
+tabindex="-1"
+
+aria-hidden="true">
+
+<div class="modal-dialog">
+
+<div class="modal-content">
+
+<div class="modal-header bg-danger text-white">
+
+<h5 class="modal-title">
+
+Delete Submission
+
+</h5>
+
+<button
+
+class="btn-close btn-close-white"
+
+data-bs-dismiss="modal">
+
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<p>
+
+Are you sure you want to permanently remove this submission?
+
+</p>
+
+<div class="alert alert-warning mb-0">
+
+This action cannot be undone.
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+
+class="btn btn-secondary"
+
+data-bs-dismiss="modal">
+
+Cancel
+
+</button>
+
+<button
+
+class="btn btn-danger"
+
+id="confirmDeleteSubmission">
+
+Delete
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= FAVORITE SUBMISSIONS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-star me-2"></i>
+
+Favorite Submissions
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="list-group">
+
+<li class="list-group-item d-flex justify-content-between">
+
+Two Sum
+
+<span class="badge bg-warning text-dark">
+
+Favorite
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Binary Search
+
+<span class="badge bg-warning text-dark">
+
+Favorite
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Merge Intervals
+
+<span class="badge bg-warning text-dark">
+
+Favorite
+
+</span>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PERSONAL NOTES ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-sticky-note me-2"></i>
+
+Personal Notes
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+
+class="form-control"
+
+rows="6"
+
+placeholder="Write notes about your submissions, mistakes, optimization ideas, or interview tips..."></textarea>
+
+<div class="text-end mt-3">
+
+<button
+
+class="btn btn-success"
+
+id="saveNotesBtn">
+
+<i class="fas fa-save me-2"></i>
+
+Save Notes
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-primary border-0 shadow">
+
+<h5>
+
+<i class="fas fa-info-circle me-2"></i>
+
+Submission Management
+
+</h5>
+
+<p class="mb-0">
+
+Use quick view to inspect submissions, export reports,
+maintain personal notes, and organize your best solutions
+for interview preparation.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+{% block scripts %}
+
+<!-- ================= LIVE SEARCH ================= -->
+
+<script>
+
+const searchInput = document.getElementById("submissionSearch");
+
+if(searchInput){
+
+searchInput.addEventListener("keyup", function(){
+
+const value = this.value.toLowerCase();
+
+const rows = document.querySelectorAll("#submissionTable tbody tr");
+
+rows.forEach(row=>{
+
+row.style.display = row.innerText.toLowerCase().includes(value)
+? ""
+: "none";
+
+});
+
+});
+
+}
+
+</script>
+
+<!-- ================= FILTER BUTTON ================= -->
+
+<script>
+
+document.getElementById("applyFilterBtn")?.addEventListener("click",function(){
+
+showToast("Filters applied successfully.","primary");
+
+});
+
+</script>
+
+<!-- ================= COPY CODE ================= -->
+
+<script>
+
+document.getElementById("copyCodeBtn")?.addEventListener("click",async function(){
+
+const code=document.getElementById("submittedCode").innerText;
+
+try{
+
+await navigator.clipboard.writeText(code);
+
+showToast("Code copied successfully.","success");
+
+}catch(e){
+
+showToast("Unable to copy code.","danger");
+
+}
+
+});
+
+</script>
+
+<!-- ================= EXPORT ================= -->
+
+<script>
+
+document.getElementById("exportCsvBtn")?.addEventListener("click",function(){
+
+showToast("Preparing CSV export...","info");
+
+/*
+
+window.location="/student/submissions/export/csv";
+
+*/
+
+});
+
+document.getElementById("exportPdfBtn")?.addEventListener("click",function(){
+
+showToast("Preparing PDF report...","info");
+
+/*
+
+window.location="/student/submissions/export/pdf";
+
+*/
+
+});
+
+</script>
+
+<!-- ================= SHARE HISTORY ================= -->
+
+<script>
+
+document.getElementById("shareHistoryBtn")?.addEventListener("click",async function(){
+
+const shareData={
+
+title:"My Lab Auto Grader Submission History",
+
+text:"Check out my coding progress!",
+
+url:window.location.href
+
+};
+
+try{
+
+if(navigator.share){
+
+await navigator.share(shareData);
+
+}else{
+
+navigator.clipboard.writeText(window.location.href);
+
+showToast("History link copied.","success");
+
+}
+
+}catch(e){}
+
+});
+
+document.getElementById("copyHistoryLinkBtn")?.addEventListener("click",async function(){
+
+await navigator.clipboard.writeText(window.location.href);
+
+showToast("Link copied to clipboard.","success");
+
+});
+
+</script>
+
+<!-- ================= NOTES ================= -->
+
+<script>
+
+document.getElementById("saveNotesBtn")?.addEventListener("click",function(){
+
+showToast("Notes saved successfully.","success");
+
+});
+
+</script>
+
+<!-- ================= DELETE ================= -->
+
+<script>
+
+document.getElementById("confirmDeleteSubmission")?.addEventListener("click",function(){
+
+showToast("Submission deleted.","warning");
+
+const modal=bootstrap.Modal.getInstance(
+
+document.getElementById("deleteSubmissionModal")
+
+);
+
+if(modal){
+
+modal.hide();
+
+}
+
+});
+
+</script>
+
+<!-- ================= REFRESH ================= -->
+
+<script>
+
+document.getElementById("refreshHistory")?.addEventListener("click",function(){
+
+location.reload();
+
+});
+
+</script>
+
+<!-- ================= TOAST ================= -->
+
+<script>
+
+function showToast(message,type="success"){
+
+const toast=document.createElement("div");
+
+toast.className=`toast align-items-center text-bg-${type} border-0 position-fixed`;
+
+toast.style.bottom="20px";
+
+toast.style.right="20px";
+
+toast.style.zIndex="99999";
+
+toast.innerHTML=`
+
+<div class="d-flex">
+
+<div class="toast-body">
+
+${message}
+
+</div>
+
+<button
+
+type="button"
+
+class="btn-close btn-close-white me-2 m-auto"
+
+data-bs-dismiss="toast">
+
+</button>
+
+</div>
+
+`;
+
+document.body.appendChild(toast);
+
+const bsToast=new bootstrap.Toast(toast);
+
+bsToast.show();
+
+toast.addEventListener("hidden.bs.toast",()=>toast.remove());
+
+}
+
+</script>
+
+<!-- ================= CARD ANIMATION ================= -->
+
+<script>
+
+const cards=document.querySelectorAll(".card");
+
+const observer=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.style.opacity="1";
+
+entry.target.style.transform="translateY(0)";
+
+observer.unobserve(entry.target);
+
+}
+
+});
+
+},{threshold:0.1});
+
+cards.forEach(card=>{
+
+card.style.opacity="0";
+
+card.style.transform="translateY(20px)";
+
+card.style.transition="all .35s ease";
+
+observer.observe(card);
+
+});
+
+</script>
+
+<!-- ================= CUSTOM CSS ================= -->
+
+<style>
+
+.card{
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-5px);
+
+box-shadow:0 15px 35px rgba(0,0,0,.12);
+
+}
+
+.progress{
+
+height:10px;
+
+}
+
+.table-hover tbody tr{
+
+transition:.2s;
+
+}
+
+.table-hover tbody tr:hover{
+
+background:#f8fafc;
+
+}
+
+pre{
+
+background:#f8f9fa;
+
+border-radius:8px;
+
+padding:15px;
+
+overflow:auto;
+
+}
+
+textarea{
+
+resize:vertical;
+
+}
+
+.modal-content{
+
+border-radius:14px;
+
+}
+
+</style>
+
+<!-- ================= PAGE LOAD ================= -->
+
+<script>
+
+window.addEventListener("load",function(){
+
+showToast("Submission history loaded successfully!","success");
+
+});
+
+</script>
+
+{% endblock %}

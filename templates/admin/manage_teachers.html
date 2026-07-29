@@ -1,0 +1,755 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Manage Teachers{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                <i class="fas fa-chalkboard-teacher text-success"></i>
+                Manage Teachers
+            </h2>
+
+            <p class="text-muted">
+                Add, Update and Manage Faculty Members
+            </p>
+
+        </div>
+
+        <div>
+
+            <button class="btn btn-success me-2">
+
+                <i class="fas fa-file-excel"></i>
+
+                Export Excel
+
+            </button>
+
+            <button class="btn btn-danger me-2">
+
+                <i class="fas fa-file-pdf"></i>
+
+                Export PDF
+
+            </button>
+
+            <button class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addTeacherModal">
+
+                <i class="fas fa-plus"></i>
+
+                Add Teacher
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Statistics -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-3">
+
+            <div class="card shadow rounded-4 border-0">
+
+                <div class="card-body text-center">
+
+                    <i class="fas fa-users fa-3x text-primary mb-3"></i>
+
+                    <h2>{{ total_teachers }}</h2>
+
+                    <p>Total Teachers</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow rounded-4 border-0">
+
+                <div class="card-body text-center">
+
+                    <i class="fas fa-user-check fa-3x text-success mb-3"></i>
+
+                    <h2>{{ active_teachers }}</h2>
+
+                    <p>Active Teachers</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow rounded-4 border-0">
+
+                <div class="card-body text-center">
+
+                    <i class="fas fa-book fa-3x text-warning mb-3"></i>
+
+                    <h2>{{ assigned_courses }}</h2>
+
+                    <p>Assigned Courses</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow rounded-4 border-0">
+
+                <div class="card-body text-center">
+
+                    <i class="fas fa-user-plus fa-3x text-danger mb-3"></i>
+
+                    <h2>{{ new_teachers }}</h2>
+
+                    <p>New This Month</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Search & Filters -->
+
+    <div class="card shadow rounded-4 mb-4">
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <div class="col-md-4">
+
+                    <input type="text"
+                           id="searchTeacher"
+                           class="form-control"
+                           placeholder="Search Teacher">
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <select class="form-select">
+
+                        <option>Department</option>
+
+                        <option>CSE</option>
+                        <option>IT</option>
+                        <option>ECE</option>
+                        <option>ME</option>
+                        <option>EE</option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <select class="form-select">
+
+                        <option>Status</option>
+
+                        <option>Active</option>
+                        <option>Inactive</option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <button class="btn btn-primary w-100">
+
+                        <i class="fas fa-search"></i>
+
+                        Search
+
+                    </button>
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <button class="btn btn-secondary w-100">
+
+                        Reset
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Teacher Table -->
+
+    <div class="card shadow rounded-4">
+
+        <div class="card-header bg-white">
+
+            <h5>
+
+                <i class="fas fa-list"></i>
+
+                Teacher List
+
+            </h5>
+
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Photo</th>
+
+                    <th>Name</th>
+
+                    <th>Email</th>
+
+                    <th>Department</th>
+
+                    <th>Experience</th>
+
+                    <th>Questions</th>
+
+                    <th>Status</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for teacher in teachers %}
+
+                <tr>
+
+                    <td>
+
+                        {{ teacher.id }}
+
+                    </td>
+
+                    <td>
+
+                        <img
+                        src="{{ url_for('static', filename='images/default-user.png') }}"
+                        width="45"
+                        class="rounded-circle">
+
+                    </td>
+
+                    <td>
+
+                        <strong>
+
+                            {{ teacher.name }}
+
+                        </strong>
+
+                    </td>
+
+                    <td>
+
+                        {{ teacher.email }}
+
+                    </td>
+
+                    <td>
+
+                        {{ teacher.department }}
+
+                    </td>
+
+                    <td>
+
+                        {{ teacher.experience }} Years
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-primary">
+
+                            {{ teacher.total_questions }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        {% if teacher.status=="Active" %}
+
+                        <span class="badge bg-success">
+
+                            Active
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-danger">
+
+                            Inactive
+
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        <button class="btn btn-info btn-sm">
+
+                            <i class="fas fa-eye"></i>
+
+                        </button>
+
+                        <button class="btn btn-warning btn-sm">
+
+                            <i class="fas fa-edit"></i>
+
+                        </button>
+
+                        <button class="btn btn-success btn-sm">
+
+                            <i class="fas fa-key"></i>
+
+                        </button>
+
+                        <button class="btn btn-danger btn-sm">
+
+                            <i class="fas fa-trash"></i>
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- ================= PAGINATION ================= -->
+
+    <div class="row mt-4">
+
+        <div class="col-md-6">
+
+            <p class="text-muted">
+
+                Showing {{ teachers|length }} Teachers
+
+            </p>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <nav class="float-end">
+
+                <ul class="pagination">
+
+                    <li class="page-item">
+                        <a class="page-link" href="#">Previous</a>
+                    </li>
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+
+                    <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= ADD TEACHER MODAL ================= -->
+
+<div class="modal fade"
+     id="addTeacherModal"
+     tabindex="-1">
+
+<div class="modal-dialog modal-lg">
+
+<div class="modal-content">
+
+<form method="POST"
+      action="{{ url_for('admin.add_teacher') }}">
+
+<div class="modal-header">
+
+<h5 class="modal-title">
+
+Add Teacher
+
+</h5>
+
+<button type="button"
+        class="btn-close"
+        data-bs-dismiss="modal">
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<div class="row">
+
+<div class="col-md-6">
+
+<label>Full Name</label>
+
+<input
+type="text"
+name="name"
+class="form-control"
+required>
+
+</div>
+
+<div class="col-md-6">
+
+<label>Email</label>
+
+<input
+type="email"
+name="email"
+class="form-control"
+required>
+
+</div>
+
+</div>
+
+<div class="row mt-3">
+
+<div class="col-md-6">
+
+<label>Username</label>
+
+<input
+type="text"
+name="username"
+class="form-control"
+required>
+
+</div>
+
+<div class="col-md-6">
+
+<label>Phone Number</label>
+
+<input
+type="text"
+name="phone"
+class="form-control">
+
+</div>
+
+</div>
+
+<div class="row mt-3">
+
+<div class="col-md-4">
+
+<label>Department</label>
+
+<select
+name="department"
+class="form-select">
+
+<option>CSE</option>
+<option>IT</option>
+<option>ECE</option>
+<option>EE</option>
+<option>ME</option>
+
+</select>
+
+</div>
+
+<div class="col-md-4">
+
+<label>Experience</label>
+
+<input
+type="number"
+name="experience"
+class="form-control"
+placeholder="Years">
+
+</div>
+
+<div class="col-md-4">
+
+<label>Password</label>
+
+<input
+type="password"
+name="password"
+class="form-control"
+required>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+class="btn btn-secondary"
+data-bs-dismiss="modal">
+
+Cancel
+
+</button>
+
+<button
+type="submit"
+class="btn btn-primary">
+
+<i class="fas fa-save"></i>
+
+Save Teacher
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RESET PASSWORD MODAL ================= -->
+
+<div class="modal fade"
+     id="resetPasswordModal"
+     tabindex="-1">
+
+<div class="modal-dialog">
+
+<div class="modal-content">
+
+<form method="POST"
+      action="{{ url_for('admin.reset_teacher_password') }}">
+
+<div class="modal-header">
+
+<h5>
+
+Reset Teacher Password
+
+</h5>
+
+</div>
+
+<div class="modal-body">
+
+<input
+type="hidden"
+id="teacher_id"
+name="teacher_id">
+
+<label>
+
+New Password
+
+</label>
+
+<input
+type="password"
+name="password"
+class="form-control"
+required>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+class="btn btn-secondary"
+data-bs-dismiss="modal">
+
+Cancel
+
+</button>
+
+<button
+class="btn btn-success">
+
+Reset Password
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= DELETE MODAL ================= -->
+
+<div class="modal fade"
+     id="deleteTeacherModal"
+     tabindex="-1">
+
+<div class="modal-dialog">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<h5>
+
+Delete Teacher
+
+</h5>
+
+</div>
+
+<div class="modal-body">
+
+<p>
+
+Are you sure you want to delete this teacher?
+
+</p>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+class="btn btn-secondary"
+data-bs-dismiss="modal">
+
+Cancel
+
+</button>
+
+<button
+class="btn btn-danger">
+
+Delete
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= LIVE SEARCH ================= -->
+
+<script>
+
+document.getElementById("searchTeacher")
+.addEventListener("keyup", function(){
+
+let value=this.value.toLowerCase();
+
+document.querySelectorAll("tbody tr")
+.forEach(function(row){
+
+row.style.display=
+
+row.innerText.toLowerCase().includes(value)
+
+? ""
+
+: "none";
+
+});
+
+});
+
+</script>
+
+<!-- ================= DELETE CONFIRM ================= -->
+
+<script>
+
+function confirmDelete(){
+
+return confirm(
+"Are you sure you want to delete this teacher?"
+);
+
+}
+
+</script>
+
+{% endblock %}

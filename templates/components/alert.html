@@ -1,0 +1,74 @@
+<!-- ================= FLASH ALERT COMPONENT ================= -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+{% if messages %}
+
+<div class="mb-4">
+
+{% for category, message in messages %}
+
+<div class="alert
+{% if category == 'success' %}
+alert-success
+{% elif category == 'danger' %}
+alert-danger
+{% elif category == 'warning' %}
+alert-warning
+{% elif category == 'info' %}
+alert-info
+{% else %}
+alert-secondary
+{% endif %}
+alert-dismissible fade show shadow-sm rounded-3"
+role="alert">
+
+<div class="d-flex align-items-center">
+
+{% if category == "success" %}
+
+<i class="fas fa-check-circle fa-lg me-2"></i>
+
+{% elif category == "danger" %}
+
+<i class="fas fa-times-circle fa-lg me-2"></i>
+
+{% elif category == "warning" %}
+
+<i class="fas fa-exclamation-triangle fa-lg me-2"></i>
+
+{% elif category == "info" %}
+
+<i class="fas fa-info-circle fa-lg me-2"></i>
+
+{% else %}
+
+<i class="fas fa-bell fa-lg me-2"></i>
+
+{% endif %}
+
+<div>
+
+{{ message }}
+
+</div>
+
+</div>
+
+<button
+type="button"
+class="btn-close"
+data-bs-dismiss="alert"
+aria-label="Close">
+
+</button>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endif %}
+
+{% endwith %}

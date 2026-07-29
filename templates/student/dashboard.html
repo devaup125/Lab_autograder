@@ -1,0 +1,2427 @@
+{% extends "student/base_student.html" %}
+
+{% block title %}
+Student Dashboard
+{% endblock %}
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+{% block breadcrumb %}
+
+<li class="breadcrumb-item active">
+Dashboard
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= WELCOME ================= -->
+
+<div class="card border-0 shadow-lg mb-4">
+
+<div class="card-body">
+
+<div class="row align-items-center">
+
+<div class="col-lg-8">
+
+<h2 class="fw-bold">
+
+Welcome back,
+{{ session.get('student_name','Student') }} 👋
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Continue solving problems and improve your programming skills.
+
+</p>
+
+</div>
+
+<div class="col-lg-4 text-end">
+
+<a href="{{ url_for('student.problems') }}"
+class="btn btn-primary btn-lg">
+
+<i class="fas fa-code me-2"></i>
+
+Start Coding
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= DASHBOARD STATS ================= -->
+
+<div class="row g-4">
+
+<!-- Problems Solved -->
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card card-dashboard border-0">
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<h6 class="text-muted">
+
+Problems Solved
+
+</h6>
+
+<h2 class="counter">
+
+{{ solved_count if solved_count else 25 }}
+
+</h2>
+
+</div>
+
+<div>
+
+<i class="fas fa-code fa-3x text-primary"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Assignments -->
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card card-dashboard border-0">
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<h6 class="text-muted">
+
+Assignments
+
+</h6>
+
+<h2 class="counter">
+
+{{ assignment_count if assignment_count else 8 }}
+
+</h2>
+
+</div>
+
+<div>
+
+<i class="fas fa-book fa-3x text-success"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Rank -->
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card card-dashboard border-0">
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<h6 class="text-muted">
+
+Leaderboard Rank
+
+</h6>
+
+<h2>
+
+#{{ rank if rank else 12 }}
+
+</h2>
+
+</div>
+
+<div>
+
+<i class="fas fa-trophy fa-3x text-warning"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Accuracy -->
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card card-dashboard border-0">
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<h6 class="text-muted">
+
+Accuracy
+
+</h6>
+
+<h2>
+
+{{ accuracy if accuracy else 92 }}%
+
+</h2>
+
+</div>
+
+<div>
+
+<i class="fas fa-bullseye fa-3x text-danger"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK ACTIONS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Quick Actions
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row g-3 text-center">
+
+<div class="col-lg-3">
+
+<a href="{{ url_for('student.problems') }}"
+class="btn btn-outline-primary w-100 p-4">
+
+<i class="fas fa-code fa-2x mb-3"></i>
+
+<br>
+
+Solve Problems
+
+</a>
+
+</div>
+
+<div class="col-lg-3">
+
+<a href="{{ url_for('student.assignments') }}"
+class="btn btn-outline-success w-100 p-4">
+
+<i class="fas fa-book fa-2x mb-3"></i>
+
+<br>
+
+Assignments
+
+</a>
+
+</div>
+
+<div class="col-lg-3">
+
+<a href="{{ url_for('student.submissions') }}"
+class="btn btn-outline-warning w-100 p-4">
+
+<i class="fas fa-upload fa-2x mb-3"></i>
+
+<br>
+
+My Submissions
+
+</a>
+
+</div>
+
+<div class="col-lg-3">
+
+<a href="{{ url_for('student.leaderboard') }}"
+class="btn btn-outline-danger w-100 p-4">
+
+<i class="fas fa-trophy fa-2x mb-3"></i>
+
+<br>
+
+Leaderboard
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= RECENT ASSIGNMENTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white d-flex justify-content-between">
+
+<h5 class="mb-0">
+
+Recent Assignments
+
+</h5>
+
+<a href="{{ url_for('student.assignments') }}"
+class="btn btn-sm btn-primary">
+
+View All
+
+</a>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead>
+
+<tr>
+
+<th>Assignment</th>
+
+<th>Course</th>
+
+<th>Deadline</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% if assignments %}
+
+{% for assignment in assignments %}
+
+<tr>
+
+<td>{{ assignment.title }}</td>
+
+<td>{{ assignment.course }}</td>
+
+<td>{{ assignment.deadline }}</td>
+
+<td>
+
+{% if assignment.status=="Completed" %}
+
+<span class="badge bg-success">
+
+Completed
+
+</span>
+
+{% elif assignment.status=="Pending" %}
+
+<span class="badge bg-warning text-dark">
+
+Pending
+
+</span>
+
+{% else %}
+
+<span class="badge bg-danger">
+
+Overdue
+
+</span>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+{% else %}
+
+<tr>
+
+<td>Python Basics</td>
+
+<td>Python</td>
+
+<td>25 July 2026</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Pending
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Sorting Algorithms</td>
+
+<td>DSA</td>
+
+<td>28 July 2026</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Completed
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Database Queries</td>
+
+<td>DBMS</td>
+
+<td>30 July 2026</td>
+
+<td>
+
+<span class="badge bg-danger">
+
+Overdue
+
+</span>
+
+</td>
+
+</tr>
+
+{% endif %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= UPCOMING DEADLINES ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Upcoming Deadlines
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="list-group">
+
+<div class="list-group-item">
+
+<h6 class="mb-1">
+
+Python Assignment
+
+</h6>
+
+<small class="text-muted">
+
+Due: 25 July 2026
+
+</small>
+
+</div>
+
+<div class="list-group-item">
+
+<h6 class="mb-1">
+
+Data Structures Lab
+
+</h6>
+
+<small class="text-muted">
+
+Due: 28 July 2026
+
+</small>
+
+</div>
+
+<div class="list-group-item">
+
+<h6 class="mb-1">
+
+SQL Practice
+
+</h6>
+
+<small class="text-muted">
+
+Due: 30 July 2026
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= NOTIFICATIONS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Latest Notifications
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="list-group list-group-flush">
+
+<li class="list-group-item">
+
+<i class="fas fa-bell text-primary me-2"></i>
+
+New Python assignment has been published.
+
+</li>
+
+<li class="list-group-item">
+
+<i class="fas fa-check-circle text-success me-2"></i>
+
+Your last submission passed all test cases.
+
+</li>
+
+<li class="list-group-item">
+
+<i class="fas fa-trophy text-warning me-2"></i>
+
+You moved up to Rank #12 on the leaderboard.
+
+</li>
+
+<li class="list-group-item">
+
+<i class="fas fa-info-circle text-info me-2"></i>
+
+Weekly coding contest starts this Friday.
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TODAY'S SCHEDULE ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Today's Schedule
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="timeline">
+
+<div class="mb-3">
+
+<strong>
+
+09:00 AM
+
+</strong>
+
+<p class="mb-0 text-muted">
+
+Programming Lab Session
+
+</p>
+
+</div>
+
+<div class="mb-3">
+
+<strong>
+
+11:00 AM
+
+</strong>
+
+<p class="mb-0 text-muted">
+
+Complete Python Assignment
+
+</p>
+
+</div>
+
+<div class="mb-3">
+
+<strong>
+
+02:00 PM
+
+</strong>
+
+<p class="mb-0 text-muted">
+
+Practice DSA Problems
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+05:00 PM
+
+</strong>
+
+<p class="mb-0 text-muted">
+
+Review Submission Results
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PENDING TASKS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Pending Tasks
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-4">
+
+<div class="alert alert-warning">
+
+<i class="fas fa-book me-2"></i>
+
+Finish Python Assignment
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="alert alert-info">
+
+<i class="fas fa-code me-2"></i>
+
+Solve 5 DSA Problems
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="alert alert-success">
+
+<i class="fas fa-chart-line me-2"></i>
+
+Improve Accuracy to 95%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= RECENT SUBMISSIONS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white d-flex justify-content-between align-items-center">
+
+<h5 class="mb-0">
+
+Recent Submissions
+
+</h5>
+
+<a href="{{ url_for('student.submissions') }}"
+class="btn btn-sm btn-primary">
+
+View All
+
+</a>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead>
+
+<tr>
+
+<th>Problem</th>
+
+<th>Language</th>
+
+<th>Result</th>
+
+<th>Time</th>
+
+<th>Submitted</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% if submissions %}
+
+{% for submission in submissions %}
+
+<tr>
+
+<td>{{ submission.problem }}</td>
+
+<td>{{ submission.language }}</td>
+
+<td>
+
+{% if submission.status == "Accepted" %}
+
+<span class="badge bg-success">
+
+Accepted
+
+</span>
+
+{% elif submission.status == "Wrong Answer" %}
+
+<span class="badge bg-danger">
+
+Wrong Answer
+
+</span>
+
+{% elif submission.status == "Time Limit Exceeded" %}
+
+<span class="badge bg-warning text-dark">
+
+TLE
+
+</span>
+
+{% else %}
+
+<span class="badge bg-secondary">
+
+{{ submission.status }}
+
+</span>
+
+{% endif %}
+
+</td>
+
+<td>{{ submission.execution_time }}</td>
+
+<td>{{ submission.created_at }}</td>
+
+</tr>
+
+{% endfor %}
+
+{% else %}
+
+<tr>
+
+<td>Two Sum</td>
+
+<td>Python</td>
+
+<td><span class="badge bg-success">Accepted</span></td>
+
+<td>0.04 s</td>
+
+<td>Today</td>
+
+</tr>
+
+<tr>
+
+<td>Binary Search</td>
+
+<td>C++</td>
+
+<td><span class="badge bg-success">Accepted</span></td>
+
+<td>0.02 s</td>
+
+<td>Yesterday</td>
+
+</tr>
+
+<tr>
+
+<td>Merge Sort</td>
+
+<td>Java</td>
+
+<td><span class="badge bg-danger">Wrong Answer</span></td>
+
+<td>0.18 s</td>
+
+<td>Yesterday</td>
+
+</tr>
+
+<tr>
+
+<td>Graph Traversal</td>
+
+<td>Python</td>
+
+<td><span class="badge bg-warning text-dark">TLE</span></td>
+
+<td>2.01 s</td>
+
+<td>2 Days Ago</td>
+
+</tr>
+
+{% endif %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= LEADERBOARD PREVIEW ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white d-flex justify-content-between">
+
+<h5 class="mb-0">
+
+Leaderboard
+
+</h5>
+
+<a href="{{ url_for('student.leaderboard') }}"
+class="btn btn-sm btn-outline-primary">
+
+Full
+
+</a>
+
+</div>
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+🥇 Rahul Sharma
+
+</span>
+
+<strong>
+
+980
+
+</strong>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+🥈 Priya Singh
+
+</span>
+
+<strong>
+
+960
+
+</strong>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+🥉 Aman Verma
+
+</span>
+
+<strong>
+
+940
+
+</strong>
+
+</div>
+
+<hr>
+
+<div class="d-flex justify-content-between">
+
+<span class="fw-bold text-primary">
+
+You
+
+</span>
+
+<strong class="text-primary">
+
+{{ rank if rank else "#12" }}
+
+</strong>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= CODING STREAK ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-fire fa-4x text-danger mb-3"></i>
+
+<h2>
+
+{{ streak if streak else 15 }}
+
+Days
+
+</h2>
+
+<p class="text-muted">
+
+Current Coding Streak
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-star fa-4x text-warning mb-3"></i>
+
+<h2>
+
+{{ points if points else 1240 }}
+
+</h2>
+
+<p class="text-muted">
+
+Total Points
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-medal fa-4x text-success mb-3"></i>
+
+<h2>
+
+{{ badges if badges else 8 }}
+
+</h2>
+
+<p class="text-muted">
+
+Badges Earned
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PERFORMANCE SUMMARY ================= -->
+
+<div class="row mt-4">
+
+<div class="col-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Performance Summary
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-3">
+
+<h3 class="text-success">
+
+95%
+
+</h3>
+
+<p class="text-muted">
+
+Acceptance Rate
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-primary">
+
+125
+
+</h3>
+
+<p class="text-muted">
+
+Problems Attempted
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-warning">
+
+98
+
+</h3>
+
+<p class="text-muted">
+
+Problems Solved
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-danger">
+
+18 hrs
+
+</h3>
+
+<p class="text-muted">
+
+Coding Time
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= PROGRESS CHARTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Weekly Coding Activity
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<canvas id="weeklyChart" height="120"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Language Usage
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<canvas id="languageChart"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUBMISSION SUCCESS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Submission Results
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<canvas id="submissionChart"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Monthly Progress
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<canvas id="progressChart"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= LANGUAGE STATISTICS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Programming Language Statistics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-3">
+
+<h3 class="text-primary">
+
+55%
+
+</h3>
+
+<p>
+
+Python
+
+</p>
+
+<div class="progress">
+
+<div class="progress-bar bg-primary"
+
+style="width:55%">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-success">
+
+20%
+
+</h3>
+
+<p>
+
+Java
+
+</p>
+
+<div class="progress">
+
+<div class="progress-bar bg-success"
+
+style="width:20%">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-warning">
+
+15%
+
+</h3>
+
+<p>
+
+C++
+
+</p>
+
+<div class="progress">
+
+<div class="progress-bar bg-warning"
+
+style="width:15%">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-danger">
+
+10%
+
+</h3>
+
+<p>
+
+C
+
+</p>
+
+<div class="progress">
+
+<div class="progress-bar bg-danger"
+
+style="width:10%">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= WEEKLY GOALS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Weekly Goals
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>
+
+Solve 20 Problems
+
+</span>
+
+<span>
+
+16 / 20
+
+</span>
+
+</div>
+
+<div class="progress">
+
+<div class="progress-bar bg-primary"
+
+style="width:80%">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>
+
+Complete Assignments
+
+</span>
+
+<span>
+
+5 / 6
+
+</span>
+
+</div>
+
+<div class="progress">
+
+<div class="progress-bar bg-success"
+
+style="width:83%">
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="d-flex justify-content-between">
+
+<span>
+
+Maintain Accuracy
+
+</span>
+
+<span>
+
+92%
+
+</span>
+
+</div>
+
+<div class="progress">
+
+<div class="progress-bar bg-warning"
+
+style="width:92%">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Learning Progress
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<strong>
+
+Python Programming
+
+</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-primary"
+
+style="width:95%">
+
+95%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<strong>
+
+Data Structures
+
+</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-success"
+
+style="width:82%">
+
+82%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<strong>
+
+Algorithms
+
+</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-warning"
+
+style="width:70%">
+
+70%
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<strong>
+
+DBMS
+
+</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-danger"
+
+style="width:65%">
+
+65%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= CHART.JS ================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- ================= CODING CALENDAR ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white d-flex justify-content-between align-items-center">
+
+<h5 class="mb-0">
+
+Coding Activity (Last 7 Days)
+
+</h5>
+
+<span class="badge bg-success">
+
+Active
+
+</span>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col">
+
+<h6>Mon</h6>
+
+<div class="bg-success rounded p-3 text-white">
+
+5
+
+</div>
+
+</div>
+
+<div class="col">
+
+<h6>Tue</h6>
+
+<div class="bg-primary rounded p-3 text-white">
+
+7
+
+</div>
+
+</div>
+
+<div class="col">
+
+<h6>Wed</h6>
+
+<div class="bg-warning rounded p-3 text-dark">
+
+4
+
+</div>
+
+</div>
+
+<div class="col">
+
+<h6>Thu</h6>
+
+<div class="bg-info rounded p-3 text-white">
+
+6
+
+</div>
+
+</div>
+
+<div class="col">
+
+<h6>Fri</h6>
+
+<div class="bg-danger rounded p-3 text-white">
+
+3
+
+</div>
+
+</div>
+
+<div class="col">
+
+<h6>Sat</h6>
+
+<div class="bg-success rounded p-3 text-white">
+
+8
+
+</div>
+
+</div>
+
+<div class="col">
+
+<h6>Sun</h6>
+
+<div class="bg-primary rounded p-3 text-white">
+
+5
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ACHIEVEMENTS ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Achievements
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+🏆 <strong>Problem Solver</strong>
+
+<br>
+
+<small class="text-muted">
+
+Solved 100 Problems
+
+</small>
+
+</div>
+
+<div class="mb-3">
+
+🔥 <strong>15 Day Streak</strong>
+
+<br>
+
+<small class="text-muted">
+
+Consistent Daily Coding
+
+</small>
+
+</div>
+
+<div class="mb-3">
+
+⚡ <strong>Fast Coder</strong>
+
+<br>
+
+<small class="text-muted">
+
+Execution under 0.05 sec
+
+</small>
+
+</div>
+
+<div>
+
+🥇 <strong>Top Performer</strong>
+
+<br>
+
+<small class="text-muted">
+
+Top 15 Leaderboard
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RECENTLY SOLVED ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-7">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Recently Solved Problems
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="list-group">
+
+<a href="#" class="list-group-item list-group-item-action">
+
+Two Sum
+
+<span class="badge bg-success float-end">
+
+Accepted
+
+</span>
+
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+
+Binary Search
+
+<span class="badge bg-success float-end">
+
+Accepted
+
+</span>
+
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+
+Merge Intervals
+
+<span class="badge bg-success float-end">
+
+Accepted
+
+</span>
+
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+
+DFS Traversal
+
+<span class="badge bg-success float-end">
+
+Accepted
+
+</span>
+
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+
+Minimum Stack
+
+<span class="badge bg-success float-end">
+
+Accepted
+
+</span>
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= LEARNING GOALS ================= -->
+
+<div class="col-lg-5">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Learning Goals
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="form-check mb-3">
+
+<input class="form-check-input"
+type="checkbox"
+checked>
+
+<label class="form-check-label">
+
+Complete Python Basics
+
+</label>
+
+</div>
+
+<div class="form-check mb-3">
+
+<input class="form-check-input"
+type="checkbox"
+checked>
+
+<label class="form-check-label">
+
+Solve 100 DSA Problems
+
+</label>
+
+</div>
+
+<div class="form-check mb-3">
+
+<input class="form-check-input"
+type="checkbox">
+
+<label class="form-check-label">
+
+Master Dynamic Programming
+
+</label>
+
+</div>
+
+<div class="form-check">
+
+<input class="form-check-input"
+type="checkbox">
+
+<label class="form-check-label">
+
+Reach Top 10 Leaderboard
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PRODUCTIVITY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Productivity Insights
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-3">
+
+<h3 class="text-primary">
+
+42 hrs
+
+</h3>
+
+<p class="text-muted">
+
+Coding Time
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-success">
+
+156
+
+</h3>
+
+<p class="text-muted">
+
+Problems Attempted
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-warning">
+
+128
+
+</h3>
+
+<p class="text-muted">
+
+Accepted Solutions
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-danger">
+
+82%
+
+</h3>
+
+<p class="text-muted">
+
+Weekly Goal Completed
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+{% block scripts %}
+
+<!-- ================= CHART.JS DASHBOARD ================= -->
+
+<script>
+
+// Weekly Coding Activity
+const weeklyCtx = document.getElementById('weeklyChart');
+
+if (weeklyCtx) {
+new Chart(weeklyCtx, {
+type: 'line',
+data: {
+labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+datasets: [{
+label: 'Problems Solved',
+data: [5,7,4,6,3,8,5],
+borderColor: '#2563eb',
+backgroundColor: 'rgba(37,99,235,0.15)',
+fill: true,
+tension: 0.4
+}]
+},
+options: {
+responsive: true,
+plugins: {
+legend: {
+display: true
+}
+}
+}
+});
+}
+
+// Language Usage
+const languageCtx = document.getElementById('languageChart');
+
+if (languageCtx) {
+new Chart(languageCtx,{
+type:'doughnut',
+data:{
+labels:['Python','Java','C++','C'],
+datasets:[{
+data:[55,20,15,10],
+backgroundColor:[
+'#2563eb',
+'#16a34a',
+'#f59e0b',
+'#dc2626'
+]
+}]
+},
+options:{
+responsive:true
+}
+});
+}
+
+// Submission Results
+const submissionCtx=document.getElementById('submissionChart');
+
+if(submissionCtx){
+
+new Chart(submissionCtx,{
+
+type:'bar',
+
+data:{
+
+labels:[
+'Accepted',
+'Wrong Answer',
+'TLE',
+'Runtime Error'
+],
+
+datasets:[{
+
+label:'Submissions',
+
+data:[128,22,8,5],
+
+backgroundColor:[
+'#16a34a',
+'#dc2626',
+'#f59e0b',
+'#6366f1'
+]
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{
+
+legend:{
+
+display:false
+
+}
+
+}
+
+}
+
+});
+
+}
+
+// Monthly Progress
+
+const progressCtx=document.getElementById('progressChart');
+
+if(progressCtx){
+
+new Chart(progressCtx,{
+
+type:'line',
+
+data:{
+
+labels:[
+'Jan',
+'Feb',
+'Mar',
+'Apr',
+'May',
+'Jun'
+],
+
+datasets:[{
+
+label:'Problems Solved',
+
+data:[20,35,42,58,74,98],
+
+borderColor:'#16a34a',
+
+backgroundColor:'rgba(22,163,74,.15)',
+
+fill:true,
+
+tension:.4
+
+}]
+
+},
+
+options:{
+
+responsive:true
+
+}
+
+});
+
+}
+
+</script>
+
+<!-- ================= DASHBOARD ANIMATION ================= -->
+
+<script>
+
+document.querySelectorAll(".card").forEach((card,index)=>{
+
+card.style.opacity="0";
+
+card.style.transform="translateY(25px)";
+
+setTimeout(()=>{
+
+card.style.transition="all .5s ease";
+
+card.style.opacity="1";
+
+card.style.transform="translateY(0)";
+
+},index*100);
+
+});
+
+</script>
+
+<!-- ================= AUTO REFRESH STATS ================= -->
+
+<script>
+
+function refreshDashboard(){
+
+console.log("Refreshing dashboard...");
+
+// Future AJAX call can be placed here.
+
+}
+
+setInterval(refreshDashboard,300000);
+
+</script>
+
+<!-- ================= TOOLTIPS ================= -->
+
+<script>
+
+document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el=>{
+
+new bootstrap.Tooltip(el);
+
+});
+
+</script>
+
+<!-- ================= ACTIVE MENU ================= -->
+
+<script>
+
+document.querySelectorAll(".sidebar a").forEach(link=>{
+
+if(link.href===window.location.href){
+
+link.classList.add("active");
+
+}
+
+});
+
+</script>
+
+{% endblock %}

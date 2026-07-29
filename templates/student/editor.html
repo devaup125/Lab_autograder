@@ -1,0 +1,2454 @@
+{% extends "student/base_student.html" %}
+
+{% block title %}
+Code Editor
+{% endblock %}
+
+{% block page_title %}
+Programming Editor
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">
+    <a href="{{ url_for('student.dashboard') }}">Dashboard</a>
+</li>
+<li class="breadcrumb-item">
+    <a href="{{ url_for('student.problems') }}">Problems</a>
+</li>
+<li class="breadcrumb-item active">
+    Code Editor
+</li>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+    <!-- ================= LEFT PANEL ================= -->
+
+    <div class="col-lg-4 mb-4">
+
+        <div class="card shadow border-0">
+
+            <div class="card-header bg-primary text-white">
+
+                <h4 class="mb-0">
+                    {{ problem.title if problem else "Two Sum" }}
+                </h4>
+
+            </div>
+
+            <div class="card-body">
+
+                <span class="badge bg-success">
+                    Easy
+                </span>
+
+                <span class="badge bg-info">
+                    Arrays
+                </span>
+
+                <span class="badge bg-warning text-dark">
+                    {{ problem.points if problem else 100 }} Points
+                </span>
+
+                <hr>
+
+                <p>
+
+                {{ problem.description if problem else
+                "Given an array of integers nums and an integer target,
+                return indices of the two numbers such that they add up
+                to target." }}
+
+                </p>
+
+                <hr>
+
+                <h6>
+
+                    Time Limit
+
+                </h6>
+
+                <p>
+
+                    1 Second
+
+                </p>
+
+                <h6>
+
+                    Memory Limit
+
+                </h6>
+
+                <p>
+
+                    256 MB
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= RIGHT PANEL ================= -->
+
+    <div class="col-lg-8">
+
+        <div class="card shadow border-0">
+
+            <div class="card-header bg-white">
+
+                <div class="row align-items-center">
+
+                    <div class="col-md-3">
+
+                        <select
+                            id="language"
+                            class="form-select">
+
+                            <option value="python">
+                                Python
+                            </option>
+
+                            <option value="java">
+                                Java
+                            </option>
+
+                            <option value="cpp">
+                                C++
+                            </option>
+
+                            <option value="c">
+                                C
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-9 text-end">
+
+                        <button
+                            class="btn btn-outline-secondary me-2"
+                            id="themeBtn">
+
+                            <i class="fas fa-moon"></i>
+
+                            Theme
+
+                        </button>
+
+                        <button
+                            class="btn btn-outline-info me-2"
+                            id="fullscreenBtn">
+
+                            <i class="fas fa-expand"></i>
+
+                            Fullscreen
+
+                        </button>
+
+                        <button
+                            class="btn btn-success me-2"
+                            id="runBtn">
+
+                            <i class="fas fa-play"></i>
+
+                            Run Code
+
+                        </button>
+
+                        <button
+                            class="btn btn-primary"
+                            id="submitBtn">
+
+                            <i class="fas fa-paper-plane"></i>
+
+                            Submit
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card-body p-0">
+
+                <!-- Monaco Editor -->
+
+                <div
+                    id="editor"
+                    style="height:600px;border-top:1px solid #ddd;">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= PROBLEM DETAILS ================= -->
+
+<div class="row mt-4">
+
+    <!-- Problem Statement -->
+
+    <div class="col-lg-12">
+
+        <div class="card shadow border-0">
+
+            <div class="card-header bg-white">
+
+                <h4 class="mb-0">
+
+                    Problem Statement
+
+                </h4>
+
+            </div>
+
+            <div class="card-body">
+
+                <p>
+
+                Given an integer array <strong>nums</strong> and an integer
+                <strong>target</strong>, return the indices of the two numbers
+                such that they add up to the target.
+
+                </p>
+
+                <p>
+
+                You may assume that each input has exactly one solution,
+                and you may not use the same element twice.
+
+                </p>
+
+                <p>
+
+                You can return the answer in any order.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= INPUT / OUTPUT ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-6">
+
+        <div class="card shadow border-0 h-100">
+
+            <div class="card-header bg-white">
+
+                <h5>
+
+                    Input Format
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+<pre>
+Line 1 : Integer n
+
+Line 2 : n integers
+
+Line 3 : Target integer
+</pre>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+
+        <div class="card shadow border-0 h-100">
+
+            <div class="card-header bg-white">
+
+                <h5>
+
+                    Output Format
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+<pre>
+Return the indices of the two
+numbers whose sum equals target.
+</pre>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= CONSTRAINTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card shadow border-0">
+
+<div class="card-header bg-white">
+
+<h5>
+
+Constraints
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul>
+
+<li>
+
+2 ≤ n ≤ 10<sup>5</sup>
+
+</li>
+
+<li>
+
+−10<sup>9</sup> ≤ nums[i] ≤ 10<sup>9</sup>
+
+</li>
+
+<li>
+
+−10<sup>9</sup> ≤ target ≤ 10<sup>9</sup>
+
+</li>
+
+<li>
+
+Exactly one valid answer exists.
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SAMPLE TEST CASES ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card shadow border-0">
+
+<div class="card-header bg-success text-white">
+
+Sample Input
+
+</div>
+
+<div class="card-body">
+
+<pre>
+4
+
+2 7 11 15
+
+9
+</pre>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="card shadow border-0">
+
+<div class="card-header bg-primary text-white">
+
+Sample Output
+
+</div>
+
+<div class="card-body">
+
+<pre>
+0 1
+</pre>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= EXPLANATION ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card shadow border-0">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+Explanation
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<p>
+
+The elements at index <strong>0</strong> and
+<strong>1</strong> are
+
+<b>2</b> and <b>7</b>.
+
+</p>
+
+<p>
+
+Their sum is
+
+<strong>
+
+2 + 7 = 9
+
+</strong>
+
+which matches the target.
+
+Therefore, the correct output is:
+
+</p>
+
+<pre>
+0 1
+</pre>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= CUSTOM INPUT & OUTPUT ================= -->
+
+<div class="row mt-4">
+
+    <!-- Custom Input -->
+
+    <div class="col-lg-6">
+
+        <div class="card shadow border-0">
+
+            <div class="card-header bg-white">
+
+                <h5 class="mb-0">
+
+                    Custom Input
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <textarea
+                    id="customInput"
+                    class="form-control"
+                    rows="10"
+                    placeholder="Enter custom input here..."></textarea>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Output Console -->
+
+    <div class="col-lg-6">
+
+        <div class="card shadow border-0">
+
+            <div class="card-header bg-dark text-white">
+
+                <h5 class="mb-0">
+
+                    Output Console
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+<pre id="outputConsole"
+style="height:220px;
+overflow:auto;
+background:#111827;
+color:#22c55e;
+padding:15px;
+border-radius:10px;">
+Program output will appear here...
+</pre>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= EXECUTION RESULT ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card shadow border-0">
+
+<div class="card-header bg-primary text-white d-flex justify-content-between">
+
+<h5 class="mb-0">
+
+Execution Result
+
+</h5>
+
+<span id="executionStatus"
+class="badge bg-success">
+
+Ready
+
+</span>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-3">
+
+<h6>
+
+Status
+
+</h6>
+
+<h5 id="statusText"
+class="text-success">
+
+Ready
+
+</h5>
+
+</div>
+
+<div class="col-md-3">
+
+<h6>
+
+Execution Time
+
+</h6>
+
+<h5 id="executionTime">
+
+0.00 sec
+
+</h5>
+
+</div>
+
+<div class="col-md-3">
+
+<h6>
+
+Memory Used
+
+</h6>
+
+<h5 id="memoryUsed">
+
+0 MB
+
+</h5>
+
+</div>
+
+<div class="col-md-3">
+
+<h6>
+
+Language
+
+</h6>
+
+<h5 id="selectedLanguage">
+
+Python
+
+</h5>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RUN RESULTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card shadow border-0">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+Test Case Results
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-bordered table-hover">
+
+<thead class="table-light">
+
+<tr>
+
+<th>#</th>
+
+<th>Input</th>
+
+<th>Expected Output</th>
+
+<th>Your Output</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="testCaseTable">
+
+<tr>
+
+<td>1</td>
+
+<td>2 7 11 15<br>9</td>
+
+<td>0 1</td>
+
+<td>-</td>
+
+<td>
+
+<span class="badge bg-secondary">
+
+Not Run
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>2</td>
+
+<td>3 2 4<br>6</td>
+
+<td>1 2</td>
+
+<td>-</td>
+
+<td>
+
+<span class="badge bg-secondary">
+
+Not Run
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>3</td>
+
+<td>3 3<br>6</td>
+
+<td>0 1</td>
+
+<td>-</td>
+
+<td>
+
+<span class="badge bg-secondary">
+
+Not Run
+
+</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= EXECUTION LOG ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="card shadow border-0">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+Execution Log
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<pre id="executionLog"
+style="height:180px;
+overflow:auto;
+background:#0f172a;
+color:#f8fafc;
+padding:15px;
+border-radius:10px;">
+Waiting for execution...
+</pre>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= HIDDEN TEST CASES ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card shadow border-0">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-user-secret me-2"></i>
+
+Hidden Test Cases
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<p class="text-muted">
+
+These test cases are used during final evaluation and
+are not visible to students.
+
+</p>
+
+<div class="list-group">
+
+<div class="list-group-item d-flex justify-content-between">
+
+Hidden Test Case #1
+
+<span class="badge bg-secondary">
+
+Hidden
+
+</span>
+
+</div>
+
+<div class="list-group-item d-flex justify-content-between">
+
+Hidden Test Case #2
+
+<span class="badge bg-secondary">
+
+Hidden
+
+</span>
+
+</div>
+
+<div class="list-group-item d-flex justify-content-between">
+
+Hidden Test Case #3
+
+<span class="badge bg-secondary">
+
+Hidden
+
+</span>
+
+</div>
+
+<div class="list-group-item d-flex justify-content-between">
+
+Hidden Test Case #4
+
+<span class="badge bg-secondary">
+
+Hidden
+
+</span>
+
+</div>
+
+<div class="list-group-item d-flex justify-content-between">
+
+Hidden Test Case #5
+
+<span class="badge bg-secondary">
+
+Hidden
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUBMISSION STATUS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card shadow border-0">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-paper-plane me-2"></i>
+
+Submission Status
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+Compilation
+
+</span>
+
+<span class="badge bg-success">
+
+Success
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+Execution
+
+</span>
+
+<span class="badge bg-warning text-dark">
+
+Pending
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+Evaluation
+
+</span>
+
+<span class="badge bg-secondary">
+
+Waiting
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between">
+
+<span>
+
+Final Verdict
+
+</span>
+
+<span id="finalVerdict"
+
+class="badge bg-info">
+
+Not Submitted
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PERFORMANCE ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-4">
+
+<div class="card shadow border-0 text-center">
+
+<div class="card-body">
+
+<i class="fas fa-clock fa-3x text-primary mb-3"></i>
+
+<h5>
+
+Runtime
+
+</h5>
+
+<h3 id="runtimeValue">
+
+0 ms
+
+</h3>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card shadow border-0 text-center">
+
+<div class="card-body">
+
+<i class="fas fa-memory fa-3x text-success mb-3"></i>
+
+<h5>
+
+Memory
+
+</h5>
+
+<h3 id="memoryValue">
+
+0 MB
+
+</h3>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card shadow border-0 text-center">
+
+<div class="card-body">
+
+<i class="fas fa-percentage fa-3x text-warning mb-3"></i>
+
+<h5>
+
+Score
+
+</h5>
+
+<h3 id="scoreValue">
+
+0 / 100
+
+</h3>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= FINAL SUMMARY ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card shadow border-0">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-bar me-2"></i>
+
+Submission Summary
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-3">
+
+<h6>
+
+Public Tests
+
+</h6>
+
+<h4 id="publicPassed">
+
+0 / 3
+
+</h4>
+
+</div>
+
+<div class="col-md-3">
+
+<h6>
+
+Hidden Tests
+
+</h6>
+
+<h4 id="hiddenPassed">
+
+0 / 5
+
+</h4>
+
+</div>
+
+<div class="col-md-3">
+
+<h6>
+
+Total Score
+
+</h6>
+
+<h4 id="totalScore">
+
+0%
+
+</h4>
+
+</div>
+
+<div class="col-md-3">
+
+<h6>
+
+Verdict
+
+</h6>
+
+<h4 id="overallVerdict"
+
+class="text-info">
+
+Waiting
+
+</h4>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="progress mt-3" style="height:24px;">
+
+<div id="scoreProgress"
+
+class="progress-bar bg-success"
+
+style="width:0%;">
+
+0%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= COMPILER INFORMATION ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-info shadow-sm">
+
+<strong>
+
+Compiler Information
+
+</strong>
+
+<hr>
+
+<ul class="mb-0">
+
+<li>
+
+Python → Python 3.11
+
+</li>
+
+<li>
+
+Java → OpenJDK 21
+
+</li>
+
+<li>
+
+C → GCC 13
+
+</li>
+
+<li>
+
+C++ → G++ 13 (C++17)
+
+</li>
+
+<li>
+
+Maximum Execution Time: 1 Second
+
+</li>
+
+<li>
+
+Maximum Memory: 256 MB
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+{% block scripts %}
+
+<!-- ================= MONACO EDITOR ================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+
+<script>
+
+let editor;
+
+const starterCode = {
+
+python:
+`def solve():
+    pass
+
+if __name__ == "__main__":
+    solve()
+`,
+
+java:
+`import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+    }
+
+}
+`,
+
+cpp:
+`#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+
+    return 0;
+}
+`,
+
+c:
+`#include <stdio.h>
+
+int main() {
+
+    return 0;
+}
+`
+
+};
+
+require.config({
+
+paths:{
+
+vs:"https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs"
+
+}
+
+});
+
+require(["vs/editor/editor.main"],function(){
+
+editor=monaco.editor.create(
+
+document.getElementById("editor"),
+
+{
+
+value:starterCode.python,
+
+language:"python",
+
+theme:"vs-dark",
+
+automaticLayout:true,
+
+fontSize:16,
+
+minimap:{
+
+enabled:true
+
+},
+
+scrollBeyondLastLine:false,
+
+roundedSelection:false,
+
+tabSize:4,
+
+insertSpaces:true,
+
+wordWrap:"on"
+
+}
+
+);
+
+});
+
+</script>
+
+<!-- ================= LANGUAGE CHANGE ================= -->
+
+<script>
+
+const languageMap={
+
+python:"python",
+
+java:"java",
+
+cpp:"cpp",
+
+c:"c"
+
+};
+
+document.getElementById("language")
+
+.addEventListener("change",function(){
+
+const lang=this.value;
+
+monaco.editor.setModelLanguage(
+
+editor.getModel(),
+
+languageMap[lang]
+
+);
+
+editor.setValue(starterCode[lang]);
+
+document.getElementById("selectedLanguage").innerHTML=
+
+this.options[this.selectedIndex].text;
+
+});
+
+</script>
+
+<!-- ================= THEME SWITCH ================= -->
+
+<script>
+
+let darkTheme=true;
+
+document.getElementById("themeBtn")
+
+.addEventListener("click",function(){
+
+darkTheme=!darkTheme;
+
+monaco.editor.setTheme(
+
+darkTheme?"vs-dark":"vs"
+
+);
+
+this.innerHTML=
+
+darkTheme
+
+?'<i class="fas fa-moon"></i> Dark'
+
+:'<i class="fas fa-sun"></i> Light';
+
+});
+
+</script>
+
+<!-- ================= FONT SIZE ================= -->
+
+<script>
+
+document.addEventListener("keydown",function(e){
+
+if(e.ctrlKey && e.key==="+"){
+
+const size=editor.getOption(
+
+monaco.editor.EditorOption.fontSize
+
+);
+
+editor.updateOptions({
+
+fontSize:size+1
+
+});
+
+}
+
+if(e.ctrlKey && e.key==="-" ){
+
+const size=editor.getOption(
+
+monaco.editor.EditorOption.fontSize
+
+);
+
+editor.updateOptions({
+
+fontSize:Math.max(10,size-1)
+
+});
+
+}
+
+});
+
+</script>
+
+<!-- ================= FORMAT DOCUMENT ================= -->
+
+<script>
+
+document.addEventListener("keydown",function(e){
+
+if(e.shiftKey && e.altKey && e.key==="F"){
+
+editor.getAction(
+
+"editor.action.formatDocument"
+
+).run();
+
+}
+
+});
+
+</script>
+
+<!-- ================= COPY CODE ================= -->
+
+<script>
+
+function copyCode(){
+
+navigator.clipboard.writeText(
+
+editor.getValue()
+
+);
+
+}
+
+</script>
+
+<!-- ================= DOWNLOAD CODE ================= -->
+
+<script>
+
+function downloadCode(){
+
+const lang=document.getElementById("language").value;
+
+const ext={
+
+python:"py",
+
+java:"java",
+
+cpp:"cpp",
+
+c:"c"
+
+};
+
+const blob=new Blob(
+
+[editor.getValue()],
+
+{type:"text/plain"}
+
+);
+
+const a=document.createElement("a");
+
+a.href=URL.createObjectURL(blob);
+
+a.download="solution."+ext[lang];
+
+a.click();
+
+}
+
+</script>
+
+<!-- ================= EXTRA TOOLBAR ================= -->
+
+<div class="mt-3 text-end">
+
+<button
+
+class="btn btn-outline-secondary"
+
+onclick="copyCode()">
+
+<i class="fas fa-copy"></i>
+
+Copy
+
+</button>
+
+<button
+
+class="btn btn-outline-success"
+
+onclick="downloadCode()">
+
+<i class="fas fa-download"></i>
+
+Download
+
+</button>
+
+</div>
+<!-- ================= RUN CODE ================= -->
+
+<script>
+
+async function runCode(){
+
+const code = editor.getValue();
+
+const language = document.getElementById("language").value;
+
+const input = document.getElementById("customInput").value;
+
+document.getElementById("executionStatus").innerHTML = "Running...";
+document.getElementById("statusText").innerHTML = "Running...";
+document.getElementById("outputConsole").textContent = "Executing...";
+document.getElementById("executionLog").textContent = "Sending code to server...\n";
+
+const start = performance.now();
+
+try{
+
+const response = await fetch("/student/run",{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify({
+
+language:language,
+
+code:code,
+
+input:input
+
+})
+
+});
+
+const result = await response.json();
+
+const end = performance.now();
+
+document.getElementById("outputConsole").textContent =
+result.output || "";
+
+document.getElementById("executionLog").textContent =
+result.log || "Execution completed.";
+
+document.getElementById("executionTime").innerHTML =
+(end-start).toFixed(2)+" ms";
+
+document.getElementById("memoryUsed").innerHTML =
+(result.memory || 0)+" MB";
+
+document.getElementById("runtimeValue").innerHTML =
+(result.runtime || 0)+" ms";
+
+document.getElementById("memoryValue").innerHTML =
+(result.memory || 0)+" MB";
+
+document.getElementById("statusText").innerHTML =
+result.status || "Completed";
+
+document.getElementById("executionStatus").innerHTML =
+result.status || "Completed";
+
+}
+catch(error){
+
+document.getElementById("outputConsole").textContent =
+"Unable to connect to server.";
+
+document.getElementById("executionLog").textContent =
+error.toString();
+
+document.getElementById("statusText").innerHTML =
+"Error";
+
+document.getElementById("executionStatus").innerHTML =
+"Error";
+
+}
+
+}
+
+document.getElementById("runBtn")
+.addEventListener("click",runCode);
+
+</script>
+
+<!-- ================= SUBMIT CODE ================= -->
+
+<script>
+
+async function submitCode(){
+
+const code = editor.getValue();
+
+const language =
+document.getElementById("language").value;
+
+document.getElementById("finalVerdict").innerHTML =
+"Submitting...";
+
+try{
+
+const response = await fetch("/student/submit",{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify({
+
+language:language,
+
+code:code
+
+})
+
+});
+
+const result = await response.json();
+
+document.getElementById("scoreValue").innerHTML =
+(result.score || 0)+" / 100";
+
+document.getElementById("totalScore").innerHTML =
+(result.score || 0)+"%";
+
+document.getElementById("overallVerdict").innerHTML =
+result.verdict || "Completed";
+
+document.getElementById("finalVerdict").innerHTML =
+result.verdict || "Completed";
+
+document.getElementById("publicPassed").innerHTML =
+(result.public_passed || 0)+"/"+
+(result.public_total || 0);
+
+document.getElementById("hiddenPassed").innerHTML =
+(result.hidden_passed || 0)+"/"+
+(result.hidden_total || 0);
+
+document.getElementById("scoreProgress").style.width =
+(result.score || 0)+"%";
+
+document.getElementById("scoreProgress").innerHTML =
+(result.score || 0)+"%";
+
+}
+catch(error){
+
+document.getElementById("overallVerdict").innerHTML =
+"Submission Failed";
+
+}
+
+}
+
+document.getElementById("submitBtn")
+.addEventListener("click",submitCode);
+
+</script>
+
+<!-- ================= UPDATE TEST CASE TABLE ================= -->
+
+<script>
+
+function updateTestCases(testcases){
+
+const table=document.getElementById("testCaseTable");
+
+table.innerHTML="";
+
+testcases.forEach((tc,index)=>{
+
+table.innerHTML+=`
+
+<tr>
+
+<td>${index+1}</td>
+
+<td>${tc.input}</td>
+
+<td>${tc.expected}</td>
+
+<td>${tc.output}</td>
+
+<td>
+
+<span class="badge bg-${tc.status=="Passed"?"success":"danger"}">
+
+${tc.status}
+
+</span>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+</script>
+
+<!-- ================= LIVE EXECUTION TIMER ================= -->
+
+<script>
+
+let timer;
+let seconds=0;
+
+function startTimer(){
+
+seconds=0;
+
+clearInterval(timer);
+
+timer=setInterval(function(){
+
+seconds++;
+
+document.getElementById("executionTime").innerHTML =
+seconds+" sec";
+
+},1000);
+
+}
+
+function stopTimer(){
+
+clearInterval(timer);
+
+}
+
+</script>
+
+<!-- ================= LOADING STATE ================= -->
+
+<script>
+
+function setLoading(state){
+
+const run=document.getElementById("runBtn");
+
+const submit=document.getElementById("submitBtn");
+
+run.disabled=state;
+
+submit.disabled=state;
+
+if(state){
+
+run.innerHTML='<span class="spinner-border spinner-border-sm"></span> Running';
+
+}else{
+
+run.innerHTML='<i class="fas fa-play"></i> Run Code';
+
+submit.innerHTML='<i class="fas fa-paper-plane"></i> Submit';
+
+}
+
+}
+
+</script>
+<!-- ================= AUTO SAVE ================= -->
+
+<script>
+
+const STORAGE_KEY = "lab_autograder_editor_code";
+
+function autoSaveCode(){
+
+if(editor){
+
+localStorage.setItem(
+
+STORAGE_KEY,
+
+editor.getValue()
+
+);
+
+}
+
+}
+
+function restoreCode(){
+
+const saved = localStorage.getItem(STORAGE_KEY);
+
+if(saved && editor){
+
+editor.setValue(saved);
+
+}
+
+}
+
+setInterval(autoSaveCode,5000);
+
+</script>
+
+<!-- ================= KEYBOARD SHORTCUTS ================= -->
+
+<script>
+
+document.addEventListener("keydown",function(e){
+
+// Ctrl + S
+
+if(e.ctrlKey && e.key==="s"){
+
+e.preventDefault();
+
+autoSaveCode();
+
+alert("Code Saved");
+
+}
+
+// Ctrl + Enter
+
+if(e.ctrlKey && e.key==="Enter"){
+
+e.preventDefault();
+
+runCode();
+
+}
+
+// Ctrl + Shift + Enter
+
+if(e.ctrlKey && e.shiftKey && e.key==="Enter"){
+
+e.preventDefault();
+
+submitCode();
+
+}
+
+});
+
+</script>
+
+<!-- ================= FULLSCREEN MODE ================= -->
+
+<script>
+
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+
+const editorContainer = document.getElementById("editor");
+
+let fullscreen = false;
+
+fullscreenBtn.addEventListener("click",function(){
+
+fullscreen = !fullscreen;
+
+if(fullscreen){
+
+editorContainer.style.position="fixed";
+
+editorContainer.style.top="0";
+
+editorContainer.style.left="0";
+
+editorContainer.style.width="100vw";
+
+editorContainer.style.height="100vh";
+
+editorContainer.style.zIndex="9999";
+
+editor.layout();
+
+this.innerHTML='<i class="fas fa-compress"></i> Exit Fullscreen';
+
+}else{
+
+editorContainer.removeAttribute("style");
+
+editorContainer.style.height="600px";
+
+editor.layout();
+
+this.innerHTML='<i class="fas fa-expand"></i> Fullscreen';
+
+}
+
+});
+
+</script>
+
+<!-- ================= CONTEST TIMER ================= -->
+
+<script>
+
+let contestSeconds = 0;
+
+function updateContestTimer(){
+
+contestSeconds++;
+
+const hrs = Math.floor(contestSeconds/3600);
+
+const mins = Math.floor((contestSeconds%3600)/60);
+
+const secs = contestSeconds%60;
+
+const timer=document.getElementById("contestTimer");
+
+if(timer){
+
+timer.innerHTML=
+
+String(hrs).padStart(2,"0")+":"+
+
+String(mins).padStart(2,"0")+":"+
+
+String(secs).padStart(2,"0");
+
+}
+
+}
+
+setInterval(updateContestTimer,1000);
+
+</script>
+
+<!-- ================= RESTORE SAVED CODE ================= -->
+
+<script>
+
+window.addEventListener("load",function(){
+
+setTimeout(function(){
+
+if(editor){
+
+restoreCode();
+
+}
+
+},1000);
+
+});
+
+</script>
+
+<!-- ================= BEFORE LEAVE WARNING ================= -->
+
+<script>
+
+window.addEventListener("beforeunload",function(e){
+
+autoSaveCode();
+
+e.preventDefault();
+
+e.returnValue="";
+
+});
+
+</script>
+
+<!-- ================= RESET EDITOR ================= -->
+
+<script>
+
+function resetEditor(){
+
+const lang=document.getElementById("language").value;
+
+if(confirm("Reset your code?")){
+
+editor.setValue(starterCode[lang]);
+
+}
+
+}
+
+</script>
+
+<!-- ================= CLEAR CONSOLE ================= -->
+
+<script>
+
+function clearConsole(){
+
+document.getElementById("outputConsole").textContent="";
+
+document.getElementById("executionLog").textContent="";
+
+}
+
+</script>
+
+<!-- ================= EXTRA ACTION BUTTONS ================= -->
+
+<div class="mt-3 d-flex gap-2 justify-content-end">
+
+<button
+
+class="btn btn-outline-danger"
+
+onclick="resetEditor()">
+
+<i class="fas fa-trash"></i>
+
+Reset Code
+
+</button>
+
+<button
+
+class="btn btn-outline-secondary"
+
+onclick="clearConsole()">
+
+<i class="fas fa-broom"></i>
+
+Clear Console
+
+</button>
+
+<button
+
+class="btn btn-outline-success"
+
+onclick="autoSaveCode()">
+
+<i class="fas fa-save"></i>
+
+Save Code
+
+</button>
+
+</div>
+
+<!-- ================= OPTIONAL CONTEST TIMER ================= -->
+
+<div class="mt-4 text-center">
+
+<h5>
+
+Contest Timer
+
+</h5>
+
+<h2 id="contestTimer">
+
+00:00:00
+
+</h2>
+
+</div>
+<!-- ================= EDITOR LOADING OVERLAY ================= -->
+
+<div id="editorLoader"
+     class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex justify-content-center align-items-center"
+     style="z-index:99999;">
+
+    <div class="text-center text-white">
+
+        <div class="spinner-border text-light mb-3"
+             style="width:4rem;height:4rem;"
+             role="status">
+        </div>
+
+        <h4>Loading Monaco Editor...</h4>
+
+    </div>
+
+</div>
+
+<!-- ================= STATUS BAR ================= -->
+
+<div class="card mt-4 border-0 shadow-sm">
+
+    <div class="card-body py-2">
+
+        <div class="row text-center">
+
+            <div class="col-md-3">
+
+                <strong>Language</strong>
+
+                <div id="statusLanguage">
+
+                    Python
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <strong>Lines</strong>
+
+                <div id="statusLines">
+
+                    0
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <strong>Characters</strong>
+
+                <div id="statusCharacters">
+
+                    0
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <strong>Auto Save</strong>
+
+                <div class="text-success">
+
+                    Enabled
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= MONACO READY ================= -->
+
+<script>
+
+require(["vs/editor/editor.main"],function(){
+
+setTimeout(function(){
+
+const loader=document.getElementById("editorLoader");
+
+if(loader){
+
+loader.remove();
+
+}
+
+updateStatusBar();
+
+},500);
+
+});
+
+</script>
+
+<!-- ================= STATUS BAR UPDATE ================= -->
+
+<script>
+
+function updateStatusBar(){
+
+if(!editor) return;
+
+const code=editor.getValue();
+
+document.getElementById("statusLines").innerHTML=
+
+code.split("\n").length;
+
+document.getElementById("statusCharacters").innerHTML=
+
+code.length;
+
+document.getElementById("statusLanguage").innerHTML=
+
+document.getElementById("language")
+
+.options[document.getElementById("language").selectedIndex].text;
+
+}
+
+setInterval(updateStatusBar,1000);
+
+</script>
+
+<!-- ================= WINDOW RESIZE ================= -->
+
+<script>
+
+window.addEventListener("resize",function(){
+
+if(editor){
+
+editor.layout();
+
+}
+
+});
+
+</script>
+
+<!-- ================= EDITOR FOCUS ================= -->
+
+<script>
+
+window.addEventListener("load",function(){
+
+setTimeout(function(){
+
+if(editor){
+
+editor.focus();
+
+}
+
+},800);
+
+});
+
+</script>
+
+<!-- ================= SUCCESS ANIMATION ================= -->
+
+<script>
+
+function showSuccess(message){
+
+const toast=document.createElement("div");
+
+toast.className="toast align-items-center text-bg-success border-0 position-fixed";
+
+toast.style.bottom="20px";
+
+toast.style.right="20px";
+
+toast.style.zIndex="99999";
+
+toast.innerHTML=`
+
+<div class="d-flex">
+
+<div class="toast-body">
+
+${message}
+
+</div>
+
+<button class="btn-close btn-close-white me-2 m-auto"
+
+data-bs-dismiss="toast">
+
+</button>
+
+</div>
+
+`;
+
+document.body.appendChild(toast);
+
+const bsToast=new bootstrap.Toast(toast);
+
+bsToast.show();
+
+toast.addEventListener("hidden.bs.toast",()=>toast.remove());
+
+}
+
+</script>
+
+<!-- ================= ERROR ANIMATION ================= -->
+
+<script>
+
+function showError(message){
+
+const toast=document.createElement("div");
+
+toast.className="toast align-items-center text-bg-danger border-0 position-fixed";
+
+toast.style.bottom="20px";
+
+toast.style.right="20px";
+
+toast.style.zIndex="99999";
+
+toast.innerHTML=`
+
+<div class="d-flex">
+
+<div class="toast-body">
+
+${message}
+
+</div>
+
+<button class="btn-close btn-close-white me-2 m-auto"
+
+data-bs-dismiss="toast">
+
+</button>
+
+</div>
+
+`;
+
+document.body.appendChild(toast);
+
+const bsToast=new bootstrap.Toast(toast);
+
+bsToast.show();
+
+toast.addEventListener("hidden.bs.toast",()=>toast.remove());
+
+}
+
+</script>
+
+<!-- ================= CARD HOVER ================= -->
+
+<style>
+
+.card{
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-4px);
+
+box-shadow:0 15px 35px rgba(0,0,0,.15);
+
+}
+
+#editor{
+
+border-radius:0 0 12px 12px;
+
+}
+
+</style>
+
+{% endblock %}

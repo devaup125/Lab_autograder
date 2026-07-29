@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Teacher Registration | Lab Auto Grader</title>
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="{{ url_for('static', filename='css/auth.css') }}">
+
+</head>
+
+<body>
+
+<div class="container py-5">
+
+<div class="row justify-content-center">
+
+<div class="col-lg-10">
+
+<div class="card shadow-lg border-0 rounded-4">
+
+<div class="card-body p-5">
+
+<!-- HEADER -->
+
+<div class="text-center mb-5">
+
+<i class="fas fa-chalkboard-teacher fa-5x text-success mb-3"></i>
+
+<h2 class="fw-bold">
+
+Teacher Registration
+
+</h2>
+
+<p class="text-muted">
+
+Create your Faculty Account
+
+</p>
+
+</div>
+
+<!-- FLASH MESSAGE -->
+
+{% with messages=get_flashed_messages(with_categories=true) %}
+
+{% if messages %}
+
+{% for category,message in messages %}
+
+<div class="alert alert-{{category}} alert-dismissible fade show">
+
+{{message}}
+
+<button
+class="btn-close"
+data-bs-dismiss="alert">
+
+</button>
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+{% endwith %}
+
+<form
+method="POST"
+action="{{ url_for('auth.register_teacher') }}"
+enctype="multipart/form-data">
+
+<!-- ================= PERSONAL INFORMATION ================= -->
+
+<h4 class="mb-4">
+
+<i class="fas fa-user text-success"></i>
+
+Personal Information
+
+</h4>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Full Name
+
+</label>
+
+<input
+type="text"
+name="name"
+class="form-control"
+placeholder="Enter Full Name"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Employee ID
+
+</label>
+
+<input
+type="text"
+name="employee_id"
+class="form-control"
+placeholder="Faculty ID"
+required>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Email Address
+
+</label>
+
+<input
+type="email"
+name="email"
+class="form-control"
+placeholder="teacher@college.edu"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Phone Number
+
+</label>
+
+<input
+type="tel"
+name="phone"
+class="form-control"
+placeholder="10 Digit Mobile Number"
+required>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Gender
+
+</label>
+
+<select
+name="gender"
+class="form-select"
+required>
+
+<option value="">Select Gender</option>
+
+<option>Male</option>
+
+<option>Female</option>
+
+<option>Other</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Date of Birth
+
+</label>
+
+<input
+type="date"
+name="dob"
+class="form-control"
+required>
+
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<label class="form-label">
+
+Profile Photo
+
+</label>
+
+<input
+type="file"
+name="photo"
+class="form-control"
+accept="image/*">
+
+</div>
+
+<hr class="my-4">
+
+<!-- ================= PROFESSIONAL INFORMATION ================= -->
+
+<h4 class="mb-4">
+
+<i class="fas fa-briefcase text-primary"></i>
+
+Professional Information
+
+</h4>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Department
+
+</label>
+
+<select
+name="department"
+class="form-select"
+required>
+
+<option value="">Select Department</option>
+
+<option>Computer Science & Engineering</option>
+
+<option>Information Technology</option>
+
+<option>Electronics & Communication</option>
+
+<option>Electrical Engineering</option>
+
+<option>Mechanical Engineering</option>
+
+<option>Civil Engineering</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Designation
+
+</label>
+
+<select
+name="designation"
+class="form-select"
+required>
+
+<option value="">Select Designation</option>
+
+<option>Assistant Professor</option>
+
+<option>Associate Professor</option>
+
+<option>Professor</option>
+
+<option>Head of Department</option>
+
+<option>Lab Instructor</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Highest Qualification
+
+</label>
+
+<select
+name="qualification"
+class="form-select"
+required>
+
+<option value="">Select Qualification</option>
+
+<option>B.Tech</option>
+
+<option>M.Tech</option>
+
+<option>MCA</option>
+
+<option>Ph.D.</option>
+
+<option>Post Doctorate</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Experience (Years)
+
+</label>
+
+<input
+type="number"
+name="experience"
+class="form-control"
+min="0"
+placeholder="Years of Experience"
+required>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Specialization
+
+</label>
+
+<input
+type="text"
+name="specialization"
+class="form-control"
+placeholder="Artificial Intelligence, DBMS, Networks">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Office Room Number
+
+</label>
+
+<input
+type="text"
+name="office_room"
+class="form-control"
+placeholder="Room Number">
+
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<label class="form-label">
+
+Biography / About
+
+</label>
+
+<textarea
+name="bio"
+rows="4"
+class="form-control"
+placeholder="Write a short faculty profile..."></textarea>
+
+</div>
+
+<hr class="my-4">
+<!-- ================= ACCOUNT INFORMATION ================= -->
+
+<h4 class="mb-4">
+
+<i class="fas fa-user-lock text-primary"></i>
+
+Account Information
+
+</h4>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Username
+
+</label>
+
+<input
+type="text"
+name="username"
+class="form-control"
+placeholder="Choose Username"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Official Email ID
+
+</label>
+
+<input
+type="email"
+name="official_email"
+class="form-control"
+placeholder="faculty@college.edu">
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Password
+
+</label>
+
+<div class="input-group">
+
+<input
+type="password"
+id="password"
+name="password"
+class="form-control"
+placeholder="Create Password"
+required>
+
+<button
+type="button"
+class="btn btn-outline-secondary"
+onclick="togglePassword('password','eye1')">
+
+<i id="eye1" class="fas fa-eye"></i>
+
+</button>
+
+</div>
+
+<div class="progress mt-2" style="height:8px;">
+
+<div
+id="passwordStrength"
+class="progress-bar"
+style="width:0%">
+
+</div>
+
+</div>
+
+<small id="strengthText"
+class="text-muted">
+
+Password Strength
+
+</small>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Confirm Password
+
+</label>
+
+<div class="input-group">
+
+<input
+type="password"
+id="confirm_password"
+name="confirm_password"
+class="form-control"
+placeholder="Confirm Password"
+required>
+
+<button
+type="button"
+class="btn btn-outline-secondary"
+onclick="togglePassword('confirm_password','eye2')">
+
+<i id="eye2"
+class="fas fa-eye"></i>
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ACCOUNT OPTIONS ================= -->
+
+<div class="row">
+
+<div class="col-md-6">
+
+<div class="form-check form-switch mb-3">
+
+<input
+class="form-check-input"
+type="checkbox"
+name="receive_email"
+checked>
+
+<label class="form-check-label">
+
+Receive Email Notifications
+
+</label>
+
+</div>
+
+</div>
+
+<div class="col-md-6">
+
+<div class="form-check form-switch mb-3">
+
+<input
+class="form-check-input"
+type="checkbox"
+name="active"
+checked>
+
+<label class="form-check-label">
+
+Activate Account
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TERMS ================= -->
+
+<div class="form-check mb-4">
+
+<input
+class="form-check-input"
+type="checkbox"
+id="terms"
+required>
+
+<label
+class="form-check-label"
+for="terms">
+
+I agree to the
+
+<a href="#">
+
+Terms & Conditions
+
+</a>
+
+and
+
+<a href="#">
+
+Privacy Policy
+
+</a>
+
+</label>
+
+</div>
+
+<!-- ================= BUTTON ================= -->
+
+<div class="d-grid">
+
+<button
+type="submit"
+class="btn btn-success btn-lg">
+
+<i class="fas fa-user-plus"></i>
+
+Register Teacher
+
+</button>
+
+</div>
+
+<div class="text-center mt-4">
+
+<p>
+
+Already have an account?
+
+<a href="{{ url_for('auth.teacher_login') }}">
+
+Login Here
+
+</a>
+
+</p>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="text-center mt-4">
+
+<small class="text-muted">
+
+© 2026 Programming Lab Auto Grader System
+
+<br>
+
+Developed by
+
+<strong>Devanshu Ranjan Upadhyay</strong>
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Bootstrap -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ================= SHOW PASSWORD ================= -->
+
+<script>
+
+function togglePassword(id,eye){
+
+const input=document.getElementById(id);
+
+const icon=document.getElementById(eye);
+
+if(input.type==="password"){
+
+input.type="text";
+
+icon.classList.replace("fa-eye","fa-eye-slash");
+
+}else{
+
+input.type="password";
+
+icon.classList.replace("fa-eye-slash","fa-eye");
+
+}
+
+}
+
+</script>
+
+<!-- ================= PASSWORD STRENGTH ================= -->
+
+<script>
+
+const password=document.getElementById("password");
+
+const bar=document.getElementById("passwordStrength");
+
+const text=document.getElementById("strengthText");
+
+password.addEventListener("keyup",function(){
+
+let value=password.value;
+
+let strength=0;
+
+if(value.length>=8) strength+=25;
+
+if(/[A-Z]/.test(value)) strength+=25;
+
+if(/[0-9]/.test(value)) strength+=25;
+
+if(/[^A-Za-z0-9]/.test(value)) strength+=25;
+
+bar.style.width=strength+"%";
+
+if(strength<=25){
+
+bar.className="progress-bar bg-danger";
+
+text.innerHTML="Weak Password";
+
+}
+
+else if(strength<=50){
+
+bar.className="progress-bar bg-warning";
+
+text.innerHTML="Medium Password";
+
+}
+
+else if(strength<=75){
+
+bar.className="progress-bar bg-info";
+
+text.innerHTML="Good Password";
+
+}
+
+else{
+
+bar.className="progress-bar bg-success";
+
+text.innerHTML="Strong Password";
+
+}
+
+});
+
+</script>
+
+<!-- ================= VALIDATION ================= -->
+
+<script>
+
+document.querySelector("form").addEventListener("submit",function(e){
+
+const pass=document.getElementById("password").value;
+
+const confirm=document.getElementById("confirm_password").value;
+
+if(pass!==confirm){
+
+e.preventDefault();
+
+alert("Passwords do not match!");
+
+return;
+
+}
+
+});
+
+</script>
+
+</body>
+
+</html>

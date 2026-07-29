@@ -1,0 +1,609 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Leaderboard{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <!-- Page Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                <i class="fas fa-trophy text-warning"></i>
+                Leaderboard
+            </h2>
+
+            <p class="text-muted">
+                Programming Lab Auto Grader Rankings
+            </p>
+
+        </div>
+
+        <div>
+
+            <button class="btn btn-success me-2">
+
+                <i class="fas fa-file-excel"></i>
+
+                Export Excel
+
+            </button>
+
+            <button class="btn btn-danger">
+
+                <i class="fas fa-file-pdf"></i>
+
+                Export PDF
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Statistics -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-3">
+
+            <div class="card shadow border-0 rounded-4">
+
+                <div class="card-body text-center">
+
+                    <h6>Total Students</h6>
+
+                    <h2 class="text-primary">
+
+                        {{ total_students }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow border-0 rounded-4">
+
+                <div class="card-body text-center">
+
+                    <h6>Total Problems</h6>
+
+                    <h2 class="text-success">
+
+                        {{ total_problems }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow border-0 rounded-4">
+
+                <div class="card-body text-center">
+
+                    <h6>Submissions</h6>
+
+                    <h2 class="text-warning">
+
+                        {{ total_submissions }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow border-0 rounded-4">
+
+                <div class="card-body text-center">
+
+                    <h6>Average Score</h6>
+
+                    <h2 class="text-danger">
+
+                        {{ average_score }}%
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Filters -->
+
+    <div class="card shadow rounded-4 mb-4">
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-4">
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="form-control"
+                        placeholder="Search Student">
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <select class="form-select">
+
+                        <option>All Branches</option>
+
+                        <option>CSE</option>
+
+                        <option>IT</option>
+
+                        <option>ECE</option>
+
+                        <option>ME</option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <select class="form-select">
+
+                        <option>Sort By</option>
+
+                        <option>Highest Score</option>
+
+                        <option>Problems Solved</option>
+
+                        <option>Accuracy</option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <button class="btn btn-primary w-100">
+
+                        Filter
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Leaderboard Table -->
+
+    <div class="card shadow rounded-4">
+
+        <div class="card-header bg-white">
+
+            <h5>
+
+                <i class="fas fa-ranking-star"></i>
+
+                Student Rankings
+
+            </h5>
+
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Rank</th>
+
+                        <th>Student</th>
+
+                        <th>Roll No</th>
+
+                        <th>Branch</th>
+
+                        <th>Problems Solved</th>
+
+                        <th>Total Score</th>
+
+                        <th>Accuracy</th>
+
+                        <th>Last Submission</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for student in leaderboard %}
+
+                    <tr>
+
+                        <td>
+
+                            {% if loop.index == 1 %}
+
+                                🥇
+
+                            {% elif loop.index == 2 %}
+
+                                🥈
+
+                            {% elif loop.index == 3 %}
+
+                                🥉
+
+                            {% else %}
+
+                                {{ loop.index }}
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <strong>
+
+                                {{ student.name }}
+
+                            </strong>
+
+                        </td>
+
+                        <td>
+
+                            {{ student.roll }}
+
+                        </td>
+
+                        <td>
+
+                            {{ student.branch }}
+
+                        </td>
+
+                        <td>
+
+                            {{ student.solved }}
+
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-success">
+
+                                {{ student.score }}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <div class="progress">
+
+                                <div
+                                    class="progress-bar bg-info"
+                                    style="width:{{ student.accuracy }}%">
+
+                                    {{ student.accuracy }}%
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            {{ student.last_submission }}
+
+                        </td>
+
+                        <td>
+
+                            <a
+                               href="{{ url_for('admin.profile', id=student.id) }}"
+                               class="btn btn-sm btn-primary">
+
+                                View
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- Pagination -->
+
+    <div class="row mt-4">
+
+        <div class="col-md-6">
+
+            <p class="text-muted">
+
+                Showing {{ leaderboard|length }} Students
+
+            </p>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <nav class="float-end">
+
+                <ul class="pagination">
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="#">
+
+                            Previous
+
+                        </a>
+
+                    </li>
+
+                    <li class="page-item active">
+
+                        <a class="page-link" href="#">
+
+                            1
+
+                        </a>
+
+                    </li>
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="#">
+
+                            2
+
+                        </a>
+
+                    </li>
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="#">
+
+                            3
+
+                        </a>
+
+                    </li>
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="#">
+
+                            Next
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+    <!-- Charts -->
+
+    <div class="row mt-5">
+
+        <!-- Score Distribution -->
+
+        <div class="col-lg-6">
+
+            <div class="card shadow rounded-4">
+
+                <div class="card-header bg-white">
+
+                    <h5>
+
+                        <i class="fas fa-chart-pie text-primary"></i>
+
+                        Score Distribution
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="scoreChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Top Performers -->
+
+        <div class="col-lg-6">
+
+            <div class="card shadow rounded-4">
+
+                <div class="card-header bg-white">
+
+                    <h5>
+
+                        <i class="fas fa-medal text-warning"></i>
+
+                        Top 10 Performers
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <ol class="list-group list-group-numbered">
+
+                        {% for student in leaderboard[:10] %}
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                            {{ student.name }}
+
+                            <span class="badge bg-success rounded-pill">
+
+                                {{ student.score }}
+
+                            </span>
+
+                        </li>
+
+                        {% endfor %}
+
+                    </ol>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Chart.js -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx=document.getElementById("scoreChart");
+
+new Chart(ctx,{
+
+    type:'doughnut',
+
+    data:{
+
+        labels:['Excellent','Good','Average','Poor'],
+
+        datasets:[{
+
+            data:[
+
+                {{ excellent_count }},
+
+                {{ good_count }},
+
+                {{ average_count }},
+
+                {{ poor_count }}
+
+            ],
+
+            backgroundColor:[
+
+                '#198754',
+
+                '#0d6efd',
+
+                '#ffc107',
+
+                '#dc3545'
+
+            ]
+
+        }]
+
+    },
+
+    options:{
+
+        responsive:true,
+
+        plugins:{
+
+            legend:{
+
+                position:'bottom'
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+<!-- Search -->
+
+<script>
+
+const input=document.getElementById("searchInput");
+
+input.addEventListener("keyup",function(){
+
+    let filter=input.value.toLowerCase();
+
+    let rows=document.querySelectorAll("tbody tr");
+
+    rows.forEach(row=>{
+
+        let text=row.innerText.toLowerCase();
+
+        row.style.display=text.includes(filter) ? "" : "none";
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

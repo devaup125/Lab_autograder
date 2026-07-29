@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+{% block title %}
+
+Student Dashboard
+
+{% endblock %}
+
+</title>
+
+<!-- Bootstrap -->
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<!-- Font Awesome -->
+
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+rel="stylesheet">
+
+<!-- Google Font -->
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<style>
+
+*{
+
+margin:0;
+
+padding:0;
+
+box-sizing:border-box;
+
+font-family:'Poppins',sans-serif;
+
+}
+
+body{
+
+background:#f4f7fb;
+
+overflow-x:hidden;
+
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:260px;
+
+height:100vh;
+
+background:#0f172a;
+
+color:white;
+
+overflow-y:auto;
+
+transition:.3s;
+
+z-index:1000;
+
+}
+
+.sidebar-header{
+
+padding:25px;
+
+text-align:center;
+
+border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.sidebar-header h4{
+
+font-weight:700;
+
+margin:0;
+
+}
+
+.sidebar a{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 22px;
+
+color:#cbd5e1;
+
+text-decoration:none;
+
+transition:.3s;
+
+font-weight:500;
+
+}
+
+.sidebar a i{
+
+width:28px;
+
+font-size:18px;
+
+}
+
+.sidebar a:hover,
+
+.sidebar a.active{
+
+background:#1e40af;
+
+color:white;
+
+}
+
+/* ================= TOPBAR ================= */
+
+.topbar{
+
+margin-left:260px;
+
+height:70px;
+
+background:white;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:0 30px;
+
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+position:sticky;
+
+top:0;
+
+z-index:999;
+
+}
+
+.search-box{
+
+position:relative;
+
+width:350px;
+
+}
+
+.search-box input{
+
+width:100%;
+
+padding:10px 15px 10px 42px;
+
+border:1px solid #ddd;
+
+border-radius:30px;
+
+outline:none;
+
+}
+
+.search-box i{
+
+position:absolute;
+
+left:15px;
+
+top:12px;
+
+color:#6b7280;
+
+}
+
+/* ================= PROFILE ================= */
+
+.profile{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+cursor:pointer;
+
+}
+
+.profile img{
+
+width:45px;
+
+height:45px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+border:2px solid #2563eb;
+
+}
+
+.profile span{
+
+font-weight:600;
+
+}
+
+/* ================= CONTENT ================= */
+
+.main-content{
+
+margin-left:260px;
+
+padding:30px;
+
+min-height:calc(100vh - 70px);
+
+}
+
+.page-title{
+
+font-size:30px;
+
+font-weight:700;
+
+color:#0f172a;
+
+margin-bottom:25px;
+
+}
+
+.card-dashboard{
+
+border:none;
+
+border-radius:18px;
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+transition:.3s;
+
+}
+
+.card-dashboard:hover{
+
+transform:translateY(-5px);
+
+}
+
+.card-dashboard .icon{
+
+font-size:40px;
+
+color:#2563eb;
+
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:992px){
+
+.sidebar{
+
+left:-260px;
+
+}
+
+.sidebar.show{
+
+left:0;
+
+}
+
+.topbar{
+
+margin-left:0;
+
+}
+
+.main-content{
+
+margin-left:0;
+
+}
+
+.search-box{
+
+width:220px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<div class="sidebar" id="sidebar">
+
+<div class="sidebar-header">
+
+<h4>
+
+<i class="fas fa-laptop-code text-info"></i>
+
+Lab Auto Grader
+
+</h4>
+
+<small class="text-secondary">
+
+Student Portal
+
+</small>
+
+</div>
+<!-- ================= SIDEBAR MENU ================= -->
+
+<a href="{{ url_for('student.dashboard') }}" class="active">
+
+<i class="fas fa-home"></i>
+
+Dashboard
+
+</a>
+
+<a href="{{ url_for('student.problems') }}">
+
+<i class="fas fa-code"></i>
+
+Programming Problems
+
+</a>
+
+<a href="{{ url_for('student.assignments') }}">
+
+<i class="fas fa-book"></i>
+
+Assignments
+
+</a>
+
+<a href="{{ url_for('student.submissions') }}">
+
+<i class="fas fa-upload"></i>
+
+My Submissions
+
+</a>
+
+<a href="{{ url_for('student.leaderboard') }}">
+
+<i class="fas fa-trophy"></i>
+
+Leaderboard
+
+</a>
+
+<a href="{{ url_for('student.results') }}">
+
+<i class="fas fa-chart-line"></i>
+
+Results
+
+</a>
+
+<a href="{{ url_for('student.progress') }}">
+
+<i class="fas fa-chart-pie"></i>
+
+Progress
+
+</a>
+
+<a href="{{ url_for('student.profile') }}">
+
+<i class="fas fa-user"></i>
+
+My Profile
+
+</a>
+
+<a href="{{ url_for('student.settings') }}">
+
+<i class="fas fa-cog"></i>
+
+Settings
+
+</a>
+
+<hr class="text-secondary mx-3">
+
+<a href="{{ url_for('auth.logout') }}">
+
+<i class="fas fa-sign-out-alt"></i>
+
+Logout
+
+</a>
+
+</div>
+
+<!-- ================= TOPBAR ================= -->
+
+<div class="topbar">
+
+<div class="d-flex align-items-center">
+
+<button
+
+class="btn btn-outline-primary d-lg-none me-3"
+
+id="menuBtn">
+
+<i class="fas fa-bars"></i>
+
+</button>
+
+<div class="search-box">
+
+<i class="fas fa-search"></i>
+
+<input
+
+type="text"
+
+placeholder="Search problems, assignments...">
+
+</div>
+
+</div>
+
+<div class="d-flex align-items-center gap-4">
+
+<!-- Notifications -->
+
+<div class="dropdown">
+
+<button
+
+class="btn btn-light position-relative"
+
+data-bs-toggle="dropdown">
+
+<i class="fas fa-bell"></i>
+
+<span
+
+class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+3
+
+</span>
+
+</button>
+
+<ul class="dropdown-menu dropdown-menu-end shadow">
+
+<li>
+
+<h6 class="dropdown-header">
+
+Notifications
+
+</h6>
+
+</li>
+
+<li>
+
+<a class="dropdown-item" href="#">
+
+New assignment available
+
+</a>
+
+</li>
+
+<li>
+
+<a class="dropdown-item" href="#">
+
+Submission evaluated
+
+</a>
+
+</li>
+
+<li>
+
+<a class="dropdown-item" href="#">
+
+Leaderboard updated
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+<!-- Profile -->
+
+<div class="dropdown">
+
+<div
+
+class="profile"
+
+data-bs-toggle="dropdown">
+
+<img
+
+src="{{ url_for('static', filename='images/default-profile.png') }}"
+
+alt="Profile">
+
+<div>
+
+<span>
+
+{{ session.get('student_name', 'Student') }}
+
+</span>
+
+<br>
+
+<small class="text-muted">
+
+Student
+
+</small>
+
+</div>
+
+</div>
+
+<ul class="dropdown-menu dropdown-menu-end shadow">
+
+<li>
+
+<a
+
+class="dropdown-item"
+
+href="{{ url_for('student.profile') }}">
+
+<i class="fas fa-user me-2"></i>
+
+My Profile
+
+</a>
+
+</li>
+
+<li>
+
+<a
+
+class="dropdown-item"
+
+href="{{ url_for('student.settings') }}">
+
+<i class="fas fa-cog me-2"></i>
+
+Settings
+
+</a>
+
+</li>
+
+<li>
+
+<hr class="dropdown-divider">
+
+</li>
+
+<li>
+
+<a
+
+class="dropdown-item text-danger"
+
+href="{{ url_for('auth.logout') }}">
+
+<i class="fas fa-sign-out-alt me-2"></i>
+
+Logout
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= MAIN CONTENT ================= -->
+
+<div class="main-content">
+
+<h2 class="page-title">
+
+{% block page_title %}
+
+Student Dashboard
+
+{% endblock %}
+
+</h2>
+<!-- ================= SIDEBAR MENU ================= -->
+
+<a href="{{ url_for('student.dashboard') }}" class="active">
+
+<i class="fas fa-home"></i>
+
+Dashboard
+
+</a>
+
+<a href="{{ url_for('student.problems') }}">
+
+<i class="fas fa-code"></i>
+
+Programming Problems
+
+</a>
+
+<a href="{{ url_for('student.assignments') }}">
+
+<i class="fas fa-book"></i>
+
+Assignments
+
+</a>
+
+<a href="{{ url_for('student.submissions') }}">
+
+<i class="fas fa-upload"></i>
+
+My Submissions
+
+</a>
+
+<a href="{{ url_for('student.leaderboard') }}">
+
+<i class="fas fa-trophy"></i>
+
+Leaderboard
+
+</a>
+
+<a href="{{ url_for('student.results') }}">
+
+<i class="fas fa-chart-line"></i>
+
+Results
+
+</a>
+
+<a href="{{ url_for('student.progress') }}">
+
+<i class="fas fa-chart-pie"></i>
+
+Progress
+
+</a>
+
+<a href="{{ url_for('student.profile') }}">
+
+<i class="fas fa-user"></i>
+
+My Profile
+
+</a>
+
+<a href="{{ url_for('student.settings') }}">
+
+<i class="fas fa-cog"></i>
+
+Settings
+
+</a>
+
+<hr class="text-secondary mx-3">
+
+<a href="{{ url_for('auth.logout') }}">
+
+<i class="fas fa-sign-out-alt"></i>
+
+Logout
+
+</a>
+
+</div>
+
+<!-- ================= TOPBAR ================= -->
+
+<div class="topbar">
+
+<div class="d-flex align-items-center">
+
+<button
+
+class="btn btn-outline-primary d-lg-none me-3"
+
+id="menuBtn">
+
+<i class="fas fa-bars"></i>
+
+</button>
+
+<div class="search-box">
+
+<i class="fas fa-search"></i>
+
+<input
+
+type="text"
+
+placeholder="Search problems, assignments...">
+
+</div>
+
+</div>
+
+<div class="d-flex align-items-center gap-4">
+
+<!-- Notifications -->
+
+<div class="dropdown">
+
+<button
+
+class="btn btn-light position-relative"
+
+data-bs-toggle="dropdown">
+
+<i class="fas fa-bell"></i>
+
+<span
+
+class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+3
+
+</span>
+
+</button>
+
+<ul class="dropdown-menu dropdown-menu-end shadow">
+
+<li>
+
+<h6 class="dropdown-header">
+
+Notifications
+
+</h6>
+
+</li>
+
+<li>
+
+<a class="dropdown-item" href="#">
+
+New assignment available
+
+</a>
+
+</li>
+
+<li>
+
+<a class="dropdown-item" href="#">
+
+Submission evaluated
+
+</a>
+
+</li>
+
+<li>
+
+<a class="dropdown-item" href="#">
+
+Leaderboard updated
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+<!-- Profile -->
+
+<div class="dropdown">
+
+<div
+
+class="profile"
+
+data-bs-toggle="dropdown">
+
+<img
+
+src="{{ url_for('static', filename='images/default-profile.png') }}"
+
+alt="Profile">
+
+<div>
+
+<span>
+
+{{ session.get('student_name', 'Student') }}
+
+</span>
+
+<br>
+
+<small class="text-muted">
+
+Student
+
+</small>
+
+</div>
+
+</div>
+
+<ul class="dropdown-menu dropdown-menu-end shadow">
+
+<li>
+
+<a
+
+class="dropdown-item"
+
+href="{{ url_for('student.profile') }}">
+
+<i class="fas fa-user me-2"></i>
+
+My Profile
+
+</a>
+
+</li>
+
+<li>
+
+<a
+
+class="dropdown-item"
+
+href="{{ url_for('student.settings') }}">
+
+<i class="fas fa-cog me-2"></i>
+
+Settings
+
+</a>
+
+</li>
+
+<li>
+
+<hr class="dropdown-divider">
+
+</li>
+
+<li>
+
+<a
+
+class="dropdown-item text-danger"
+
+href="{{ url_for('auth.logout') }}">
+
+<i class="fas fa-sign-out-alt me-2"></i>
+
+Logout
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= MAIN CONTENT ================= -->
+
+<div class="main-content">
+
+<h2 class="page-title">
+
+{% block page_title %}
+
+Student Dashboard
+
+{% endblock %}
+
+</h2>
+<!-- ================= NOTIFICATION OFFCANVAS ================= -->
+
+<div class="offcanvas offcanvas-end"
+     tabindex="-1"
+     id="notificationCanvas">
+
+<div class="offcanvas-header">
+
+<h5 class="offcanvas-title">
+
+<i class="fas fa-bell me-2"></i>
+
+Notifications
+
+</h5>
+
+<button type="button"
+        class="btn-close"
+        data-bs-dismiss="offcanvas">
+</button>
+
+</div>
+
+<div class="offcanvas-body">
+
+<div class="list-group">
+
+<a href="#"
+class="list-group-item list-group-item-action">
+
+<div class="d-flex justify-content-between">
+
+<strong>
+
+New Assignment Added
+
+</strong>
+
+<small>
+
+2 min ago
+
+</small>
+
+</div>
+
+<p class="mb-0 text-muted">
+
+Python Assignment 5 has been published.
+
+</p>
+
+</a>
+
+<a href="#"
+class="list-group-item list-group-item-action">
+
+<div class="d-flex justify-content-between">
+
+<strong>
+
+Submission Evaluated
+
+</strong>
+
+<small>
+
+15 min ago
+
+</small>
+
+</div>
+
+<p class="mb-0 text-muted">
+
+Your Java solution passed all test cases.
+
+</p>
+
+</a>
+
+<a href="#"
+class="list-group-item list-group-item-action">
+
+<div class="d-flex justify-content-between">
+
+<strong>
+
+Leaderboard Updated
+
+</strong>
+
+<small>
+
+1 hour ago
+
+</small>
+
+</div>
+
+<p class="mb-0 text-muted">
+
+You moved up to Rank #12.
+
+</p>
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PROFILE MODAL ================= -->
+
+<div class="modal fade"
+     id="profileModal"
+     tabindex="-1">
+
+<div class="modal-dialog">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<h5>
+
+Student Profile
+
+</h5>
+
+<button type="button"
+        class="btn-close"
+        data-bs-dismiss="modal">
+</button>
+
+</div>
+
+<div class="modal-body text-center">
+
+<img src="{{ url_for('static', filename='images/default-profile.png') }}"
+     class="rounded-circle shadow mb-3"
+     width="120"
+     height="120">
+
+<h4>
+
+{{ session.get('student_name','Student') }}
+
+</h4>
+
+<p class="text-muted">
+
+{{ session.get('student_email','student@example.com') }}
+
+</p>
+
+<hr>
+
+<div class="row text-center">
+
+<div class="col-4">
+
+<h5>
+
+25
+
+</h5>
+
+<small>
+
+Solved
+
+</small>
+
+</div>
+
+<div class="col-4">
+
+<h5>
+
+18
+
+</h5>
+
+<small>
+
+Submissions
+
+</small>
+
+</div>
+
+<div class="col-4">
+
+<h5>
+
+#12
+
+</h5>
+
+<small>
+
+Rank
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
+<a href="{{ url_for('student.profile') }}"
+class="btn btn-primary">
+
+View Profile
+
+</a>
+
+<button class="btn btn-secondary"
+        data-bs-dismiss="modal">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK ACTIONS ================= -->
+
+<div class="card card-dashboard mt-4">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Quick Actions
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-3 mb-3">
+
+<a href="{{ url_for('student.problems') }}"
+class="btn btn-outline-primary w-100">
+
+<i class="fas fa-code mb-2 d-block"></i>
+
+Solve Problems
+
+</a>
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<a href="{{ url_for('student.assignments') }}"
+class="btn btn-outline-success w-100">
+
+<i class="fas fa-book mb-2 d-block"></i>
+
+Assignments
+
+</a>
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<a href="{{ url_for('student.submissions') }}"
+class="btn btn-outline-warning w-100">
+
+<i class="fas fa-upload mb-2 d-block"></i>
+
+Submissions
+
+</a>
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<a href="{{ url_for('student.leaderboard') }}"
+class="btn btn-outline-danger w-100">
+
+<i class="fas fa-trophy mb-2 d-block"></i>
+
+Leaderboard
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="mt-5">
+
+<div class="card shadow-sm border-0">
+
+<div class="card-body">
+
+<div class="row align-items-center">
+
+<div class="col-md-6">
+
+<p class="mb-0">
+
+© {{ current_year if current_year else 2026 }}
+
+Lab Auto Grader.
+
+All Rights Reserved.
+
+</p>
+
+</div>
+
+<div class="col-md-6 text-md-end">
+
+<p class="mb-0">
+
+Developed by
+
+<strong>
+
+Devanshu Ranjan Upadhyay
+
+</strong>
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</footer>
+<!-- ================= DARK MODE TOGGLE ================= -->
+
+<button
+id="themeToggle"
+class="btn btn-dark rounded-circle shadow">
+
+<i class="fas fa-moon"></i>
+
+</button>
+
+<!-- ================= SCROLL TO TOP ================= -->
+
+<button
+id="scrollTopBtn"
+class="btn btn-primary rounded-circle shadow">
+
+<i class="fas fa-arrow-up"></i>
+
+</button>
+
+<style>
+
+/* Theme Toggle */
+
+#themeToggle{
+
+position:fixed;
+
+bottom:95px;
+
+right:25px;
+
+width:55px;
+
+height:55px;
+
+border-radius:50%;
+
+z-index:999;
+
+}
+
+/* Scroll Button */
+
+#scrollTopBtn{
+
+position:fixed;
+
+bottom:25px;
+
+right:25px;
+
+width:55px;
+
+height:55px;
+
+display:none;
+
+border-radius:50%;
+
+z-index:999;
+
+}
+
+/* Dark Theme */
+
+body.dark-mode{
+
+background:#0f172a;
+
+color:#f8fafc;
+
+}
+
+body.dark-mode .topbar{
+
+background:#1e293b;
+
+color:white;
+
+}
+
+body.dark-mode .main-content{
+
+background:#0f172a;
+
+}
+
+body.dark-mode .card,
+
+body.dark-mode .card-dashboard{
+
+background:#1e293b;
+
+color:white;
+
+}
+
+body.dark-mode .card-header{
+
+background:#334155 !important;
+
+color:white;
+
+}
+
+body.dark-mode .table{
+
+color:white;
+
+}
+
+body.dark-mode .breadcrumb{
+
+background:transparent;
+
+}
+
+body.dark-mode .breadcrumb-item a{
+
+color:#60a5fa;
+
+}
+
+body.dark-mode .form-control{
+
+background:#334155;
+
+border-color:#475569;
+
+color:white;
+
+}
+
+body.dark-mode .form-control::placeholder{
+
+color:#cbd5e1;
+
+}
+
+body.dark-mode .dropdown-menu{
+
+background:#1e293b;
+
+color:white;
+
+}
+
+body.dark-mode .dropdown-item{
+
+color:white;
+
+}
+
+body.dark-mode .dropdown-item:hover{
+
+background:#334155;
+
+}
+
+body.dark-mode footer .card{
+
+background:#1e293b;
+
+color:white;
+
+}
+
+/* Notification Badge */
+
+.badge{
+
+animation:pulse 2s infinite;
+
+}
+
+@keyframes pulse{
+
+0%{
+
+transform:scale(1);
+
+}
+
+50%{
+
+transform:scale(1.2);
+
+}
+
+100%{
+
+transform:scale(1);
+
+}
+
+}
+
+</style>
+
+<!-- ================= SIDEBAR TOGGLE ================= -->
+
+<script>
+
+const sidebar=document.getElementById("sidebar");
+
+const menuBtn=document.getElementById("menuBtn");
+
+if(menuBtn){
+
+menuBtn.onclick=function(){
+
+sidebar.classList.toggle("show");
+
+};
+
+}
+
+</script>
+
+<!-- ================= DARK MODE ================= -->
+
+<script>
+
+const toggle=document.getElementById("themeToggle");
+
+const body=document.body;
+
+if(localStorage.getItem("theme")==="dark"){
+
+body.classList.add("dark-mode");
+
+toggle.innerHTML='<i class="fas fa-sun"></i>';
+
+}
+
+toggle.onclick=function(){
+
+body.classList.toggle("dark-mode");
+
+if(body.classList.contains("dark-mode")){
+
+localStorage.setItem("theme","dark");
+
+toggle.innerHTML='<i class="fas fa-sun"></i>';
+
+}else{
+
+localStorage.setItem("theme","light");
+
+toggle.innerHTML='<i class="fas fa-moon"></i>';
+
+}
+
+};
+
+</script>
+
+<!-- ================= SCROLL BUTTON ================= -->
+
+<script>
+
+const scrollBtn=document.getElementById("scrollTopBtn");
+
+window.addEventListener("scroll",function(){
+
+if(window.scrollY>300){
+
+scrollBtn.style.display="block";
+
+}else{
+
+scrollBtn.style.display="none";
+
+}
+
+});
+
+scrollBtn.onclick=function(){
+
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
+};
+
+</script>
+
+<!-- ================= ACTIVE SIDEBAR ================= -->
+
+<script>
+
+document.querySelectorAll(".sidebar a").forEach(link=>{
+
+if(link.href===window.location.href){
+
+link.classList.add("active");
+
+}
+
+});
+
+</script>
+<!-- ================= BOOTSTRAP JAVASCRIPT ================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ================= TOOLTIP INITIALIZATION ================= -->
+
+<script>
+
+document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el){
+
+new bootstrap.Tooltip(el);
+
+});
+
+</script>
+
+<!-- ================= POPOVER INITIALIZATION ================= -->
+
+<script>
+
+document.querySelectorAll('[data-bs-toggle="popover"]').forEach(function(el){
+
+new bootstrap.Popover(el);
+
+});
+
+</script>
+
+<!-- ================= FADE-IN ANIMATION ================= -->
+
+<script>
+
+const cards=document.querySelectorAll(".card-dashboard,.info-card");
+
+const observer=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.style.opacity="1";
+
+entry.target.style.transform="translateY(0)";
+
+observer.unobserve(entry.target);
+
+}
+
+});
+
+},{threshold:0.15});
+
+cards.forEach(card=>{
+
+card.style.opacity="0";
+
+card.style.transform="translateY(30px)";
+
+card.style.transition="all .5s ease";
+
+observer.observe(card);
+
+});
+
+</script>
+
+<!-- ================= COUNTER ANIMATION ================= -->
+
+<script>
+
+document.querySelectorAll(".counter").forEach(counter=>{
+
+const text=counter.textContent;
+
+const target=parseInt(text.replace(/\D/g,""));
+
+if(isNaN(target)) return;
+
+let count=0;
+
+const step=Math.max(1,Math.ceil(target/60));
+
+function update(){
+
+count+=step;
+
+if(count<target){
+
+counter.textContent=text.replace(target,count);
+
+requestAnimationFrame(update);
+
+}else{
+
+counter.textContent=text;
+
+}
+
+}
+
+update();
+
+});
+
+</script>
+
+<!-- ================= RIPPLE EFFECT ================= -->
+
+<script>
+
+document.querySelectorAll(".btn").forEach(button=>{
+
+button.addEventListener("click",function(e){
+
+const ripple=document.createElement("span");
+
+const rect=this.getBoundingClientRect();
+
+const size=Math.max(rect.width,rect.height);
+
+ripple.style.width=size+"px";
+
+ripple.style.height=size+"px";
+
+ripple.style.left=(e.clientX-rect.left-size/2)+"px";
+
+ripple.style.top=(e.clientY-rect.top-size/2)+"px";
+
+ripple.style.position="absolute";
+
+ripple.style.borderRadius="50%";
+
+ripple.style.background="rgba(255,255,255,.35)";
+
+ripple.style.transform="scale(0)";
+
+ripple.style.animation="ripple .6s linear";
+
+ripple.style.pointerEvents="none";
+
+this.style.position="relative";
+
+this.style.overflow="hidden";
+
+this.appendChild(ripple);
+
+setTimeout(()=>ripple.remove(),600);
+
+});
+
+});
+
+</script>
+
+<style>
+
+@keyframes ripple{
+
+to{
+
+transform:scale(4);
+
+opacity:0;
+
+}
+
+}
+
+</style>
+
+<!-- ================= AUTO HIDE ALERTS ================= -->
+
+<script>
+
+setTimeout(function(){
+
+document.querySelectorAll(".alert").forEach(alert=>{
+
+bootstrap.Alert.getOrCreateInstance(alert).close();
+
+});
+
+},5000);
+
+</script>
+
+<!-- ================= CURRENT DATE & TIME ================= -->
+
+<script>
+
+function updateClock(){
+
+const clock=document.getElementById("liveClock");
+
+if(!clock) return;
+
+const now=new Date();
+
+clock.textContent=now.toLocaleString();
+
+}
+
+updateClock();
+
+setInterval(updateClock,1000);
+
+</script>
+
+<!-- ================= PAGE LOADER ================= -->
+
+<script>
+
+window.addEventListener("load",function(){
+
+const loader=document.getElementById("pageLoader");
+
+if(loader){
+
+loader.style.opacity="0";
+
+setTimeout(()=>loader.remove(),500);
+
+}
+
+});
+
+</script>
+
+<!-- ================= CUSTOM PAGE SCRIPTS ================= -->
+
+{% block scripts %}
+
+{% endblock %}
+
+</body>
+
+</html>

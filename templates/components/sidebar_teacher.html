@@ -1,0 +1,489 @@
+<!-- ================= TEACHER SIDEBAR ================= -->
+
+<aside id="sidebar" class="sidebar bg-dark text-white">
+
+    <!-- Logo -->
+
+    <div class="sidebar-header text-center py-4 border-bottom">
+
+        <a href="{{ url_for('teacher.dashboard') }}"
+           class="text-decoration-none text-white">
+
+            <i class="fas fa-laptop-code fa-3x text-info mb-3"></i>
+
+            <h4 class="fw-bold">
+
+                Lab Auto Grader
+
+            </h4>
+
+            <small class="text-secondary">
+
+                Teacher Portal
+
+            </small>
+
+        </a>
+
+    </div>
+
+    <!-- Teacher Profile -->
+
+    <div class="text-center py-4 border-bottom">
+
+        <img
+
+            src="{{ current_user.photo if current_user.photo else url_for('static', filename='images/default-user.png') }}"
+
+            class="rounded-circle border border-3 border-success"
+
+            width="90"
+
+            height="90">
+
+        <h5 class="mt-3 mb-1">
+
+            {{ current_user.name }}
+
+        </h5>
+
+        <small class="text-secondary">
+
+            {{ current_user.department }}
+
+        </small>
+
+        <br>
+
+        <span class="badge bg-success mt-2">
+
+            Teacher
+
+        </span>
+
+    </div>
+
+    <!-- Navigation -->
+
+    <ul class="nav flex-column mt-3">
+
+        <!-- Dashboard -->
+
+        <li class="nav-item">
+
+            <a class="nav-link
+            {% if request.endpoint=='teacher.dashboard' %}active{% endif %}"
+
+               href="{{ url_for('teacher.dashboard') }}">
+
+                <i class="fas fa-chart-line me-2"></i>
+
+                Dashboard
+
+            </a>
+
+        </li>
+
+        <!-- Question Management -->
+
+        <li class="nav-item">
+
+            <a class="nav-link"
+
+               data-bs-toggle="collapse"
+
+               href="#questionMenu"
+
+               role="button">
+
+                <i class="fas fa-book-open me-2"></i>
+
+                Question Management
+
+                <i class="fas fa-chevron-down float-end"></i>
+
+            </a>
+
+            <div class="collapse
+                 {% if 'questions' in request.endpoint %}show{% endif %}"
+
+                 id="questionMenu">
+
+                <ul class="nav flex-column ms-4 mt-2">
+
+                    <li>
+
+                        <a class="nav-link"
+
+                           href="{{ url_for('teacher.manage_questions') }}">
+
+                            <i class="fas fa-list"></i>
+
+                            All Questions
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a class="nav-link"
+
+                           href="{{ url_for('teacher.add_question') }}">
+
+                            <i class="fas fa-plus-circle"></i>
+
+                            Add Question
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </li>
+
+        <!-- Test Cases -->
+
+        <li class="nav-item">
+
+            <a class="nav-link
+            {% if 'testcases' in request.endpoint %}active{% endif %}"
+
+               href="{{ url_for('teacher.manage_testcases') }}">
+
+                <i class="fas fa-vial me-2"></i>
+
+                Test Cases
+
+            </a>
+
+        </li>
+
+        <!-- Student Submissions -->
+
+        <li class="nav-item">
+
+            <a class="nav-link
+            {% if 'submissions' in request.endpoint %}active{% endif %}"
+
+               href="{{ url_for('teacher.submissions') }}">
+
+                <i class="fas fa-code me-2"></i>
+
+                Student Submissions
+
+                <span class="badge bg-warning float-end">
+
+                    {{ total_submissions }}
+
+                </span>
+
+            </a>
+
+        </li>
+
+        <!-- Student Performance -->
+
+        <li class="nav-item">
+
+            <a class="nav-link"
+
+               data-bs-toggle="collapse"
+
+               href="#performanceMenu"
+
+               role="button">
+
+                <i class="fas fa-chart-bar me-2"></i>
+
+                Student Performance
+
+                <i class="fas fa-chevron-down float-end"></i>
+
+            </a>
+
+            <div class="collapse
+                 {% if 'performance' in request.endpoint %}show{% endif %}"
+
+                 id="performanceMenu">
+
+                <ul class="nav flex-column ms-4 mt-2">
+
+                    <li>
+
+                        <a class="nav-link"
+
+                           href="{{ url_for('teacher.student_performance') }}">
+
+                            <i class="fas fa-users"></i>
+
+                            Overall Performance
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a class="nav-link"
+
+                           href="{{ url_for('teacher.performance_charts') }}">
+
+                            <i class="fas fa-chart-pie"></i>
+
+                            Performance Charts
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </li>
+
+        <!-- Leaderboard -->
+
+        <li class="nav-item">
+
+            <a class="nav-link
+            {% if 'leaderboard' in request.endpoint %}active{% endif %}"
+
+               href="{{ url_for('teacher.leaderboard') }}">
+
+                <i class="fas fa-trophy me-2"></i>
+
+                Leaderboard
+
+            </a>
+
+        </li>
+
+        <!-- ================= ANALYTICS ================= -->
+
+        <li class="nav-item">
+
+            <a class="nav-link
+            {% if 'analytics' in request.endpoint %}active{% endif %}"
+
+               href="{{ url_for('teacher.analytics') }}">
+
+                <i class="fas fa-chart-pie me-2"></i>
+
+                Analytics
+
+            </a>
+
+        </li>
+
+        <!-- ================= REPORTS ================= -->
+
+        <li class="nav-item">
+
+            <a class="nav-link
+            {% if 'reports' in request.endpoint %}active{% endif %}"
+
+               href="{{ url_for('teacher.reports') }}">
+
+                <i class="fas fa-file-alt me-2"></i>
+
+                Reports
+
+            </a>
+
+        </li>
+
+        <!-- ================= PROFILE ================= -->
+
+        <li class="nav-item">
+
+            <a class="nav-link
+            {% if 'profile' in request.endpoint %}active{% endif %}"
+
+               href="{{ url_for('teacher.profile') }}">
+
+                <i class="fas fa-user-circle me-2"></i>
+
+                My Profile
+
+            </a>
+
+        </li>
+
+        <!-- ================= SETTINGS ================= -->
+
+        <li class="nav-item">
+
+            <a class="nav-link
+            {% if 'settings' in request.endpoint %}active{% endif %}"
+
+               href="{{ url_for('teacher.settings') }}">
+
+                <i class="fas fa-cogs me-2"></i>
+
+                Settings
+
+            </a>
+
+        </li>
+
+        <!-- ================= HELP ================= -->
+
+        <li class="nav-item">
+
+            <a class="nav-link
+            {% if 'help' in request.endpoint %}active{% endif %}"
+
+               href="{{ url_for('teacher.help') }}">
+
+                <i class="fas fa-question-circle me-2"></i>
+
+                Help & Support
+
+            </a>
+
+        </li>
+
+        <!-- ================= LOGOUT ================= -->
+
+        <li class="nav-item mt-3">
+
+            <a class="nav-link text-danger"
+
+               href="{{ url_for('auth.logout') }}">
+
+                <i class="fas fa-sign-out-alt me-2"></i>
+
+                Logout
+
+            </a>
+
+        </li>
+
+    </ul>
+
+    <!-- ================= TEACHER STATS ================= -->
+
+    <div class="px-3 mt-4">
+
+        <div class="card bg-secondary border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-white mb-3">
+
+                    Teaching Summary
+
+                </h6>
+
+                <div class="mb-3">
+
+                    <small class="text-light">
+
+                        Questions Created
+
+                    </small>
+
+                    <div class="progress">
+
+                        <div class="progress-bar bg-success"
+
+                             style="width:{{ question_percentage }}%">
+
+                            {{ total_questions }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <small class="text-light">
+
+                        Students Evaluated
+
+                    </small>
+
+                    <h4 class="text-warning">
+
+                        {{ total_students }}
+
+                    </h4>
+
+                </div>
+
+                <div>
+
+                    <small class="text-light">
+
+                        Total Submissions
+
+                    </small>
+
+                    <h4 class="text-info">
+
+                        {{ total_submissions }}
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+
+    <div class="sidebar-footer text-center mt-auto p-3 border-top">
+
+        <small class="text-secondary">
+
+            Lab Auto Grader v2.0
+
+        </small>
+
+        <br>
+
+        <small class="text-secondary">
+
+            © 2026 Devanshu Ranjan Upadhyay
+
+        </small>
+
+    </div>
+
+</aside>
+
+<!-- ================= SIDEBAR TOGGLE ================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded",function(){
+
+const toggle=document.getElementById("sidebarToggle");
+
+const sidebar=document.getElementById("sidebar");
+
+if(toggle){
+
+toggle.addEventListener("click",function(){
+
+sidebar.classList.toggle("collapsed");
+
+document.body.classList.toggle("sidebar-collapsed");
+
+});
+
+}
+
+});
+
+</script>

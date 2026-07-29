@@ -1,0 +1,3752 @@
+{% extends "teacher/base_teacher.html" %}
+
+{% block title %}
+Edit Problem
+{% endblock %}
+
+{% block page_title %}
+Edit Programming Problem
+{% endblock %}
+
+{% block breadcrumb %}
+
+<li class="breadcrumb-item">
+    <a href="{{ url_for('teacher.dashboard') }}">
+        Dashboard
+    </a>
+</li>
+
+<li class="breadcrumb-item">
+    <a href="{{ url_for('teacher.problems') }}">
+        Problems
+    </a>
+</li>
+
+<li class="breadcrumb-item active">
+    Edit Problem
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= HEADER ================= -->
+
+<div class="card border-0 shadow mb-4">
+
+<div class="card-body">
+
+<div class="row align-items-center">
+
+<div class="col-lg-8">
+
+<h2 class="fw-bold">
+
+<i class="fas fa-edit text-primary me-2"></i>
+
+Edit Programming Problem
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Modify the problem statement, update test cases,
+change execution settings, and manage publishing
+options for this programming problem.
+
+</p>
+
+</div>
+
+<div class="col-lg-4 text-end">
+
+<a
+href="{{ url_for('teacher.problems') }}"
+class="btn btn-outline-secondary me-2">
+
+<i class="fas fa-arrow-left me-2"></i>
+
+Back
+
+</a>
+
+<button
+type="submit"
+form="editProblemForm"
+class="btn btn-success">
+
+<i class="fas fa-save me-2"></i>
+
+Save Changes
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= EDIT FORM ================= -->
+
+<form
+id="editProblemForm"
+method="POST"
+enctype="multipart/form-data">
+
+{{ form.hidden_tag() if form else "" }}
+
+<!-- ================= BASIC INFORMATION ================= -->
+
+<div class="card border-0 shadow mb-4">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-info-circle me-2"></i>
+
+Basic Information
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-8 mb-3">
+
+<label class="form-label">
+
+Problem Title
+
+</label>
+
+<input
+type="text"
+class="form-control"
+name="title"
+value="{{ problem.title if problem else '' }}"
+placeholder="Enter problem title">
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Problem Code
+
+</label>
+
+<input
+type="text"
+class="form-control"
+name="problem_code"
+value="{{ problem.problem_code if problem else '' }}"
+readonly>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Difficulty
+
+</label>
+
+<select
+class="form-select"
+name="difficulty">
+
+<option value="Easy"
+{% if problem and problem.difficulty=="Easy" %}selected{% endif %}>
+Easy
+</option>
+
+<option value="Medium"
+{% if problem and problem.difficulty=="Medium" %}selected{% endif %}>
+Medium
+</option>
+
+<option value="Hard"
+{% if problem and problem.difficulty=="Hard" %}selected{% endif %}>
+Hard
+</option>
+
+</select>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Category
+
+</label>
+
+<select
+class="form-select"
+name="category">
+
+<option>Arrays</option>
+<option>Strings</option>
+<option>Searching</option>
+<option>Sorting</option>
+<option>Linked List</option>
+<option>Stack</option>
+<option>Queue</option>
+<option>Tree</option>
+<option>Graph</option>
+<option>Dynamic Programming</option>
+
+</select>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Tags
+
+</label>
+
+<input
+type="text"
+class="form-control"
+name="tags"
+value="{{ problem.tags if problem else '' }}"
+placeholder="arrays, sorting, greedy">
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Time Limit (sec)
+
+</label>
+
+<input
+type="number"
+class="form-control"
+name="time_limit"
+value="{{ problem.time_limit if problem else 1 }}">
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Memory Limit (MB)
+
+</label>
+
+<input
+type="number"
+class="form-control"
+name="memory_limit"
+value="{{ problem.memory_limit if problem else 256 }}">
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Maximum Score
+
+</label>
+
+<input
+type="number"
+class="form-control"
+name="score"
+value="{{ problem.score if problem else 100 }}">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= STATUS ================= -->
+
+<div class="row">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-toggle-on me-2"></i>
+
+Problem Status
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="form-check form-switch mb-3">
+
+<input
+class="form-check-input"
+type="checkbox"
+checked
+name="is_active">
+
+<label class="form-check-label">
+
+Active Problem
+
+</label>
+
+</div>
+
+<div class="form-check form-switch mb-3">
+
+<input
+class="form-check-input"
+type="checkbox"
+checked
+name="visible_to_students">
+
+<label class="form-check-label">
+
+Visible to Students
+
+</label>
+
+</div>
+
+<div class="form-check form-switch">
+
+<input
+class="form-check-input"
+type="checkbox"
+checked
+name="leaderboard_enabled">
+
+<label class="form-check-label">
+
+Enable Leaderboard
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK INFO ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-bar me-2"></i>
+
+Problem Summary
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Created</th>
+
+<td>
+
+{{ problem.created_at if problem else "—" }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Last Updated</th>
+
+<td>
+
+{{ problem.updated_at if problem else "—" }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Total Attempts</th>
+
+<td>
+
+{{ problem.total_attempts if problem else 0 }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Acceptance Rate</th>
+
+<td>
+
+{{ problem.acceptance_rate if problem else "0%" }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Status</th>
+
+<td>
+
+<span class="badge bg-success">
+
+Published
+
+</span>
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= PROBLEM DESCRIPTION ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-align-left me-2"></i>
+
+Problem Statement
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-4">
+
+<label class="form-label">
+
+Problem Description
+
+</label>
+
+<textarea
+class="form-control"
+id="problemDescription"
+name="description"
+rows="12"
+placeholder="Write the complete problem statement...">{{ problem.description if problem else "" }}</textarea>
+
+<small class="text-muted">
+
+Describe the programming problem clearly. Markdown or HTML can be supported if enabled.
+
+</small>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6">
+
+<div class="alert alert-info">
+
+<i class="fas fa-lightbulb me-2"></i>
+
+Use clear language and include all necessary details.
+
+</div>
+
+</div>
+
+<div class="col-md-6">
+
+<div class="alert alert-success">
+
+<i class="fas fa-check-circle me-2"></i>
+
+Provide enough information for students to solve the problem.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= INPUT & OUTPUT FORMAT ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-sign-in-alt me-2"></i>
+
+Input Format
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+class="form-control font-monospace"
+name="input_format"
+rows="10"
+placeholder="Describe the input format...">{{ problem.input_format if problem else "" }}</textarea>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-sign-out-alt me-2"></i>
+
+Output Format
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+class="form-control font-monospace"
+name="output_format"
+rows="10"
+placeholder="Describe the output format...">{{ problem.output_format if problem else "" }}</textarea>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= CONSTRAINTS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-sliders-h me-2"></i>
+
+Constraints
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+class="form-control font-monospace"
+id="constraints"
+name="constraints"
+rows="8"
+placeholder="Example:
+
+1 ≤ N ≤ 10^5
+1 ≤ A[i] ≤ 10^9">{{ problem.constraints if problem else "" }}</textarea>
+
+</div>
+
+</div>
+
+<!-- ================= NOTES ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-sticky-note me-2"></i>
+
+Additional Notes
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+class="form-control"
+name="notes"
+rows="6"
+placeholder="Optional notes for students...">{{ problem.notes if problem else "" }}</textarea>
+
+</div>
+
+</div>
+
+<!-- ================= EXAMPLES ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+<div class="card-header bg-secondary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-book-open me-2"></i>
+
+Example Explanation
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<textarea
+class="form-control"
+name="example_explanation"
+rows="8"
+placeholder="Explain how the sample input produces the sample output...">{{ problem.example_explanation if problem else "" }}</textarea>
+
+</div>
+
+</div>
+
+<!-- ================= DESCRIPTION SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-primary border-0 shadow">
+
+<h5>
+
+<i class="fas fa-info-circle me-2"></i>
+
+Description Guidelines
+
+</h5>
+
+<ul class="mb-0">
+
+<li>Write a clear and complete problem statement.</li>
+
+<li>Clearly specify input and output formats.</li>
+
+<li>List all constraints accurately.</li>
+
+<li>Provide helpful notes if necessary.</li>
+
+<li>Explain the sample cases to improve understanding.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= SAMPLE TEST CASES ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-success text-white">
+
+        <h5 class="mb-0">
+            <i class="fas fa-vial me-2"></i>
+            Sample Test Cases
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <!-- Sample Input -->
+
+        <div class="mb-4">
+
+            <label class="form-label">
+                Sample Input
+            </label>
+
+            <textarea
+                class="form-control font-monospace"
+                rows="6"
+                name="sample_input"
+                placeholder="Enter sample input...">{{ problem.sample_input if problem else "" }}</textarea>
+
+        </div>
+
+        <!-- Sample Output -->
+
+        <div class="mb-4">
+
+            <label class="form-label">
+                Sample Output
+            </label>
+
+            <textarea
+                class="form-control font-monospace"
+                rows="6"
+                name="sample_output"
+                placeholder="Enter sample output...">{{ problem.sample_output if problem else "" }}</textarea>
+
+        </div>
+
+        <!-- Explanation -->
+
+        <div>
+
+            <label class="form-label">
+                Sample Explanation
+            </label>
+
+            <textarea
+                class="form-control"
+                rows="6"
+                name="sample_explanation"
+                placeholder="Explain the sample...">{{ problem.sample_explanation if problem else "" }}</textarea>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= HINTS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-warning">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-lightbulb me-2"></i>
+
+            Hints
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <textarea
+            class="form-control"
+            rows="6"
+            name="hints"
+            placeholder="Optional hints for students...">{{ problem.hints if problem else "" }}</textarea>
+
+    </div>
+
+</div>
+
+<!-- ================= EDITORIAL ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-info text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-book me-2"></i>
+
+            Editorial Notes
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <textarea
+            class="form-control"
+            rows="8"
+            name="editorial"
+            placeholder="Write the official solution or editorial...">{{ problem.editorial if problem else "" }}</textarea>
+
+    </div>
+
+</div>
+
+<!-- ================= PROBLEM TIPS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-star me-2"></i>
+
+            Problem Tips
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <div class="alert alert-success">
+
+                    <strong>✔ Tip 1</strong>
+
+                    <p class="mb-0">
+
+                        Keep the sample test case simple and easy to understand.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="alert alert-primary">
+
+                    <strong>✔ Tip 2</strong>
+
+                    <p class="mb-0">
+
+                        Add explanations for edge cases whenever possible.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="alert alert-warning">
+
+                    <strong>✔ Tip 3</strong>
+
+                    <p class="mb-0">
+
+                        Editorials are visible only to teachers unless published.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+    <div class="col-lg-12">
+
+        <div class="alert alert-primary border-0 shadow">
+
+            <h5>
+
+                <i class="fas fa-info-circle me-2"></i>
+
+                Sample & Editorial Guidelines
+
+            </h5>
+
+            <ul class="mb-0">
+
+                <li>Provide at least one valid sample test case.</li>
+
+                <li>Ensure the sample output exactly matches the sample input.</li>
+
+                <li>Explain the sample step-by-step if needed.</li>
+
+                <li>Use hints sparingly to encourage problem solving.</li>
+
+                <li>Editorials should contain the optimal solution and complexity analysis.</li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= PUBLIC TEST CASES ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+
+        <h5 class="mb-0">
+            <i class="fas fa-vial me-2"></i>
+            Public Test Cases
+        </h5>
+
+        <button
+            type="button"
+            class="btn btn-light btn-sm"
+            id="addPublicTestCase">
+
+            <i class="fas fa-plus me-1"></i>
+
+            Add Test Case
+
+        </button>
+
+    </div>
+
+    <div class="card-body">
+
+        <div id="publicTestCases">
+
+            {% if problem and problem.public_testcases %}
+
+                {% for testcase in problem.public_testcases %}
+
+                <div class="card border mb-3 testcase-item">
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+
+                                    Input
+
+                                </label>
+
+                                <textarea
+                                    class="form-control font-monospace"
+                                    rows="5"
+                                    name="public_input[]">{{ testcase.input }}</textarea>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+
+                                    Expected Output
+
+                                </label>
+
+                                <textarea
+                                    class="form-control font-monospace"
+                                    rows="5"
+                                    name="public_output[]">{{ testcase.output }}</textarea>
+
+                            </div>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-danger btn-sm remove-testcase">
+
+                            <i class="fas fa-trash me-1"></i>
+
+                            Remove
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+            <div class="card border mb-3 testcase-item">
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Input
+
+                            </label>
+
+                            <textarea
+                                class="form-control font-monospace"
+                                rows="5"
+                                name="public_input[]"></textarea>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Expected Output
+
+                            </label>
+
+                            <textarea
+                                class="form-control font-monospace"
+                                rows="5"
+                                name="public_output[]"></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= HIDDEN TEST CASES ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-lock me-2"></i>
+
+            Hidden Test Cases
+
+        </h5>
+
+        <button
+            type="button"
+            class="btn btn-light btn-sm"
+            id="addHiddenTestCase">
+
+            <i class="fas fa-plus me-1"></i>
+
+            Add Hidden Test
+
+        </button>
+
+    </div>
+
+    <div class="card-body">
+
+        <div id="hiddenTestCases">
+
+            <div class="card border mb-3 hidden-testcase">
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Hidden Input
+
+                            </label>
+
+                            <textarea
+                                class="form-control font-monospace"
+                                rows="5"
+                                name="hidden_input[]"></textarea>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Expected Output
+
+                            </label>
+
+                            <textarea
+                                class="form-control font-monospace"
+                                rows="5"
+                                name="hidden_output[]"></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= BULK IMPORT ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-info text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-file-import me-2"></i>
+
+            Bulk Import Test Cases
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="mb-3">
+
+            <label class="form-label">
+
+                Upload ZIP / JSON File
+
+            </label>
+
+            <input
+                type="file"
+                class="form-control"
+                accept=".zip,.json,.txt">
+
+        </div>
+
+        <small class="text-muted">
+
+            Supported formats:
+            ZIP, JSON, TXT
+
+        </small>
+
+    </div>
+
+</div>
+
+<!-- ================= TEST CASE SETTINGS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-secondary text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-cogs me-2"></i>
+
+            Test Case Settings
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <label class="form-label">
+
+                    Maximum Test Cases
+
+                </label>
+
+                <input
+                    type="number"
+                    class="form-control"
+                    value="20">
+
+            </div>
+
+            <div class="col-md-4">
+
+                <label class="form-label">
+
+                    Minimum Passing Test Cases
+
+                </label>
+
+                <input
+                    type="number"
+                    class="form-control"
+                    value="20">
+
+            </div>
+
+            <div class="col-md-4">
+
+                <label class="form-label">
+
+                    Test Case Weight
+
+                </label>
+
+                <input
+                    type="number"
+                    class="form-control"
+                    value="5">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="alert alert-primary border-0 shadow mt-4">
+
+    <h5>
+
+        <i class="fas fa-info-circle me-2"></i>
+
+        Test Case Guidelines
+
+    </h5>
+
+    <ul class="mb-0">
+
+        <li>Create multiple public examples for students.</li>
+
+        <li>Keep hidden test cases confidential.</li>
+
+        <li>Include edge cases and large inputs.</li>
+
+        <li>Test all boundary conditions.</li>
+
+        <li>Verify outputs before publishing.</li>
+
+    </ul>
+
+</div>
+<!-- ================= JUDGE CONFIGURATION ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-gavel me-2"></i>
+
+            Judge Configuration
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+
+                    Default Time Limit (Seconds)
+
+                </label>
+
+                <input
+                    type="number"
+                    class="form-control"
+                    name="default_time_limit"
+                    value="{{ problem.default_time_limit if problem else 1 }}"
+                    min="1">
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+
+                    Default Memory Limit (MB)
+
+                </label>
+
+                <input
+                    type="number"
+                    class="form-control"
+                    name="default_memory_limit"
+                    value="{{ problem.default_memory_limit if problem else 256 }}">
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+
+                    Maximum Output Size (KB)
+
+                </label>
+
+                <input
+                    type="number"
+                    class="form-control"
+                    value="1024">
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="form-check form-switch mb-3">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        checked
+                        name="case_sensitive">
+
+                    <label class="form-check-label">
+
+                        Case Sensitive Output
+
+                    </label>
+
+                </div>
+
+                <div class="form-check form-switch mb-3">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        checked
+                        name="ignore_trailing_spaces">
+
+                    <label class="form-check-label">
+
+                        Ignore Trailing Spaces
+
+                    </label>
+
+                </div>
+
+                <div class="form-check form-switch">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        checked
+                        name="ignore_blank_lines">
+
+                    <label class="form-check-label">
+
+                        Ignore Blank Lines
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="form-check form-switch mb-3">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        checked
+                        name="partial_scoring">
+
+                    <label class="form-check-label">
+
+                        Enable Partial Scoring
+
+                    </label>
+
+                </div>
+
+                <div class="form-check form-switch mb-3">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        checked
+                        name="show_runtime">
+
+                    <label class="form-check-label">
+
+                        Show Runtime
+
+                    </label>
+
+                </div>
+
+                <div class="form-check form-switch">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        checked
+                        name="show_memory">
+
+                    <label class="form-check-label">
+
+                        Show Memory Usage
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= DOCKER EXECUTION ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fab fa-docker me-2"></i>
+
+            Docker Execution Settings
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+
+                    CPU Limit
+
+                </label>
+
+                <input
+                    type="text"
+                    class="form-control"
+                    value="1 Core">
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+
+                    RAM Limit
+
+                </label>
+
+                <input
+                    type="text"
+                    class="form-control"
+                    value="512 MB">
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+
+                    Process Limit
+
+                </label>
+
+                <input
+                    type="number"
+                    class="form-control"
+                    value="100">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SUPPORTED LANGUAGES ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-success text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-code me-2"></i>
+
+            Supported Languages
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-3">
+
+                <div class="form-check">
+
+                    <input class="form-check-input"
+                           type="checkbox"
+                           checked
+                           name="languages"
+                           value="python">
+
+                    <label class="form-check-label">
+
+                        Python 3.11
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="form-check">
+
+                    <input class="form-check-input"
+                           type="checkbox"
+                           checked
+                           value="java">
+
+                    <label class="form-check-label">
+
+                        Java 21
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="form-check">
+
+                    <input class="form-check-input"
+                           type="checkbox"
+                           checked
+                           value="cpp">
+
+                    <label class="form-check-label">
+
+                        C++17
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="form-check">
+
+                    <input class="form-check-input"
+                           type="checkbox"
+                           checked
+                           value="c">
+
+                    <label class="form-check-label">
+
+                        C17
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= LANGUAGE LIMITS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-warning">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-stopwatch me-2"></i>
+
+            Language Specific Limits
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-hover">
+
+            <thead>
+
+                <tr>
+
+                    <th>Language</th>
+
+                    <th>Time Limit</th>
+
+                    <th>Memory Limit</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td>Python</td>
+
+                    <td>2 sec</td>
+
+                    <td>512 MB</td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Java</td>
+
+                    <td>2 sec</td>
+
+                    <td>512 MB</td>
+
+                </tr>
+
+                <tr>
+
+                    <td>C++</td>
+
+                    <td>1 sec</td>
+
+                    <td>256 MB</td>
+
+                </tr>
+
+                <tr>
+
+                    <td>C</td>
+
+                    <td>1 sec</td>
+
+                    <td>256 MB</td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- ================= SANDBOX ================= -->
+
+<div class="alert alert-info border-0 shadow mt-4">
+
+    <h5>
+
+        <i class="fas fa-shield-alt me-2"></i>
+
+        Sandbox Configuration
+
+    </h5>
+
+    <ul class="mb-0">
+
+        <li>Docker container isolation enabled.</li>
+
+        <li>Network access disabled.</li>
+
+        <li>File system write protection enabled.</li>
+
+        <li>Execution timeout enforced.</li>
+
+        <li>Resource limits applied to every submission.</li>
+
+    </ul>
+
+</div>
+<!-- ================= ATTACHMENTS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-paperclip me-2"></i>
+
+            Problem Attachments
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+
+                    Upload PDF Statement
+
+                </label>
+
+                <input
+                    type="file"
+                    class="form-control"
+                    name="statement_pdf"
+                    accept=".pdf">
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+
+                    Upload Images
+
+                </label>
+
+                <input
+                    type="file"
+                    class="form-control"
+                    name="problem_images"
+                    accept=".png,.jpg,.jpeg,.gif"
+                    multiple>
+
+            </div>
+
+            <div class="col-md-12">
+
+                <label class="form-label">
+
+                    Additional Files (ZIP)
+
+                </label>
+
+                <input
+                    type="file"
+                    class="form-control"
+                    name="attachments"
+                    accept=".zip">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= PROBLEM STATISTICS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-success text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-chart-line me-2"></i>
+
+            Problem Statistics
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row text-center">
+
+            <div class="col-md-3">
+
+                <h3 class="text-primary">
+
+                    {{ problem.total_attempts if problem else 0 }}
+
+                </h3>
+
+                <p class="text-muted">
+
+                    Total Attempts
+
+                </p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h3 class="text-success">
+
+                    {{ problem.accepted_submissions if problem else 0 }}
+
+                </h3>
+
+                <p class="text-muted">
+
+                    Accepted
+
+                </p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h3 class="text-danger">
+
+                    {{ problem.rejected_submissions if problem else 0 }}
+
+                </h3>
+
+                <p class="text-muted">
+
+                    Rejected
+
+                </p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h3 class="text-warning">
+
+                    {{ problem.acceptance_rate if problem else "0%" }}
+
+                </h3>
+
+                <p class="text-muted">
+
+                    Acceptance Rate
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <canvas id="problemStatsChart" height="100"></canvas>
+
+    </div>
+
+</div>
+
+<!-- ================= VERSION HISTORY ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-warning">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-history me-2"></i>
+
+            Version History
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Version</th>
+
+                        <th>Date</th>
+
+                        <th>Updated By</th>
+
+                        <th>Changes</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+
+                        <td>v1.3</td>
+
+                        <td>2026-07-10</td>
+
+                        <td>{{ current_user.full_name if current_user else "Teacher" }}</td>
+
+                        <td>Updated hidden test cases</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>v1.2</td>
+
+                        <td>2026-06-30</td>
+
+                        <td>Admin</td>
+
+                        <td>Improved constraints</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>v1.1</td>
+
+                        <td>2026-06-22</td>
+
+                        <td>Admin</td>
+
+                        <td>Added editorial</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>v1.0</td>
+
+                        <td>2026-06-15</td>
+
+                        <td>Admin</td>
+
+                        <td>Initial Release</td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= AUTHOR INFORMATION ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-info text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-user-edit me-2"></i>
+
+                    Author Information
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <table class="table table-borderless">
+
+                    <tr>
+
+                        <th>Created By</th>
+
+                        <td>
+
+                            {{ problem.created_by if problem else current_user.full_name }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Created On</th>
+
+                        <td>
+
+                            {{ problem.created_at if problem else "-" }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Last Modified</th>
+
+                        <td>
+
+                            {{ problem.updated_at if problem else "-" }}
+
+                        </td>
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+<!-- ================= CHANGE LOG ================= -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-secondary text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-clipboard-list me-2"></i>
+
+                    Change Log
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <textarea
+
+                    class="form-control"
+
+                    rows="8"
+
+                    name="change_log"
+
+                    placeholder="Describe the latest changes made to this problem..."></textarea>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="alert alert-success border-0 shadow mt-4 mb-4">
+
+    <h5>
+
+        <i class="fas fa-info-circle me-2"></i>
+
+        Version Management
+
+    </h5>
+
+    <ul class="mb-0">
+
+        <li>Maintain a clear history of all updates.</li>
+
+        <li>Record important modifications before publishing.</li>
+
+        <li>Upload supporting files whenever required.</li>
+
+        <li>Review statistics after major updates.</li>
+
+        <li>Use the change log for future reference.</li>
+
+    </ul>
+
+</div>
+<!-- ================= LIVE PREVIEW ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-eye me-2"></i>
+
+            Live Problem Preview
+
+        </h5>
+
+        <button
+            type="button"
+            class="btn btn-light btn-sm"
+            id="refreshPreviewBtn">
+
+            <i class="fas fa-sync-alt me-1"></i>
+
+            Refresh Preview
+
+        </button>
+
+    </div>
+
+    <div class="card-body">
+
+        <div id="problemPreview"
+
+             class="border rounded p-4 bg-light">
+
+            <h2 id="previewTitle">
+
+                {{ problem.title if problem else "Problem Title" }}
+
+            </h2>
+
+            <span class="badge bg-success me-2">
+
+                {{ problem.difficulty if problem else "Easy" }}
+
+            </span>
+
+            <span class="badge bg-primary">
+
+                {{ problem.category if problem else "Category" }}
+
+            </span>
+
+            <hr>
+
+            <h5>Description</h5>
+
+            <div id="previewDescription">
+
+                {{ problem.description|safe if problem else "Problem description will appear here..." }}
+
+            </div>
+
+            <hr>
+
+            <h5>Input</h5>
+
+            <pre id="previewInput">
+
+{{ problem.input_format if problem else "" }}
+
+            </pre>
+
+            <h5>Output</h5>
+
+            <pre id="previewOutput">
+
+{{ problem.output_format if problem else "" }}
+
+            </pre>
+
+            <h5>Constraints</h5>
+
+            <pre id="previewConstraints">
+
+{{ problem.constraints if problem else "" }}
+
+            </pre>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= REVIEW CHECKLIST ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-success text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-clipboard-check me-2"></i>
+
+            Review Checklist
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="form-check mb-3">
+
+            <input class="form-check-input"
+
+                   type="checkbox"
+
+                   checked>
+
+            <label class="form-check-label">
+
+                Problem title is complete.
+
+            </label>
+
+        </div>
+
+        <div class="form-check mb-3">
+
+            <input class="form-check-input"
+
+                   type="checkbox"
+
+                   checked>
+
+            <label class="form-check-label">
+
+                Description is well written.
+
+            </label>
+
+        </div>
+
+        <div class="form-check mb-3">
+
+            <input class="form-check-input"
+
+                   type="checkbox"
+
+                   checked>
+
+            <label class="form-check-label">
+
+                Input / Output format verified.
+
+            </label>
+
+        </div>
+
+        <div class="form-check mb-3">
+
+            <input class="form-check-input"
+
+                   type="checkbox">
+
+            <label class="form-check-label">
+
+                Hidden test cases validated.
+
+            </label>
+
+        </div>
+
+        <div class="form-check">
+
+            <input class="form-check-input"
+
+                   type="checkbox">
+
+            <label class="form-check-label">
+
+                Editorial reviewed.
+
+            </label>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= VALIDATION SUMMARY ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-warning">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-check-double me-2"></i>
+
+            Validation Summary
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-borderless">
+
+            <tr>
+
+                <th>Required Fields</th>
+
+                <td>
+
+                    <span class="badge bg-success">
+
+                        Complete
+
+                    </span>
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <th>Public Test Cases</th>
+
+                <td>
+
+                    <span class="badge bg-success">
+
+                        Available
+
+                    </span>
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <th>Hidden Test Cases</th>
+
+                <td>
+
+                    <span class="badge bg-warning text-dark">
+
+                        Review Required
+
+                    </span>
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <th>Judge Configuration</th>
+
+                <td>
+
+                    <span class="badge bg-success">
+
+                        Valid
+
+                    </span>
+
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- ================= PUBLISH READINESS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-danger text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-rocket me-2"></i>
+
+            Publishing Readiness
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="progress mb-3">
+
+            <div class="progress-bar bg-success"
+
+                 style="width:92%;">
+
+                92% Ready
+
+            </div>
+
+        </div>
+
+        <ul>
+
+            <li>✔ Problem statement completed</li>
+
+            <li>✔ Constraints verified</li>
+
+            <li>✔ Sample cases available</li>
+
+            <li>⚠ Hidden test cases need final review</li>
+
+            <li>⚠ Editorial pending approval</li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+<!-- ================= FINAL REVIEW ================= -->
+
+<div class="alert alert-primary border-0 shadow mt-4 mb-4">
+
+    <h5>
+
+        <i class="fas fa-info-circle me-2"></i>
+
+        Final Review
+
+    </h5>
+
+    <p class="mb-0">
+
+        Before publishing, verify all hidden test cases,
+        review the editorial, confirm the judge configuration,
+        and preview the complete problem statement.
+        Once published, students will immediately receive
+        the updated version of this programming problem.
+
+    </p>
+
+</div>
+<!-- ================= ACTION PANEL ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-sliders-h me-2"></i>
+
+            Problem Actions
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <!-- Left Side -->
+
+            <div class="col-lg-6">
+
+                <h6 class="fw-bold mb-3">
+
+                    Save & Publish
+
+                </h6>
+
+                <div class="d-grid gap-3">
+
+                    <button
+                        type="submit"
+                        class="btn btn-success btn-lg"
+                        id="saveProblemBtn">
+
+                        <i class="fas fa-save me-2"></i>
+
+                        Save Changes
+
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-primary btn-lg"
+                        id="saveDraftBtn">
+
+                        <i class="fas fa-file-alt me-2"></i>
+
+                        Save as Draft
+
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-warning btn-lg"
+                        id="previewProblemBtn">
+
+                        <i class="fas fa-eye me-2"></i>
+
+                        Preview Problem
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Right Side -->
+
+            <div class="col-lg-6">
+
+                <h6 class="fw-bold mb-3">
+
+                    Publishing Controls
+
+                </h6>
+
+                <div class="form-check form-switch mb-3">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        checked
+                        id="publishSwitch">
+
+                    <label class="form-check-label">
+
+                        Publish Immediately
+
+                    </label>
+
+                </div>
+
+                <div class="form-check form-switch mb-3">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        checked
+                        id="leaderboardSwitch">
+
+                    <label class="form-check-label">
+
+                        Enable Leaderboard
+
+                    </label>
+
+                </div>
+
+                <div class="form-check form-switch mb-3">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        checked
+                        id="visibleSwitch">
+
+                    <label class="form-check-label">
+
+                        Visible to Students
+
+                    </label>
+
+                </div>
+
+                <div class="form-check form-switch">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="discussionSwitch">
+
+                    <label class="form-check-label">
+
+                        Enable Discussion
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= RESET / DUPLICATE ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-warning">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-sync-alt me-2"></i>
+
+                    Reset Changes
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <p class="text-muted">
+
+                    Discard all unsaved changes and restore the last saved version.
+
+                </p>
+
+                <button
+                    type="reset"
+                    class="btn btn-warning w-100"
+                    id="resetProblemBtn">
+
+                    <i class="fas fa-undo me-2"></i>
+
+                    Reset Form
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-info text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-copy me-2"></i>
+
+                    Duplicate Problem
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <p class="text-muted">
+
+                    Create a copy of this problem with all test cases and settings.
+
+                </p>
+
+                <button
+                    type="button"
+                    class="btn btn-info text-white w-100"
+                    id="duplicateProblemBtn">
+
+                    <i class="fas fa-clone me-2"></i>
+
+                    Duplicate Problem
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= PUBLISH SUMMARY ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-success text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-rocket me-2"></i>
+
+            Publish Summary
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row text-center">
+
+            <div class="col-md-3">
+
+                <h2 class="text-success">
+
+                    ✓
+
+                </h2>
+
+                <p>
+
+                    Description
+
+                </p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h2 class="text-success">
+
+                    ✓
+
+                </h2>
+
+                <p>
+
+                    Test Cases
+
+                </p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h2 class="text-success">
+
+                    ✓
+
+                </h2>
+
+                <p>
+
+                    Judge Config
+
+                </p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h2 class="text-warning">
+
+                    !
+
+                </h2>
+
+                <p>
+
+                    Final Review
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= FOOTER ACTIONS ================= -->
+
+<div class="row mt-4 mb-5">
+
+    <div class="col-lg-12">
+
+        <div class="d-flex justify-content-between flex-wrap gap-3">
+
+            <a
+                href="{{ url_for('teacher.problems') }}"
+                class="btn btn-outline-secondary">
+
+                <i class="fas fa-arrow-left me-2"></i>
+
+                Back to Problems
+
+            </a>
+
+            <div>
+
+                <button
+                    type="button"
+                    class="btn btn-danger me-2"
+                    id="deleteProblemBtn">
+
+                    <i class="fas fa-trash-alt me-2"></i>
+
+                    Delete Problem
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-success btn-lg">
+
+                    <i class="fas fa-check-circle me-2"></i>
+
+                    Update Problem
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= SAVE CONFIRMATION MODAL ================= -->
+
+<div class="modal fade"
+     id="saveModal"
+     tabindex="-1"
+     aria-labelledby="saveModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-success text-white">
+
+                <h5 class="modal-title" id="saveModalLabel">
+
+                    <i class="fas fa-save me-2"></i>
+
+                    Save Changes
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                Are you sure you want to save all changes made to this problem?
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="submit"
+                    form="editProblemForm"
+                    class="btn btn-success">
+
+                    Save Changes
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= DELETE MODAL ================= -->
+
+<div class="modal fade"
+     id="deleteModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+
+                <h5 class="modal-title">
+
+                    <i class="fas fa-trash-alt me-2"></i>
+
+                    Delete Problem
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="alert alert-danger mb-0">
+
+                    <strong>Warning!</strong>
+
+                    Deleting this problem will permanently remove:
+
+                    <ul class="mt-3 mb-0">
+
+                        <li>Problem Statement</li>
+                        <li>All Test Cases</li>
+                        <li>Editorial</li>
+                        <li>Submission History</li>
+                        <li>Leaderboard Data</li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    class="btn btn-danger">
+
+                    Delete Permanently
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= DUPLICATE MODAL ================= -->
+
+<div class="modal fade"
+     id="duplicateModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-info text-white">
+
+                <h5 class="modal-title">
+
+                    <i class="fas fa-copy me-2"></i>
+
+                    Duplicate Problem
+
+                </h5>
+
+                <button
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        New Problem Title
+
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Copy of {{ problem.title if problem else 'Problem' }}">
+
+                </div>
+
+                <div class="form-check">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        checked>
+
+                    <label class="form-check-label">
+
+                        Copy all test cases
+
+                    </label>
+
+                </div>
+
+                <div class="form-check">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        checked>
+
+                    <label class="form-check-label">
+
+                        Copy judge configuration
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    class="btn btn-info text-white">
+
+                    Duplicate
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= UNSAVED CHANGES ================= -->
+
+<div class="modal fade"
+     id="unsavedModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-warning">
+
+                <h5 class="modal-title">
+
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+
+                    Unsaved Changes
+
+                </h5>
+
+            </div>
+
+            <div class="modal-body">
+
+                You have unsaved changes.
+
+                Do you really want to leave this page?
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Stay
+
+                </button>
+
+                <button
+                    class="btn btn-warning">
+
+                    Leave Page
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= QUICK ACTIONS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-bolt me-2"></i>
+
+            Quick Actions
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-md-3">
+
+                <button
+                    type="button"
+                    class="btn btn-outline-primary w-100">
+
+                    <i class="fas fa-eye me-2"></i>
+
+                    Preview
+
+                </button>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <button
+                    type="button"
+                    class="btn btn-outline-success w-100">
+
+                    <i class="fas fa-upload me-2"></i>
+
+                    Publish
+
+                </button>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <button
+                    type="button"
+                    class="btn btn-outline-warning w-100">
+
+                    <i class="fas fa-file-export me-2"></i>
+
+                    Export
+
+                </button>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <button
+                    type="button"
+                    class="btn btn-outline-danger w-100">
+
+                    <i class="fas fa-trash me-2"></i>
+
+                    Delete
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= FINAL ACTION CENTER ================= -->
+
+<div class="alert alert-primary border-0 shadow mt-4 mb-4">
+
+    <h5>
+
+        <i class="fas fa-flag-checkered me-2"></i>
+
+        Final Action Center
+
+    </h5>
+
+    <p>
+
+        Before updating the problem, verify:
+
+    </p>
+
+    <ul class="mb-0">
+
+        <li>✓ Problem statement is complete</li>
+
+        <li>✓ Sample test cases are correct</li>
+
+        <li>✓ Hidden test cases are validated</li>
+
+        <li>✓ Judge configuration is correct</li>
+
+        <li>✓ Time and memory limits are appropriate</li>
+
+        <li>✓ Editorial has been reviewed</li>
+
+        <li>✓ Publishing settings are correct</li>
+
+    </ul>
+
+</div>
+{% block scripts %}
+
+<!-- ================= CHART.JS ================= -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ================= Problem Statistics =================
+
+    const statsChart = document.getElementById("problemStatsChart");
+
+    if (statsChart) {
+
+        new Chart(statsChart, {
+
+            type: "bar",
+
+            data: {
+
+                labels: ["Attempts", "Accepted", "Rejected"],
+
+                datasets: [{
+
+                    label: "Statistics",
+
+                    data: [
+
+                        {{ problem.total_attempts if problem else 120 }},
+
+                        {{ problem.accepted_submissions if problem else 84 }},
+
+                        {{ problem.rejected_submissions if problem else 36 }}
+
+                    ],
+
+                    backgroundColor: [
+
+                        "#0d6efd",
+
+                        "#198754",
+
+                        "#dc3545"
+
+                    ]
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false
+
+            }
+
+        });
+
+    }
+
+});
+</script>
+
+<!-- ================= LIVE PREVIEW ================= -->
+
+<script>
+
+function updatePreview(){
+
+    document.getElementById("previewTitle").innerText =
+        document.querySelector("[name='title']").value;
+
+    document.getElementById("previewDescription").innerHTML =
+        document.getElementById("problemDescription").value;
+
+    document.getElementById("previewInput").innerText =
+        document.querySelector("[name='input_format']").value;
+
+    document.getElementById("previewOutput").innerText =
+        document.querySelector("[name='output_format']").value;
+
+    document.getElementById("previewConstraints").innerText =
+        document.getElementById("constraints").value;
+
+}
+
+document.querySelector("[name='title']")?.addEventListener("keyup",updatePreview);
+
+document.getElementById("problemDescription")?.addEventListener("keyup",updatePreview);
+
+document.querySelector("[name='input_format']")?.addEventListener("keyup",updatePreview);
+
+document.querySelector("[name='output_format']")?.addEventListener("keyup",updatePreview);
+
+document.getElementById("constraints")?.addEventListener("keyup",updatePreview);
+
+document.getElementById("refreshPreviewBtn")?.addEventListener("click",updatePreview);
+
+</script>
+
+<!-- ================= ADD TEST CASE ================= -->
+
+<script>
+
+function createTestCase(type){
+
+    return `
+    <div class="card border mb-3 testcase-item">
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <label class="form-label">Input</label>
+
+                    <textarea class="form-control font-monospace"
+                              rows="5"
+                              name="${type}_input[]"></textarea>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label">Expected Output</label>
+
+                    <textarea class="form-control font-monospace"
+                              rows="5"
+                              name="${type}_output[]"></textarea>
+
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="btn btn-outline-danger btn-sm mt-3 remove-testcase">
+
+                <i class="fas fa-trash"></i>
+
+                Remove
+
+            </button>
+
+        </div>
+
+    </div>`;
+
+}
+
+document.getElementById("addPublicTestCase")?.onclick=function(){
+
+    document.getElementById("publicTestCases")
+        .insertAdjacentHTML("beforeend",createTestCase("public"));
+
+};
+
+document.getElementById("addHiddenTestCase")?.onclick=function(){
+
+    document.getElementById("hiddenTestCases")
+        .insertAdjacentHTML("beforeend",createTestCase("hidden"));
+
+};
+
+document.addEventListener("click",function(e){
+
+    if(e.target.classList.contains("remove-testcase")){
+
+        e.target.closest(".testcase-item")?.remove();
+
+    }
+
+});
+
+</script>
+
+<!-- ================= TOAST ================= -->
+
+<script>
+
+function showToast(message,type="success"){
+
+    const toast=document.createElement("div");
+
+    toast.className=`toast text-bg-${type} border-0 position-fixed`;
+
+    toast.style.bottom="20px";
+
+    toast.style.right="20px";
+
+    toast.style.zIndex="99999";
+
+    toast.innerHTML=`
+
+    <div class="d-flex">
+
+        <div class="toast-body">
+
+            ${message}
+
+        </div>
+
+        <button
+
+        class="btn-close btn-close-white me-2 m-auto"
+
+        data-bs-dismiss="toast">
+
+        </button>
+
+    </div>`;
+
+    document.body.appendChild(toast);
+
+    const bsToast=new bootstrap.Toast(toast);
+
+    bsToast.show();
+
+    toast.addEventListener("hidden.bs.toast",()=>toast.remove());
+
+}
+
+</script>
+
+<!-- ================= BUTTON EVENTS ================= -->
+
+<script>
+
+document.getElementById("saveDraftBtn")?.onclick=function(){
+
+    showToast("Draft saved successfully.","primary");
+
+};
+
+document.getElementById("previewProblemBtn")?.onclick=function(){
+
+    updatePreview();
+
+    showToast("Preview updated.","success");
+
+};
+
+document.getElementById("duplicateProblemBtn")?.onclick=function(){
+
+    const modal=new bootstrap.Modal(document.getElementById("duplicateModal"));
+
+    modal.show();
+
+};
+
+document.getElementById("deleteProblemBtn")?.onclick=function(){
+
+    const modal=new bootstrap.Modal(document.getElementById("deleteModal"));
+
+    modal.show();
+
+};
+
+document.getElementById("saveProblemBtn")?.onclick=function(e){
+
+    showToast("Saving problem...","success");
+
+};
+
+</script>
+
+<!-- ================= FORM CHANGE DETECTION ================= -->
+
+<script>
+
+let formChanged=false;
+
+document.querySelectorAll("input, textarea, select").forEach(el=>{
+
+    el.addEventListener("change",()=>{
+
+        formChanged=true;
+
+    });
+
+});
+
+window.addEventListener("beforeunload",function(e){
+
+    if(formChanged){
+
+        e.preventDefault();
+
+        e.returnValue="";
+
+    }
+
+});
+
+</script>
+
+<!-- ================= CARD ANIMATION ================= -->
+
+<script>
+
+const observer=new IntersectionObserver(entries=>{
+
+    entries.forEach(entry=>{
+
+        if(entry.isIntersecting){
+
+            entry.target.style.opacity="1";
+
+            entry.target.style.transform="translateY(0)";
+
+            observer.unobserve(entry.target);
+
+        }
+
+    });
+
+},{threshold:.1});
+
+document.querySelectorAll(".card").forEach(card=>{
+
+    card.style.opacity="0";
+
+    card.style.transform="translateY(20px)";
+
+    card.style.transition=".35s ease";
+
+    observer.observe(card);
+
+});
+
+</script>
+
+<!-- ================= CUSTOM CSS ================= -->
+
+<style>
+
+.card{
+
+    transition:.3s;
+
+    border-radius:14px;
+
+}
+
+.card:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 12px 28px rgba(0,0,0,.12);
+
+}
+
+.progress{
+
+    height:10px;
+
+}
+
+.table-hover tbody tr:hover{
+
+    background:#f8f9fa;
+
+}
+
+textarea{
+
+    resize:vertical;
+
+}
+
+pre{
+
+    white-space:pre-wrap;
+
+    word-break:break-word;
+
+}
+
+#problemPreview{
+
+    min-height:400px;
+
+}
+
+canvas{
+
+    max-width:100%;
+
+}
+
+.modal-content{
+
+    border-radius:16px;
+
+}
+
+@media print{
+
+.card-header,
+
+.btn,
+
+.modal{
+
+display:none!important;
+
+}
+
+body{
+
+background:#fff;
+
+}
+
+}
+
+</style>
+
+<script>
+
+window.addEventListener("load",function(){
+
+    updatePreview();
+
+    showToast("Edit Problem Page Loaded","success");
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,2218 @@
+{% extends "student/base_student.html" %}
+
+{% block title %}
+Notifications
+{% endblock %}
+
+{% block page_title %}
+Notification Center
+{% endblock %}
+
+{% block breadcrumb %}
+
+<li class="breadcrumb-item">
+    <a href="{{ url_for('student.dashboard') }}">
+        Dashboard
+    </a>
+</li>
+
+<li class="breadcrumb-item active">
+    Notifications
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+
+<div class="card border-0 shadow mb-4">
+
+    <div class="card-body">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <h2 class="fw-bold">
+
+                    <i class="fas fa-bell text-warning me-2"></i>
+
+                    Notification Center
+
+                </h2>
+
+                <p class="text-muted mb-0">
+
+                    Stay updated with assignments, submissions,
+                    announcements, leaderboard changes and system alerts.
+
+                </p>
+
+            </div>
+
+            <div class="col-lg-4 text-end">
+
+                <button
+                    class="btn btn-primary"
+                    id="markAllReadBtn">
+
+                    <i class="fas fa-check-double me-2"></i>
+
+                    Mark All Read
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SUMMARY CARDS ================= -->
+
+<div class="row g-4">
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card border-0 shadow text-center">
+
+            <div class="card-body">
+
+                <i class="fas fa-envelope fa-3x text-primary mb-3"></i>
+
+                <h3>
+
+                    {{ total_notifications if total_notifications else 32 }}
+
+                </h3>
+
+                <p class="text-muted">
+
+                    Total Notifications
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card border-0 shadow text-center">
+
+            <div class="card-body">
+
+                <i class="fas fa-envelope-open fa-3x text-success mb-3"></i>
+
+                <h3>
+
+                    {{ unread_notifications if unread_notifications else 6 }}
+
+                </h3>
+
+                <p class="text-muted">
+
+                    Unread
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card border-0 shadow text-center">
+
+            <div class="card-body">
+
+                <i class="fas fa-book fa-3x text-warning mb-3"></i>
+
+                <h3>
+
+                    {{ assignment_alerts if assignment_alerts else 4 }}
+
+                </h3>
+
+                <p class="text-muted">
+
+                    Assignment Alerts
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card border-0 shadow text-center">
+
+            <div class="card-body">
+
+                <i class="fas fa-trophy fa-3x text-danger mb-3"></i>
+
+                <h3>
+
+                    {{ leaderboard_updates if leaderboard_updates else 2 }}
+
+                </h3>
+
+                <p class="text-muted">
+
+                    Rank Updates
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SEARCH BAR ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-lg-8">
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+
+                        <i class="fas fa-search"></i>
+
+                    </span>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="searchNotification"
+                        placeholder="Search notifications...">
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <select
+                    class="form-select"
+                    id="notificationFilter">
+
+                    <option value="">
+
+                        All Categories
+
+                    </option>
+
+                    <option value="assignment">
+
+                        Assignments
+
+                    </option>
+
+                    <option value="submission">
+
+                        Submissions
+
+                    </option>
+
+                    <option value="leaderboard">
+
+                        Leaderboard
+
+                    </option>
+
+                    <option value="announcement">
+
+                        Announcements
+
+                    </option>
+
+                    <option value="system">
+
+                        System
+
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= RECENT NOTIFICATIONS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bell me-2 text-warning"></i>
+
+Recent Notifications
+
+</h5>
+
+</div>
+
+<div class="card-body p-0">
+
+<div class="list-group list-group-flush" id="notificationList">
+
+<!-- Notification 1 -->
+
+<div class="list-group-item notification-item unread" data-category="assignment">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
+<h6 class="mb-1">
+
+<i class="fas fa-book text-primary me-2"></i>
+
+New Assignment Published
+
+<span class="badge bg-danger ms-2">
+
+New
+
+</span>
+
+</h6>
+
+<p class="mb-1">
+
+Python Programming Assignment 5 has been published.
+Submit your solution before the deadline.
+
+</p>
+
+<small class="text-muted">
+
+2 minutes ago
+
+</small>
+
+</div>
+
+<button class="btn btn-sm btn-outline-success">
+
+<i class="fas fa-check"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Notification 2 -->
+
+<div class="list-group-item notification-item unread" data-category="submission">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
+<h6 class="mb-1">
+
+<i class="fas fa-code text-success me-2"></i>
+
+Submission Evaluated
+
+<span class="badge bg-danger ms-2">
+
+New
+
+</span>
+
+</h6>
+
+<p class="mb-1">
+
+Your solution for <strong>Binary Search</strong>
+passed all test cases.
+
+</p>
+
+<small class="text-muted">
+
+10 minutes ago
+
+</small>
+
+</div>
+
+<button class="btn btn-sm btn-outline-success">
+
+<i class="fas fa-check"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Notification 3 -->
+
+<div class="list-group-item notification-item" data-category="leaderboard">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
+<h6 class="mb-1">
+
+<i class="fas fa-trophy text-warning me-2"></i>
+
+Leaderboard Updated
+
+</h6>
+
+<p class="mb-1">
+
+Congratulations! You moved from
+<strong>#17</strong> to
+<strong>#12</strong>.
+
+</p>
+
+<small class="text-muted">
+
+1 hour ago
+
+</small>
+
+</div>
+
+<button class="btn btn-sm btn-outline-secondary">
+
+<i class="fas fa-check"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Notification 4 -->
+
+<div class="list-group-item notification-item" data-category="announcement">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
+<h6 class="mb-1">
+
+<i class="fas fa-bullhorn text-info me-2"></i>
+
+Department Announcement
+
+</h6>
+
+<p class="mb-1">
+
+Programming Contest will be held this Friday
+at 10:00 AM in Lab 2.
+
+</p>
+
+<small class="text-muted">
+
+Today, 9:30 AM
+
+</small>
+
+</div>
+
+<button class="btn btn-sm btn-outline-secondary">
+
+<i class="fas fa-check"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Notification 5 -->
+
+<div class="list-group-item notification-item" data-category="system">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
+<h6 class="mb-1">
+
+<i class="fas fa-server text-secondary me-2"></i>
+
+System Maintenance
+
+</h6>
+
+<p class="mb-1">
+
+The Lab Auto Grader server will undergo
+maintenance tonight from 12:00 AM to 1:00 AM.
+
+</p>
+
+<small class="text-muted">
+
+Yesterday
+
+</small>
+
+</div>
+
+<button class="btn btn-sm btn-outline-secondary">
+
+<i class="fas fa-check"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Notification 6 -->
+
+<div class="list-group-item notification-item" data-category="assignment">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
+<h6 class="mb-1">
+
+<i class="fas fa-clock text-danger me-2"></i>
+
+Assignment Deadline Reminder
+
+</h6>
+
+<p class="mb-1">
+
+Your DBMS Lab Assignment is due tomorrow.
+
+</p>
+
+<small class="text-muted">
+
+Yesterday
+
+</small>
+
+</div>
+
+<button class="btn btn-sm btn-outline-secondary">
+
+<i class="fas fa-check"></i>
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK ACTIONS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-md-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-book fa-3x text-primary mb-3"></i>
+
+<h5>
+
+Assignments
+
+</h5>
+
+<p class="text-muted">
+
+View all assignment notifications.
+
+</p>
+
+<a href="{{ url_for('student.assignments') }}"
+class="btn btn-outline-primary">
+
+Open
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-upload fa-3x text-success mb-3"></i>
+
+<h5>
+
+Submissions
+
+</h5>
+
+<p class="text-muted">
+
+View submission results.
+
+</p>
+
+<a href="{{ url_for('student.submissions') }}"
+class="btn btn-outline-success">
+
+Open
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-trophy fa-3x text-warning mb-3"></i>
+
+<h5>
+
+Leaderboard
+
+</h5>
+
+<p class="text-muted">
+
+See ranking updates.
+
+</p>
+
+<a href="{{ url_for('student.leaderboard') }}"
+class="btn btn-outline-warning">
+
+Open
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= RECENT NOTIFICATIONS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bell me-2 text-warning"></i>
+
+Recent Notifications
+
+</h5>
+
+</div>
+
+<div class="card-body p-0">
+
+<div class="list-group list-group-flush" id="notificationList">
+
+<!-- Notification 1 -->
+
+<div class="list-group-item notification-item unread" data-category="assignment">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
+<h6 class="mb-1">
+
+<i class="fas fa-book text-primary me-2"></i>
+
+New Assignment Published
+
+<span class="badge bg-danger ms-2">
+
+New
+
+</span>
+
+</h6>
+
+<p class="mb-1">
+
+Python Programming Assignment 5 has been published.
+Submit your solution before the deadline.
+
+</p>
+
+<small class="text-muted">
+
+2 minutes ago
+
+</small>
+
+</div>
+
+<button class="btn btn-sm btn-outline-success">
+
+<i class="fas fa-check"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Notification 2 -->
+
+<div class="list-group-item notification-item unread" data-category="submission">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
+<h6 class="mb-1">
+
+<i class="fas fa-code text-success me-2"></i>
+
+Submission Evaluated
+
+<span class="badge bg-danger ms-2">
+
+New
+
+</span>
+
+</h6>
+
+<p class="mb-1">
+
+Your solution for <strong>Binary Search</strong>
+passed all test cases.
+
+</p>
+
+<small class="text-muted">
+
+10 minutes ago
+
+</small>
+
+</div>
+
+<button class="btn btn-sm btn-outline-success">
+
+<i class="fas fa-check"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Notification 3 -->
+
+<div class="list-group-item notification-item" data-category="leaderboard">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
+<h6 class="mb-1">
+
+<i class="fas fa-trophy text-warning me-2"></i>
+
+Leaderboard Updated
+
+</h6>
+
+<p class="mb-1">
+
+Congratulations! You moved from
+<strong>#17</strong> to
+<strong>#12</strong>.
+
+</p>
+
+<small class="text-muted">
+
+1 hour ago
+
+</small>
+
+</div>
+
+<button class="btn btn-sm btn-outline-secondary">
+
+<i class="fas fa-check"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Notification 4 -->
+
+<div class="list-group-item notification-item" data-category="announcement">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
+<h6 class="mb-1">
+
+<i class="fas fa-bullhorn text-info me-2"></i>
+
+Department Announcement
+
+</h6>
+
+<p class="mb-1">
+
+Programming Contest will be held this Friday
+at 10:00 AM in Lab 2.
+
+</p>
+
+<small class="text-muted">
+
+Today, 9:30 AM
+
+</small>
+
+</div>
+
+<button class="btn btn-sm btn-outline-secondary">
+
+<i class="fas fa-check"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Notification 5 -->
+
+<div class="list-group-item notification-item" data-category="system">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
+<h6 class="mb-1">
+
+<i class="fas fa-server text-secondary me-2"></i>
+
+System Maintenance
+
+</h6>
+
+<p class="mb-1">
+
+The Lab Auto Grader server will undergo
+maintenance tonight from 12:00 AM to 1:00 AM.
+
+</p>
+
+<small class="text-muted">
+
+Yesterday
+
+</small>
+
+</div>
+
+<button class="btn btn-sm btn-outline-secondary">
+
+<i class="fas fa-check"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Notification 6 -->
+
+<div class="list-group-item notification-item" data-category="assignment">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
+<h6 class="mb-1">
+
+<i class="fas fa-clock text-danger me-2"></i>
+
+Assignment Deadline Reminder
+
+</h6>
+
+<p class="mb-1">
+
+Your DBMS Lab Assignment is due tomorrow.
+
+</p>
+
+<small class="text-muted">
+
+Yesterday
+
+</small>
+
+</div>
+
+<button class="btn btn-sm btn-outline-secondary">
+
+<i class="fas fa-check"></i>
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK ACTIONS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-md-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-book fa-3x text-primary mb-3"></i>
+
+<h5>
+
+Assignments
+
+</h5>
+
+<p class="text-muted">
+
+View all assignment notifications.
+
+</p>
+
+<a href="{{ url_for('student.assignments') }}"
+class="btn btn-outline-primary">
+
+Open
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-upload fa-3x text-success mb-3"></i>
+
+<h5>
+
+Submissions
+
+</h5>
+
+<p class="text-muted">
+
+View submission results.
+
+</p>
+
+<a href="{{ url_for('student.submissions') }}"
+class="btn btn-outline-success">
+
+Open
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-trophy fa-3x text-warning mb-3"></i>
+
+<h5>
+
+Leaderboard
+
+</h5>
+
+<p class="text-muted">
+
+See ranking updates.
+
+</p>
+
+<a href="{{ url_for('student.leaderboard') }}"
+class="btn btn-outline-warning">
+
+Open
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= ASSIGNMENT ALERTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-book me-2"></i>
+
+Assignment Alerts
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="list-group list-group-flush">
+
+<div class="list-group-item">
+
+<h6 class="mb-1">
+
+Python Assignment 5
+
+</h6>
+
+<p class="mb-1">
+
+Submission deadline is <strong>25 July 2026</strong>.
+
+</p>
+
+<span class="badge bg-warning text-dark">
+
+Due Tomorrow
+
+</span>
+
+</div>
+
+<div class="list-group-item">
+
+<h6 class="mb-1">
+
+DBMS Lab Assignment
+
+</h6>
+
+<p class="mb-1">
+
+Complete all SQL queries before submission.
+
+</p>
+
+<span class="badge bg-danger">
+
+Urgent
+
+</span>
+
+</div>
+
+<div class="list-group-item">
+
+<h6 class="mb-1">
+
+Operating Systems Lab
+
+</h6>
+
+<p class="mb-1">
+
+Assignment has been graded successfully.
+
+</p>
+
+<span class="badge bg-success">
+
+Completed
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUBMISSION RESULTS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-code me-2"></i>
+
+Submission Results
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>
+
+Problem
+
+</th>
+
+<th>
+
+Result
+
+</th>
+
+<th>
+
+Score
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>
+
+Two Sum
+
+</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Accepted
+
+</span>
+
+</td>
+
+<td>
+
+100
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+Binary Search
+
+</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Accepted
+
+</span>
+
+</td>
+
+<td>
+
+100
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+Merge Sort
+
+</td>
+
+<td>
+
+<span class="badge bg-danger">
+
+Wrong Answer
+
+</span>
+
+</td>
+
+<td>
+
+35
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+Graph Traversal
+
+</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+TLE
+
+</span>
+
+</td>
+
+<td>
+
+60
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SYSTEM ANNOUNCEMENTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bullhorn me-2"></i>
+
+System Announcements
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="alert alert-info">
+
+<strong>
+
+Contest Registration Open
+
+</strong>
+
+<hr>
+
+Register now for the weekly coding contest.
+Top performers will receive certificates.
+
+</div>
+
+<div class="alert alert-warning">
+
+<strong>
+
+Scheduled Maintenance
+
+</strong>
+
+<hr>
+
+The Lab Auto Grader server will be unavailable
+from <strong>12:00 AM to 1:00 AM</strong> tonight.
+
+</div>
+
+<div class="alert alert-success">
+
+<strong>
+
+New Features Added
+
+</strong>
+
+<hr>
+
+Dark mode, Monaco Editor improvements,
+and faster code execution are now available.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= LEADERBOARD UPDATES ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+🏆 Leaderboard
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<strong>
+
+Current Rank
+
+</strong>
+
+<h4 class="text-primary">
+
+#{{ current_rank if current_rank else 12 }}
+
+</h4>
+
+</div>
+
+<div class="mb-3">
+
+<strong>
+
+Weekly Change
+
+</strong>
+
+<h5 class="text-success">
+
+▲ +5 Positions
+
+</h5>
+
+</div>
+
+<div>
+
+<strong>
+
+Next Target
+
+</strong>
+
+<h5>
+
+Top 10
+
+</h5>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= UPCOMING EVENTS ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-calendar-alt me-2"></i>
+
+Upcoming Events
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-3">
+
+<h5>
+
+25 Jul
+
+</h5>
+
+<p>
+
+Python Assignment Deadline
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h5>
+
+28 Jul
+
+</h5>
+
+<p>
+
+Weekly Coding Contest
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h5>
+
+30 Jul
+
+</h5>
+
+<p>
+
+DBMS Lab Submission
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h5>
+
+01 Aug
+
+</h5>
+
+<p>
+
+Monthly Leaderboard Reset
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= FILTERS & ACTIONS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-filter me-2"></i>
+
+Notification Filters
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row g-3">
+
+<div class="col-lg-3">
+
+<select class="form-select" id="statusFilter">
+
+<option value="all">
+
+All Status
+
+</option>
+
+<option value="unread">
+
+Unread
+
+</option>
+
+<option value="read">
+
+Read
+
+</option>
+
+</select>
+
+</div>
+
+<div class="col-lg-3">
+
+<select class="form-select" id="priorityFilter">
+
+<option value="all">
+
+All Priorities
+
+</option>
+
+<option value="high">
+
+High
+
+</option>
+
+<option value="medium">
+
+Medium
+
+</option>
+
+<option value="low">
+
+Low
+
+</option>
+
+</select>
+
+</div>
+
+<div class="col-lg-6 text-end">
+
+<button
+class="btn btn-success me-2"
+id="markReadBtn">
+
+<i class="fas fa-check-double me-2"></i>
+
+Mark All Read
+
+</button>
+
+<button
+class="btn btn-danger"
+id="deleteAllBtn">
+
+<i class="fas fa-trash me-2"></i>
+
+Delete All
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= NOTIFICATION STATISTICS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-envelope-open text-success fa-2x mb-3"></i>
+
+<h3>
+
+26
+
+</h3>
+
+<p class="text-muted mb-0">
+
+Read
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-envelope text-danger fa-2x mb-3"></i>
+
+<h3>
+
+6
+
+</h3>
+
+<p class="text-muted mb-0">
+
+Unread
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-exclamation-circle text-warning fa-2x mb-3"></i>
+
+<h3>
+
+3
+
+</h3>
+
+<p class="text-muted mb-0">
+
+High Priority
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-calendar-check text-primary fa-2x mb-3"></i>
+
+<h3>
+
+12
+
+</h3>
+
+<p class="text-muted mb-0">
+
+This Week
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PAGINATION ================= -->
+
+<nav class="mt-4">
+
+<ul class="pagination justify-content-center">
+
+<li class="page-item disabled">
+
+<a class="page-link">
+
+Previous
+
+</a>
+
+</li>
+
+<li class="page-item active">
+
+<a class="page-link">
+
+1
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link">
+
+2
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link">
+
+3
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link">
+
+Next
+
+</a>
+
+</li>
+
+</ul>
+
+</nav>
+
+<!-- ================= NOTIFICATION PREFERENCES ================= -->
+
+<div class="card border-0 shadow mt-4 mb-4">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-cog me-2"></i>
+
+Notification Preferences
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="form-check form-switch mb-3">
+
+<input
+class="form-check-input"
+type="checkbox"
+id="assignmentSwitch"
+checked>
+
+<label
+class="form-check-label"
+for="assignmentSwitch">
+
+Assignment Notifications
+
+</label>
+
+</div>
+
+<div class="form-check form-switch mb-3">
+
+<input
+class="form-check-input"
+type="checkbox"
+id="submissionSwitch"
+checked>
+
+<label
+class="form-check-label"
+for="submissionSwitch">
+
+Submission Results
+
+</label>
+
+</div>
+
+<div class="form-check form-switch mb-3">
+
+<input
+class="form-check-input"
+type="checkbox"
+id="leaderboardSwitch"
+checked>
+
+<label
+class="form-check-label"
+for="leaderboardSwitch">
+
+Leaderboard Updates
+
+</label>
+
+</div>
+
+<div class="form-check form-switch">
+
+<input
+class="form-check-input"
+type="checkbox"
+id="systemSwitch"
+checked>
+
+<label
+class="form-check-label"
+for="systemSwitch">
+
+System Announcements
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+{% block scripts %}
+
+<!-- ================= SEARCH NOTIFICATIONS ================= -->
+
+<script>
+
+const searchInput=document.getElementById("searchNotification");
+
+if(searchInput){
+
+searchInput.addEventListener("keyup",function(){
+
+const value=this.value.toLowerCase();
+
+document.querySelectorAll(".notification-item").forEach(item=>{
+
+item.style.display=item.innerText.toLowerCase().includes(value)
+
+? ""
+
+: "none";
+
+});
+
+});
+
+}
+
+</script>
+
+<!-- ================= CATEGORY FILTER ================= -->
+
+<script>
+
+const categoryFilter=document.getElementById("notificationFilter");
+
+if(categoryFilter){
+
+categoryFilter.addEventListener("change",function(){
+
+const category=this.value;
+
+document.querySelectorAll(".notification-item").forEach(item=>{
+
+if(category===""){
+
+item.style.display="";
+
+}else{
+
+item.style.display=item.dataset.category===category
+
+? ""
+
+: "none";
+
+}
+
+});
+
+});
+
+}
+
+</script>
+
+<!-- ================= MARK ALL READ ================= -->
+
+<script>
+
+const markBtn=document.getElementById("markReadBtn");
+
+if(markBtn){
+
+markBtn.addEventListener("click",function(){
+
+document.querySelectorAll(".notification-item").forEach(item=>{
+
+item.classList.remove("unread");
+
+const badge=item.querySelector(".badge.bg-danger");
+
+if(badge){
+
+badge.remove();
+
+}
+
+});
+
+showToast("All notifications marked as read.","success");
+
+});
+
+}
+
+</script>
+
+<!-- ================= DELETE ALL ================= -->
+
+<script>
+
+const deleteBtn=document.getElementById("deleteAllBtn");
+
+if(deleteBtn){
+
+deleteBtn.addEventListener("click",function(){
+
+if(confirm("Delete all notifications?")){
+
+const list=document.getElementById("notificationList");
+
+if(list){
+
+list.innerHTML=`
+
+<div class="text-center p-5">
+
+<i class="fas fa-bell-slash fa-4x text-muted mb-3"></i>
+
+<h4>No Notifications</h4>
+
+<p class="text-muted">
+
+You're all caught up!
+
+</p>
+
+</div>
+
+`;
+
+}
+
+showToast("Notifications deleted.","danger");
+
+}
+
+});
+
+}
+
+</script>
+
+<!-- ================= TOAST ================= -->
+
+<script>
+
+function showToast(message,type){
+
+const toast=document.createElement("div");
+
+toast.className=`toast align-items-center text-bg-${type} border-0 position-fixed`;
+
+toast.style.right="20px";
+
+toast.style.bottom="20px";
+
+toast.style.zIndex="99999";
+
+toast.innerHTML=`
+
+<div class="d-flex">
+
+<div class="toast-body">
+
+${message}
+
+</div>
+
+<button
+
+type="button"
+
+class="btn-close btn-close-white me-2 m-auto"
+
+data-bs-dismiss="toast">
+
+</button>
+
+</div>
+
+`;
+
+document.body.appendChild(toast);
+
+const bsToast=new bootstrap.Toast(toast);
+
+bsToast.show();
+
+toast.addEventListener("hidden.bs.toast",()=>toast.remove());
+
+}
+
+</script>
+
+<!-- ================= CARD ANIMATION ================= -->
+
+<script>
+
+const cards=document.querySelectorAll(".card");
+
+const observer=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.style.opacity="1";
+
+entry.target.style.transform="translateY(0)";
+
+observer.unobserve(entry.target);
+
+}
+
+});
+
+});
+
+cards.forEach(card=>{
+
+card.style.opacity="0";
+
+card.style.transform="translateY(25px)";
+
+card.style.transition="all .4s ease";
+
+observer.observe(card);
+
+});
+
+</script>
+
+<!-- ================= AUTO REFRESH ================= -->
+
+<script>
+
+setInterval(function(){
+
+console.log("Checking for new notifications...");
+
+// AJAX call can be added here
+
+},300000);
+
+</script>
+
+<!-- ================= HOVER EFFECT ================= -->
+
+<style>
+
+.notification-item{
+
+transition:.25s;
+
+cursor:pointer;
+
+}
+
+.notification-item:hover{
+
+background:#f8f9fa;
+
+transform:translateX(5px);
+
+}
+
+.notification-item.unread{
+
+border-left:5px solid #0d6efd;
+
+background:#eef5ff;
+
+}
+
+.card{
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-5px);
+
+box-shadow:0 12px 30px rgba(0,0,0,.12);
+
+}
+
+</style>
+
+<!-- ================= PAGE LOADED ================= -->
+
+<script>
+
+window.addEventListener("load",function(){
+
+showToast("Notification Center Loaded","success");
+
+});
+
+</script>
+
+{% endblock %}

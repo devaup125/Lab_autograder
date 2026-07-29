@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Contact Us | Lab Auto Grader</title>
+
+<!-- Bootstrap -->
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<!-- Font Awesome -->
+
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+rel="stylesheet">
+
+<!-- Google Font -->
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<style>
+
+*{
+
+margin:0;
+
+padding:0;
+
+box-sizing:border-box;
+
+font-family:'Poppins',sans-serif;
+
+}
+
+body{
+
+background:#f8fafc;
+
+overflow-x:hidden;
+
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+
+background:rgba(15,23,42,.95);
+
+backdrop-filter:blur(15px);
+
+padding:18px 0;
+
+}
+
+.navbar-brand{
+
+font-size:28px;
+
+font-weight:700;
+
+color:white!important;
+
+}
+
+.nav-link{
+
+color:white!important;
+
+margin-left:20px;
+
+font-weight:500;
+
+transition:.3s;
+
+}
+
+.nav-link:hover{
+
+color:#38bdf8!important;
+
+}
+
+/* ================= HERO ================= */
+
+.hero{
+
+background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+
+min-height:75vh;
+
+display:flex;
+
+align-items:center;
+
+position:relative;
+
+overflow:hidden;
+
+color:white;
+
+}
+
+.hero::before{
+
+content:"";
+
+position:absolute;
+
+width:320px;
+
+height:320px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.08);
+
+top:-120px;
+
+right:-120px;
+
+}
+
+.hero::after{
+
+content:"";
+
+position:absolute;
+
+width:220px;
+
+height:220px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.08);
+
+bottom:-80px;
+
+left:-60px;
+
+}
+
+.hero h1{
+
+font-size:60px;
+
+font-weight:700;
+
+}
+
+.hero p{
+
+font-size:18px;
+
+margin-top:20px;
+
+line-height:1.8;
+
+color:#dbeafe;
+
+}
+
+.hero-image{
+
+text-align:center;
+
+}
+
+.hero-image i{
+
+font-size:220px;
+
+color:#38bdf8;
+
+animation:float 4s infinite ease-in-out;
+
+}
+
+@keyframes float{
+
+0%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-15px);
+
+}
+
+100%{
+
+transform:translateY(0);
+
+}
+
+}
+
+/* ================= SECTION ================= */
+
+.section-title{
+
+font-size:42px;
+
+font-weight:700;
+
+margin-bottom:20px;
+
+color:#0f172a;
+
+}
+
+.section-text{
+
+font-size:18px;
+
+color:#64748b;
+
+line-height:1.8;
+
+}
+
+.contact-card{
+
+background:white;
+
+padding:30px;
+
+border-radius:20px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+transition:.3s;
+
+height:100%;
+
+}
+
+.contact-card:hover{
+
+transform:translateY(-8px);
+
+}
+
+.contact-card i{
+
+font-size:45px;
+
+margin-bottom:20px;
+
+color:#2563eb;
+
+}
+
+.btn-custom{
+
+padding:14px 35px;
+
+border-radius:50px;
+
+font-weight:600;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar navbar-expand-lg fixed-top">
+
+<div class="container">
+
+<a class="navbar-brand"
+
+href="{{ url_for('home') }}">
+
+<i class="fas fa-laptop-code text-info"></i>
+
+Lab Auto Grader
+
+</a>
+
+<button
+
+class="navbar-toggler"
+
+data-bs-toggle="collapse"
+
+data-bs-target="#menu">
+
+<span class="navbar-toggler-icon"></span>
+
+</button>
+
+<div
+
+class="collapse navbar-collapse"
+
+id="menu">
+
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item">
+
+<a class="nav-link"
+
+href="{{ url_for('home') }}">
+
+Home
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a class="nav-link"
+
+href="{{ url_for('landing.about') }}">
+
+About
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a class="nav-link active"
+
+href="{{ url_for('landing.contact') }}">
+
+Contact
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a class="nav-link"
+
+href="{{ url_for('auth.student_login') }}">
+
+Login
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</nav>
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+<div class="container">
+
+<div class="row align-items-center">
+
+<div class="col-lg-6">
+
+<h1>
+
+Contact Us
+
+</h1>
+
+<p>
+
+Have questions, suggestions, or need technical support?
+We're here to help. Reach out to the Lab Auto Grader team,
+and we'll get back to you as soon as possible.
+
+</p>
+
+<a
+
+href="#contact"
+
+class="btn btn-info btn-custom mt-4">
+
+Get In Touch
+
+</a>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="hero-image">
+
+<i class="fas fa-headset"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= INTRODUCTION ================= -->
+
+<section id="contact" class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+We'd Love to Hear From You
+
+</h2>
+
+<p class="section-text">
+
+Whether you're a student, teacher, administrator, or institution,
+our team is ready to answer your questions and help you make the
+most of the Lab Auto Grader platform.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-md-4">
+
+<div class="contact-card text-center">
+
+<i class="fas fa-comments"></i>
+
+<h4>General Inquiry</h4>
+
+<p>
+
+Ask questions about the platform, features,
+or upcoming updates.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="contact-card text-center">
+
+<i class="fas fa-life-ring"></i>
+
+<h4>Technical Support</h4>
+
+<p>
+
+Need help with login, submissions,
+or technical issues?
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="contact-card text-center">
+
+<i class="fas fa-handshake"></i>
+
+<h4>Partnership</h4>
+
+<p>
+
+Interested in deploying Lab Auto Grader
+at your institution?
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ================= CONTACT INFORMATION ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Contact Information
+
+</h2>
+
+<p class="section-text">
+
+Reach us through any of the following communication channels.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<!-- Email -->
+
+<div class="col-lg-3 col-md-6">
+
+<div class="contact-card text-center">
+
+<i class="fas fa-envelope fa-3x text-primary mb-4"></i>
+
+<h4>Email</h4>
+
+<p>
+
+devaup05@gmail.com
+
+</p>
+
+<a
+href="mailto:devaup05@gmail.com"
+class="btn btn-outline-primary">
+
+Send Email
+
+</a>
+
+</div>
+
+</div>
+
+<!-- Phone -->
+
+<div class="col-lg-3 col-md-6">
+
+<div class="contact-card text-center">
+
+<i class="fas fa-phone fa-3x text-success mb-4"></i>
+
+<h4>Phone</h4>
+
+<p>
+
++91 9044189390
+
+</p>
+
+<a
+href="tel:+919044189390"
+class="btn btn-outline-success">
+
+Call Now
+
+</a>
+
+</div>
+
+</div>
+
+<!-- Location -->
+
+<div class="col-lg-3 col-md-6">
+
+<div class="contact-card text-center">
+
+<i class="fas fa-map-marker-alt fa-3x text-danger mb-4"></i>
+
+<h4>Location</h4>
+
+<p>
+
+United Institute of Technology
+
+<br>
+
+Prayagraj,
+
+Uttar Pradesh
+
+</p>
+
+<a
+
+href="https://maps.google.com"
+
+target="_blank"
+
+class="btn btn-outline-danger">
+
+View Map
+
+</a>
+
+</div>
+
+</div>
+
+<!-- Office Hours -->
+
+<div class="col-lg-3 col-md-6">
+
+<div class="contact-card text-center">
+
+<i class="fas fa-clock fa-3x text-warning mb-4"></i>
+
+<h4>Office Hours</h4>
+
+<p>
+
+Monday - Friday
+
+<br>
+
+09:00 AM - 05:00 PM
+
+</p>
+
+<span class="badge bg-success">
+
+Open
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= GOOGLE MAP ================= -->
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Find Us
+
+</h2>
+
+<p class="section-text">
+
+Visit our campus or connect with us during working hours.
+
+</p>
+
+</div>
+
+<div class="row">
+
+<div class="col-lg-12">
+
+<div class="card shadow-lg border-0 rounded-4">
+
+<div class="card-body p-0">
+
+<iframe
+
+src="https://www.google.com/maps?q=United+Institute+of+Technology+Prayagraj&output=embed"
+
+width="100%"
+
+height="450"
+
+style="border:0; border-radius:20px;"
+
+allowfullscreen=""
+
+loading="lazy">
+
+</iframe>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= SUPPORT INFORMATION ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Support Information
+
+</h2>
+
+<p class="section-text">
+
+We're committed to providing prompt and effective assistance.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-4">
+
+<div class="contact-card">
+
+<i class="fas fa-headset text-primary"></i>
+
+<h4>
+
+Technical Support
+
+</h4>
+
+<p>
+
+Get assistance with coding issues, login problems,
+Docker execution, and platform-related questions.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="contact-card">
+
+<i class="fas fa-user-graduate text-success"></i>
+
+<h4>
+
+Student Support
+
+</h4>
+
+<p>
+
+Help with assignments, submissions,
+coding environment and account-related queries.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="contact-card">
+
+<i class="fas fa-chalkboard-teacher text-warning"></i>
+
+<h4>
+
+Faculty Support
+
+</h4>
+
+<p>
+
+Support for question management,
+test cases, reports, analytics and classroom setup.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ================= TEAM CONTACT ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Meet Our Team
+
+</h2>
+
+<p class="section-text">
+
+Our team is committed to delivering the best programming laboratory experience.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<!-- Developer -->
+
+<div class="col-lg-4">
+
+<div class="card shadow border-0 rounded-4 h-100">
+
+<div class="card-body text-center p-4">
+
+<img
+src="{{ url_for('static', filename='images/developer.jpg') }}"
+class="rounded-circle shadow mb-3"
+width="120"
+height="120"
+alt="Developer">
+
+<h4>
+
+Devanshu Ranjan Upadhyay
+
+</h4>
+
+<span class="badge bg-primary mb-3">
+
+Full Stack Developer
+
+</span>
+
+<p class="text-muted">
+
+Designed and developed the Programming Lab Auto Grader using
+Flask, Docker, SQLite and Monaco Editor.
+
+</p>
+
+<a href="mailto:devaup05@gmail.com"
+class="btn btn-outline-primary">
+
+<i class="fas fa-envelope"></i>
+
+Contact
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Guide -->
+
+<div class="col-lg-4">
+
+<div class="card shadow border-0 rounded-4 h-100">
+
+<div class="card-body text-center p-4">
+
+<img
+src="{{ url_for('static', filename='images/guide.jpg') }}"
+class="rounded-circle shadow mb-3"
+width="120"
+height="120"
+alt="Guide">
+
+<h4>
+
+Dr. Umesh Kumar Pandey
+
+</h4>
+
+<span class="badge bg-success mb-3">
+
+Project Guide
+
+</span>
+
+<p class="text-muted">
+
+Provided technical guidance, academic supervision,
+and valuable suggestions throughout the project.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Support -->
+
+<div class="col-lg-4">
+
+<div class="card shadow border-0 rounded-4 h-100">
+
+<div class="card-body text-center p-4">
+
+<i class="fas fa-headset fa-5x text-info mb-3"></i>
+
+<h4>
+
+Support Team
+
+</h4>
+
+<span class="badge bg-info mb-3">
+
+24×7 Support
+
+</span>
+
+<p class="text-muted">
+
+For technical assistance,
+bug reports,
+or platform-related issues.
+
+</p>
+
+<a href="mailto:support@labautograder.com"
+class="btn btn-outline-info">
+
+Support
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= NEWSLETTER ================= -->
+
+<section class="py-5 bg-primary text-white">
+
+<div class="container">
+
+<div class="row align-items-center">
+
+<div class="col-lg-6">
+
+<h2>
+
+Subscribe to Our Newsletter
+
+</h2>
+
+<p>
+
+Receive updates about new features,
+security improvements,
+and platform releases.
+
+</p>
+
+</div>
+
+<div class="col-lg-6">
+
+<form class="row g-2">
+
+<div class="col-md-8">
+
+<input
+type="email"
+class="form-control form-control-lg"
+placeholder="Enter your email">
+
+</div>
+
+<div class="col-md-4">
+
+<button
+class="btn btn-warning btn-lg w-100"
+type="submit">
+
+Subscribe
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= PLATFORM STATS ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Platform Statistics
+
+</h2>
+
+</div>
+
+<div class="row text-center g-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="contact-card">
+
+<h1 class="text-primary fw-bold">
+
+1000+
+
+</h1>
+
+<h5>
+
+Students
+
+</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="contact-card">
+
+<h1 class="text-success fw-bold">
+
+100+
+
+</h1>
+
+<h5>
+
+Programming Problems
+
+</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="contact-card">
+
+<h1 class="text-warning fw-bold">
+
+5000+
+
+</h1>
+
+<h5>
+
+Code Executions
+
+</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="contact-card">
+
+<h1 class="text-danger fw-bold">
+
+99.9%
+
+</h1>
+
+<h5>
+
+System Uptime
+
+</h5>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+What Users Say
+
+</h2>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-4">
+
+<div class="contact-card">
+
+<p>
+
+"Lab Auto Grader has made programming assignments much easier to manage.
+Instant feedback helps students learn faster."
+
+</p>
+
+<hr>
+
+<strong>
+
+Faculty Member
+
+</strong>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="contact-card">
+
+<p>
+
+"The Monaco Editor and instant evaluation provide a coding experience
+similar to competitive programming platforms."
+
+</p>
+
+<hr>
+
+<strong>
+
+Student
+
+</strong>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="contact-card">
+
+<p>
+
+"The Docker-based execution environment ensures safe and reliable
+code execution for every submission."
+
+</p>
+
+<hr>
+
+<strong>
+
+System Administrator
+
+</strong>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ================= FOOTER ================= -->
+
+<footer class="bg-dark text-white pt-5 pb-3">
+
+<div class="container">
+
+<div class="row">
+
+<!-- About -->
+
+<div class="col-lg-4 mb-4">
+
+<h4>
+
+<i class="fas fa-laptop-code text-info"></i>
+
+Lab Auto Grader
+
+</h4>
+
+<p class="mt-3 text-light">
+
+A secure web-based programming laboratory platform that automates
+code evaluation using Docker containers and provides instant feedback,
+analytics, and leaderboard generation.
+
+</p>
+
+</div>
+
+<!-- Quick Links -->
+
+<div class="col-lg-2 mb-4">
+
+<h5>
+
+Quick Links
+
+</h5>
+
+<ul class="list-unstyled mt-3">
+
+<li>
+
+<a href="{{ url_for('home') }}"
+class="text-light text-decoration-none">
+
+Home
+
+</a>
+
+</li>
+
+<li>
+
+<a href="{{ url_for('landing.about') }}"
+class="text-light text-decoration-none">
+
+About
+
+</a>
+
+</li>
+
+<li>
+
+<a href="{{ url_for('landing.contact') }}"
+class="text-light text-decoration-none">
+
+Contact
+
+</a>
+
+</li>
+
+<li>
+
+<a href="{{ url_for('auth.student_login') }}"
+class="text-light text-decoration-none">
+
+Student Login
+
+</a>
+
+</li>
+
+<li>
+
+<a href="{{ url_for('auth.teacher_login') }}"
+class="text-light text-decoration-none">
+
+Teacher Login
+
+</a>
+
+</li>
+
+<li>
+
+<a href="{{ url_for('auth.admin_login') }}"
+class="text-light text-decoration-none">
+
+Admin Login
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+<!-- Technologies -->
+
+<div class="col-lg-3 mb-4">
+
+<h5>
+
+Technologies
+
+</h5>
+
+<ul class="list-unstyled mt-3">
+
+<li><i class="fab fa-python text-warning me-2"></i>Python</li>
+
+<li><i class="fas fa-fire text-danger me-2"></i>Flask</li>
+
+<li><i class="fab fa-docker text-info me-2"></i>Docker</li>
+
+<li><i class="fas fa-database text-success me-2"></i>SQLite</li>
+
+<li><i class="fab fa-js text-warning me-2"></i>JavaScript</li>
+
+<li><i class="fas fa-code text-primary me-2"></i>Monaco Editor</li>
+
+</ul>
+
+</div>
+
+<!-- Contact -->
+
+<div class="col-lg-3 mb-4">
+
+<h5>
+
+Contact Information
+
+</h5>
+
+<p>
+
+<i class="fas fa-envelope text-info me-2"></i>
+
+devaup05@gmail.com
+
+</p>
+
+<p>
+
+<i class="fas fa-phone text-success me-2"></i>
+
++91 9044189390
+
+</p>
+
+<p>
+
+<i class="fas fa-map-marker-alt text-danger me-2"></i>
+
+Prayagraj, Uttar Pradesh, India
+
+</p>
+
+<div class="mt-4">
+
+<a href="#" class="text-white me-3">
+
+<i class="fab fa-github fa-2x"></i>
+
+</a>
+
+<a href="#" class="text-white me-3">
+
+<i class="fab fa-linkedin fa-2x"></i>
+
+</a>
+
+<a href="#" class="text-white me-3">
+
+<i class="fab fa-youtube fa-2x"></i>
+
+</a>
+
+<a href="#" class="text-white">
+
+<i class="fab fa-discord fa-2x"></i>
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<hr class="border-secondary">
+
+<div class="row align-items-center">
+
+<div class="col-md-6">
+
+<p class="mb-0">
+
+© 2026 Lab Auto Grader System. All Rights Reserved.
+
+</p>
+
+</div>
+
+<div class="col-md-6 text-md-end">
+
+<p class="mb-0">
+
+Developed by
+
+<strong>
+
+Devanshu Ranjan Upadhyay
+
+</strong>
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</footer>
+
+<!-- ================= SCROLL TO TOP ================= -->
+
+<button
+id="scrollTopBtn"
+class="btn btn-primary rounded-circle shadow">
+
+<i class="fas fa-arrow-up"></i>
+
+</button>
+
+<style>
+
+#scrollTopBtn{
+
+position:fixed;
+
+bottom:25px;
+
+right:25px;
+
+width:55px;
+
+height:55px;
+
+display:none;
+
+z-index:9999;
+
+border-radius:50%;
+
+}
+
+.contact-card{
+
+transition:.4s;
+
+}
+
+.contact-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:0 20px 40px rgba(0,0,0,.15);
+
+}
+
+footer a{
+
+transition:.3s;
+
+}
+
+footer a:hover{
+
+color:#38bdf8!important;
+
+}
+
+</style>
+
+<!-- Bootstrap -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Scroll Button -->
+
+<script>
+
+const scrollBtn=document.getElementById("scrollTopBtn");
+
+window.addEventListener("scroll",function(){
+
+if(window.scrollY>300){
+
+scrollBtn.style.display="block";
+
+}else{
+
+scrollBtn.style.display="none";
+
+}
+
+});
+
+scrollBtn.onclick=function(){
+
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
+};
+
+</script>
+
+<!-- Counter Animation -->
+
+<script>
+
+document.querySelectorAll("h1").forEach(counter=>{
+
+const target=parseInt(counter.innerText);
+
+if(isNaN(target)) return;
+
+let value=0;
+
+const update=()=>{
+
+value+=Math.ceil(target/60);
+
+if(value<target){
+
+counter.innerText=value+"+";
+
+requestAnimationFrame(update);
+
+}else{
+
+counter.innerText=target+"+";
+
+}
+
+};
+
+update();
+
+});
+
+</script>
+
+<!-- Fade Animation -->
+
+<script>
+
+const observer=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.style.opacity="1";
+
+entry.target.style.transform="translateY(0)";
+
+}
+
+});
+
+});
+
+document.querySelectorAll(".contact-card").forEach(card=>{
+
+card.style.opacity="0";
+
+card.style.transform="translateY(40px)";
+
+card.style.transition=".6s";
+
+observer.observe(card);
+
+});
+
+</script>
+
+</body>
+
+</html>

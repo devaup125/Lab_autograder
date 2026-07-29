@@ -1,0 +1,5160 @@
+{% extends "teacher/base_teacher.html" %}
+
+{% block title %}
+Teacher Dashboard
+{% endblock %}
+
+{% block page_title %}
+Teacher Dashboard
+{% endblock %}
+
+{% block breadcrumb %}
+
+<li class="breadcrumb-item active">
+Dashboard
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= DASHBOARD HEADER ================= -->
+
+<div class="card border-0 shadow mb-4">
+
+<div class="card-body">
+
+<div class="row align-items-center">
+
+<div class="col-lg-8">
+
+<h2 class="fw-bold">
+
+<i class="fas fa-chalkboard-teacher text-primary me-2"></i>
+
+Welcome,
+{{ current_user.full_name if current_user else "Teacher" }}
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Manage programming labs, monitor student performance,
+create coding problems, review submissions,
+and analyze classroom progress from one dashboard.
+
+</p>
+
+</div>
+
+<div class="col-lg-4 text-end">
+
+<a
+href="{{ url_for('teacher.add_problem') }}"
+class="btn btn-success me-2">
+
+<i class="fas fa-plus me-2"></i>
+
+Add Problem
+
+</a>
+
+<a
+href="{{ url_for('teacher.analytics') }}"
+class="btn btn-primary">
+
+<i class="fas fa-chart-line me-2"></i>
+
+Analytics
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= OVERVIEW CARDS ================= -->
+
+<div class="row g-4">
+
+<div class="col-xl-3 col-md-6">
+
+<div class="card border-0 shadow h-100">
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<h6 class="text-muted">
+
+Students
+
+</h6>
+
+<h2>
+
+{{ total_students if total_students else 185 }}
+
+</h2>
+
+<p class="mb-0 text-success">
+
+<i class="fas fa-arrow-up"></i>
+
++12%
+
+</p>
+
+</div>
+
+<div>
+
+<i class="fas fa-users fa-3x text-primary"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-xl-3 col-md-6">
+
+<div class="card border-0 shadow h-100">
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<h6 class="text-muted">
+
+Problems
+
+</h6>
+
+<h2>
+
+{{ total_problems if total_problems else 96 }}
+
+</h2>
+
+<p class="mb-0 text-success">
+
+<i class="fas fa-arrow-up"></i>
+
++8
+
+</p>
+
+</div>
+
+<div>
+
+<i class="fas fa-code fa-3x text-success"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-xl-3 col-md-6">
+
+<div class="card border-0 shadow h-100">
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<h6 class="text-muted">
+
+Submissions
+
+</h6>
+
+<h2>
+
+{{ total_submissions if total_submissions else 5284 }}
+
+</h2>
+
+<p class="mb-0 text-primary">
+
+Today +245
+
+</p>
+
+</div>
+
+<div>
+
+<i class="fas fa-file-code fa-3x text-warning"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-xl-3 col-md-6">
+
+<div class="card border-0 shadow h-100">
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<h6 class="text-muted">
+
+Acceptance Rate
+
+</h6>
+
+<h2>
+
+78%
+
+</h2>
+
+<p class="mb-0 text-success">
+
+Excellent
+
+</p>
+
+</div>
+
+<div>
+
+<i class="fas fa-check-circle fa-3x text-danger"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TODAY OVERVIEW ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-bar me-2"></i>
+
+Today's Overview
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-3">
+
+<h3 class="text-primary">
+
+245
+
+</h3>
+
+<p class="text-muted">
+
+Today's Submissions
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-success">
+
+189
+
+</h3>
+
+<p class="text-muted">
+
+Accepted
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-warning">
+
+41
+
+</h3>
+
+<p class="text-muted">
+
+Pending Review
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-danger">
+
+15
+
+</h3>
+
+<p class="text-muted">
+
+Flagged
+
+</p>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="progress">
+
+<div
+
+class="progress-bar bg-success"
+
+style="width:78%;">
+
+78% Acceptance
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SYSTEM STATUS ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-server me-2"></i>
+
+System Status
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+Judge Server
+
+</span>
+
+<span class="badge bg-success">
+
+Online
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+Docker Workers
+
+</span>
+
+<span class="badge bg-success">
+
+Running
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+Database
+
+</span>
+
+<span class="badge bg-success">
+
+Healthy
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between">
+
+<span>
+
+Queue
+
+</span>
+
+<span class="badge bg-primary">
+
+12 Jobs
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= DASHBOARD SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-primary border-0 shadow">
+
+<h5>
+
+<i class="fas fa-info-circle me-2"></i>
+
+Dashboard Overview
+
+</h5>
+
+<p class="mb-0">
+
+This dashboard provides a real-time overview of programming lab activities, including student participation, submissions, problem statistics, and system health. Use the quick actions above to manage coding problems and monitor classroom performance efficiently.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+{% extends "teacher/base_teacher.html" %}
+
+{% block title %}
+Teacher Dashboard
+{% endblock %}
+
+{% block page_title %}
+Teacher Dashboard
+{% endblock %}
+
+{% block breadcrumb %}
+
+<li class="breadcrumb-item active">
+Dashboard
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= DASHBOARD HEADER ================= -->
+
+<div class="card border-0 shadow mb-4">
+
+<div class="card-body">
+
+<div class="row align-items-center">
+
+<div class="col-lg-8">
+
+<h2 class="fw-bold">
+
+<i class="fas fa-chalkboard-teacher text-primary me-2"></i>
+
+Welcome,
+{{ current_user.full_name if current_user else "Teacher" }}
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Manage programming labs, monitor student performance,
+create coding problems, review submissions,
+and analyze classroom progress from one dashboard.
+
+</p>
+
+</div>
+
+<div class="col-lg-4 text-end">
+
+<a
+href="{{ url_for('teacher.add_problem') }}"
+class="btn btn-success me-2">
+
+<i class="fas fa-plus me-2"></i>
+
+Add Problem
+
+</a>
+
+<a
+href="{{ url_for('teacher.analytics') }}"
+class="btn btn-primary">
+
+<i class="fas fa-chart-line me-2"></i>
+
+Analytics
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= OVERVIEW CARDS ================= -->
+
+<div class="row g-4">
+
+<div class="col-xl-3 col-md-6">
+
+<div class="card border-0 shadow h-100">
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<h6 class="text-muted">
+
+Students
+
+</h6>
+
+<h2>
+
+{{ total_students if total_students else 185 }}
+
+</h2>
+
+<p class="mb-0 text-success">
+
+<i class="fas fa-arrow-up"></i>
+
++12%
+
+</p>
+
+</div>
+
+<div>
+
+<i class="fas fa-users fa-3x text-primary"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-xl-3 col-md-6">
+
+<div class="card border-0 shadow h-100">
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<h6 class="text-muted">
+
+Problems
+
+</h6>
+
+<h2>
+
+{{ total_problems if total_problems else 96 }}
+
+</h2>
+
+<p class="mb-0 text-success">
+
+<i class="fas fa-arrow-up"></i>
+
++8
+
+</p>
+
+</div>
+
+<div>
+
+<i class="fas fa-code fa-3x text-success"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-xl-3 col-md-6">
+
+<div class="card border-0 shadow h-100">
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<h6 class="text-muted">
+
+Submissions
+
+</h6>
+
+<h2>
+
+{{ total_submissions if total_submissions else 5284 }}
+
+</h2>
+
+<p class="mb-0 text-primary">
+
+Today +245
+
+</p>
+
+</div>
+
+<div>
+
+<i class="fas fa-file-code fa-3x text-warning"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-xl-3 col-md-6">
+
+<div class="card border-0 shadow h-100">
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<h6 class="text-muted">
+
+Acceptance Rate
+
+</h6>
+
+<h2>
+
+78%
+
+</h2>
+
+<p class="mb-0 text-success">
+
+Excellent
+
+</p>
+
+</div>
+
+<div>
+
+<i class="fas fa-check-circle fa-3x text-danger"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TODAY OVERVIEW ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-bar me-2"></i>
+
+Today's Overview
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-3">
+
+<h3 class="text-primary">
+
+245
+
+</h3>
+
+<p class="text-muted">
+
+Today's Submissions
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-success">
+
+189
+
+</h3>
+
+<p class="text-muted">
+
+Accepted
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-warning">
+
+41
+
+</h3>
+
+<p class="text-muted">
+
+Pending Review
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h3 class="text-danger">
+
+15
+
+</h3>
+
+<p class="text-muted">
+
+Flagged
+
+</p>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="progress">
+
+<div
+
+class="progress-bar bg-success"
+
+style="width:78%;">
+
+78% Acceptance
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SYSTEM STATUS ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-server me-2"></i>
+
+System Status
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+Judge Server
+
+</span>
+
+<span class="badge bg-success">
+
+Online
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+Docker Workers
+
+</span>
+
+<span class="badge bg-success">
+
+Running
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+Database
+
+</span>
+
+<span class="badge bg-success">
+
+Healthy
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between">
+
+<span>
+
+Queue
+
+</span>
+
+<span class="badge bg-primary">
+
+12 Jobs
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= DASHBOARD SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-primary border-0 shadow">
+
+<h5>
+
+<i class="fas fa-info-circle me-2"></i>
+
+Dashboard Overview
+
+</h5>
+
+<p class="mb-0">
+
+This dashboard provides a real-time overview of programming lab activities, including student participation, submissions, problem statistics, and system health. Use the quick actions above to manage coding problems and monitor classroom performance efficiently.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= SUBMISSION ANALYTICS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-line me-2"></i>
+
+Submission Analytics
+
+</h5>
+
+<span class="badge bg-light text-dark">
+
+Last 7 Days
+
+</span>
+
+</div>
+
+<div class="card-body">
+
+<canvas id="submissionTrendChart" height="120"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ACCEPTANCE SUMMARY ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-check-circle me-2"></i>
+
+Acceptance Statistics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Accepted</span>
+
+<strong>78%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-success"
+
+style="width:78%;">
+
+78%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Wrong Answer</span>
+
+<strong>14%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-danger"
+
+style="width:14%;">
+
+14%
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="d-flex justify-content-between">
+
+<span>Runtime Error</span>
+
+<strong>8%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-warning"
+
+style="width:8%;">
+
+8%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= LANGUAGE ANALYTICS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-code me-2"></i>
+
+Language Usage
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<canvas id="languageUsageChart"
+
+height="220">
+
+</canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RUNTIME ANALYTICS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-stopwatch me-2"></i>
+
+Runtime Performance
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Fastest</th>
+
+<td class="text-success">
+
+9 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Average</th>
+
+<td>
+
+31 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Slowest</th>
+
+<td class="text-danger">
+
+1200 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Median</th>
+
+<td>
+
+26 ms
+
+</td>
+
+</tr>
+
+</table>
+
+<hr>
+
+<canvas id="runtimeChart"
+
+height="150">
+
+</canvas>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= MEMORY ANALYTICS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-secondary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-memory me-2"></i>
+
+Memory Usage
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Lowest</th>
+
+<td>
+
+9 MB
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Average</th>
+
+<td>
+
+16 MB
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Highest</th>
+
+<td>
+
+64 MB
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Efficiency</th>
+
+<td>
+
+Excellent
+
+</td>
+
+</tr>
+
+</table>
+
+<hr>
+
+<canvas id="memoryChart"
+
+height="150">
+
+</canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= EXECUTION SUMMARY ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-microchip me-2"></i>
+
+Execution Summary
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="alert alert-success">
+
+Average execution time has improved by
+
+<strong>6%</strong>
+
+this week.
+
+</div>
+
+<div class="alert alert-info">
+
+Python remains the most used language.
+
+</div>
+
+<div class="alert alert-warning">
+
+Peak submissions occur between
+
+<strong>6 PM - 9 PM</strong>
+
+</div>
+
+<div class="alert alert-primary mb-0">
+
+Overall judge performance is stable.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PERFORMANCE SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-primary border-0 shadow">
+
+<h5>
+
+<i class="fas fa-chart-bar me-2"></i>
+
+Submission Performance Summary
+
+</h5>
+
+<p class="mb-0">
+
+The submission analytics indicate healthy student engagement with a
+strong acceptance rate. Runtime and memory usage remain within expected
+limits, while Python continues to be the preferred programming language.
+The charts above help monitor trends, execution efficiency, and overall
+judge performance.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= RECENT STUDENT ACTIVITY ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-7">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-user-clock me-2"></i>
+
+Recent Student Activity
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="list-group list-group-flush">
+
+<div class="list-group-item">
+
+<div class="d-flex justify-content-between">
+
+<div>
+
+<strong>Rahul Sharma</strong>
+
+submitted
+
+<strong>Two Sum</strong>
+
+</div>
+
+<small class="text-muted">
+
+2 min ago
+
+</small>
+
+</div>
+
+</div>
+
+<div class="list-group-item">
+
+<div class="d-flex justify-content-between">
+
+<div>
+
+<strong>Priya Singh</strong>
+
+solved
+
+<strong>Binary Search</strong>
+
+</div>
+
+<small class="text-muted">
+
+8 min ago
+
+</small>
+
+</div>
+
+</div>
+
+<div class="list-group-item">
+
+<div class="d-flex justify-content-between">
+
+<div>
+
+<strong>Amit Verma</strong>
+
+started
+
+<strong>Graph Traversal</strong>
+
+</div>
+
+<small class="text-muted">
+
+15 min ago
+
+</small>
+
+</div>
+
+</div>
+
+<div class="list-group-item">
+
+<div class="d-flex justify-content-between">
+
+<div>
+
+<strong>Neha Patel</strong>
+
+joined today's contest
+
+</div>
+
+<small class="text-muted">
+
+20 min ago
+
+</small>
+
+</div>
+
+</div>
+
+<div class="list-group-item">
+
+<div class="d-flex justify-content-between">
+
+<div>
+
+<strong>Rohit Kumar</strong>
+
+earned
+
+<span class="badge bg-warning text-dark">
+
+Gold Badge
+
+</span>
+
+</div>
+
+<small class="text-muted">
+
+35 min ago
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= NOTIFICATIONS ================= -->
+
+<div class="col-lg-5">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bell me-2"></i>
+
+Notifications
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="alert alert-success">
+
+<i class="fas fa-check-circle me-2"></i>
+
+15 new submissions accepted.
+
+</div>
+
+<div class="alert alert-primary">
+
+<i class="fas fa-code me-2"></i>
+
+New programming assignment published.
+
+</div>
+
+<div class="alert alert-warning">
+
+<i class="fas fa-clock me-2"></i>
+
+12 submissions waiting for review.
+
+</div>
+
+<div class="alert alert-danger mb-0">
+
+<i class="fas fa-exclamation-circle me-2"></i>
+
+Judge queue contains pending jobs.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RECENT SUBMISSIONS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-file-code me-2"></i>
+
+Recent Submissions
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead class="table-light">
+
+<tr>
+
+<th>Student</th>
+
+<th>Problem</th>
+
+<th>Language</th>
+
+<th>Status</th>
+
+<th>Runtime</th>
+
+<th>Submitted</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Rahul Sharma</td>
+
+<td>Two Sum</td>
+
+<td>Python</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Accepted
+
+</span>
+
+</td>
+
+<td>22 ms</td>
+
+<td>2 min ago</td>
+
+</tr>
+
+<tr>
+
+<td>Priya Singh</td>
+
+<td>Binary Search</td>
+
+<td>Java</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Accepted
+
+</span>
+
+</td>
+
+<td>31 ms</td>
+
+<td>8 min ago</td>
+
+</tr>
+
+<tr>
+
+<td>Amit Verma</td>
+
+<td>Graph Traversal</td>
+
+<td>C++</td>
+
+<td>
+
+<span class="badge bg-danger">
+
+Wrong Answer
+
+</span>
+
+</td>
+
+<td>17 ms</td>
+
+<td>14 min ago</td>
+
+</tr>
+
+<tr>
+
+<td>Neha Patel</td>
+
+<td>Merge Intervals</td>
+
+<td>Python</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Pending
+
+</span>
+
+</td>
+
+<td>—</td>
+
+<td>18 min ago</td>
+
+</tr>
+
+<tr>
+
+<td>Rohit Kumar</td>
+
+<td>Dynamic Programming</td>
+
+<td>Java</td>
+
+<td>
+
+<span class="badge bg-danger">
+
+Runtime Error
+
+</span>
+
+</td>
+
+<td>120 ms</td>
+
+<td>25 min ago</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PENDING REVIEWS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-hourglass-half me-2"></i>
+
+Pending Reviews
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="list-group">
+
+<li class="list-group-item d-flex justify-content-between">
+
+Manual Code Review
+
+<span class="badge bg-danger">
+
+6
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Plagiarism Check
+
+<span class="badge bg-warning text-dark">
+
+4
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Judge Retry
+
+<span class="badge bg-info">
+
+2
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Appeal Requests
+
+<span class="badge bg-primary">
+
+1
+
+</span>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ACTIVITY TIMELINE ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-stream me-2"></i>
+
+Activity Timeline
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="timeline list-unstyled">
+
+<li class="mb-3">
+
+<strong>09:00 AM</strong> —
+
+Lab session started
+
+</li>
+
+<li class="mb-3">
+
+<strong>10:15 AM</strong> —
+
+Assignment published
+
+</li>
+
+<li class="mb-3">
+
+<strong>11:30 AM</strong> —
+
+100th submission received
+
+</li>
+
+<li class="mb-3">
+
+<strong>01:00 PM</strong> —
+
+Leaderboard updated
+
+</li>
+
+<li>
+
+<strong>02:30 PM</strong> —
+
+Contest ranking generated
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-info border-0 shadow">
+
+<h5>
+
+<i class="fas fa-info-circle me-2"></i>
+
+Activity Summary
+
+</h5>
+
+<p class="mb-0">
+
+The dashboard shows the latest student activity, recent submissions, notifications, pending reviews, and timeline events. This enables instructors to monitor classroom activity and quickly respond to submission issues and student progress.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= TOP STUDENTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-7">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-trophy me-2"></i>
+
+Top Students Leaderboard
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead class="table-light">
+
+<tr>
+
+<th>Rank</th>
+
+<th>Student</th>
+
+<th>Problems Solved</th>
+
+<th>Acceptance</th>
+
+<th>Score</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+🥇 #1
+
+</span>
+
+</td>
+
+<td>Rahul Sharma</td>
+
+<td>91</td>
+
+<td>91%</td>
+
+<td>
+
+<strong>972</strong>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<span class="badge bg-secondary">
+
+🥈 #2
+
+</span>
+
+</td>
+
+<td>Priya Singh</td>
+
+<td>88</td>
+
+<td>89%</td>
+
+<td>
+
+965
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<span class="badge bg-danger">
+
+🥉 #3
+
+</span>
+
+</td>
+
+<td>Amit Verma</td>
+
+<td>85</td>
+
+<td>86%</td>
+
+<td>
+
+951
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>#4</td>
+
+<td>Neha Patel</td>
+
+<td>81</td>
+
+<td>84%</td>
+
+<td>
+
+934
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>#5</td>
+
+<td>Rohit Kumar</td>
+
+<td>78</td>
+
+<td>82%</td>
+
+<td>
+
+921
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= LEADERBOARD SUMMARY ================= -->
+
+<div class="col-lg-5">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-medal me-2"></i>
+
+Leaderboard Summary
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>Highest Score</span>
+
+<strong>972</strong>
+
+</div>
+
+<div class="progress mb-3">
+
+<div
+
+class="progress-bar bg-success"
+
+style="width:97%;">
+
+97%
+
+</div>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>Average Score</span>
+
+<strong>846</strong>
+
+</div>
+
+<div class="progress mb-3">
+
+<div
+
+class="progress-bar bg-primary"
+
+style="width:84%;">
+
+84%
+
+</div>
+
+</div>
+
+<div class="d-flex justify-content-between">
+
+<span>Leaderboard Participation</span>
+
+<strong>95%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+
+class="progress-bar bg-warning"
+
+style="width:95%;">
+
+95%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PERFORMANCE TABLE ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-bar me-2"></i>
+
+Student Performance Overview
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead>
+
+<tr>
+
+<th>Student</th>
+
+<th>Easy</th>
+
+<th>Medium</th>
+
+<th>Hard</th>
+
+<th>Total Solved</th>
+
+<th>Rank</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Rahul Sharma</td>
+
+<td>34</td>
+
+<td>42</td>
+
+<td>15</td>
+
+<td>91</td>
+
+<td>#1</td>
+
+</tr>
+
+<tr>
+
+<td>Priya Singh</td>
+
+<td>31</td>
+
+<td>41</td>
+
+<td>16</td>
+
+<td>88</td>
+
+<td>#2</td>
+
+</tr>
+
+<tr>
+
+<td>Amit Verma</td>
+
+<td>29</td>
+
+<td>40</td>
+
+<td>16</td>
+
+<td>85</td>
+
+<td>#3</td>
+
+</tr>
+
+<tr>
+
+<td>Neha Patel</td>
+
+<td>30</td>
+
+<td>38</td>
+
+<td>13</td>
+
+<td>81</td>
+
+<td>#4</td>
+
+</tr>
+
+<tr>
+
+<td>Rohit Kumar</td>
+
+<td>28</td>
+
+<td>37</td>
+
+<td>13</td>
+
+<td>78</td>
+
+<td>#5</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ACHIEVEMENTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-star me-2"></i>
+
+Achievement Statistics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="list-group">
+
+<li class="list-group-item d-flex justify-content-between">
+
+Gold Badges
+
+<span class="badge bg-warning text-dark">
+
+18
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Silver Badges
+
+<span class="badge bg-secondary">
+
+36
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Bronze Badges
+
+<span class="badge bg-danger">
+
+58
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Perfect Scores
+
+<span class="badge bg-success">
+
+91
+
+</span>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TOP CONTRIBUTORS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-users me-2"></i>
+
+Top Contributors
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<strong>Rahul Sharma</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-success"
+
+style="width:96%;">
+
+96%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<strong>Priya Singh</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-primary"
+
+style="width:93%;">
+
+93%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<strong>Amit Verma</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-info"
+
+style="width:90%;">
+
+90%
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<strong>Neha Patel</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-warning"
+
+style="width:88%;">
+
+88%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-success border-0 shadow">
+
+<h5>
+
+<i class="fas fa-award me-2"></i>
+
+Leaderboard Summary
+
+</h5>
+
+<p class="mb-0">
+
+The leaderboard highlights the highest-performing students based on solved problems, acceptance rate, and overall score. Achievement statistics and contributor rankings provide quick insight into student engagement and classroom performance.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= PROBLEM STATISTICS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-book me-2"></i>
+
+Problem Statistics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead class="table-light">
+
+<tr>
+
+<th>Problem</th>
+
+<th>Difficulty</th>
+
+<th>Attempts</th>
+
+<th>Solved</th>
+
+<th>Acceptance</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Two Sum</td>
+
+<td><span class="badge bg-success">Easy</span></td>
+
+<td>342</td>
+
+<td>318</td>
+
+<td>93%</td>
+
+<td><span class="badge bg-success">Active</span></td>
+
+</tr>
+
+<tr>
+
+<td>Binary Search</td>
+
+<td><span class="badge bg-primary">Medium</span></td>
+
+<td>295</td>
+
+<td>232</td>
+
+<td>79%</td>
+
+<td><span class="badge bg-success">Active</span></td>
+
+</tr>
+
+<tr>
+
+<td>Merge Intervals</td>
+
+<td><span class="badge bg-primary">Medium</span></td>
+
+<td>201</td>
+
+<td>148</td>
+
+<td>74%</td>
+
+<td><span class="badge bg-success">Active</span></td>
+
+</tr>
+
+<tr>
+
+<td>Graph Traversal</td>
+
+<td><span class="badge bg-danger">Hard</span></td>
+
+<td>188</td>
+
+<td>94</td>
+
+<td>50%</td>
+
+<td><span class="badge bg-warning text-dark">Needs Review</span></td>
+
+</tr>
+
+<tr>
+
+<td>Dynamic Programming</td>
+
+<td><span class="badge bg-danger">Hard</span></td>
+
+<td>167</td>
+
+<td>72</td>
+
+<td>43%</td>
+
+<td><span class="badge bg-warning text-dark">Needs Review</span></td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PROBLEM OVERVIEW ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-pie me-2"></i>
+
+Problem Overview
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Easy</span>
+
+<strong>36</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-success"
+
+style="width:38%;">
+
+38%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Medium</span>
+
+<strong>42</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-primary"
+
+style="width:44%;">
+
+44%
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="d-flex justify-content-between">
+
+<span>Hard</span>
+
+<strong>18</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-danger"
+
+style="width:18%;">
+
+18%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= POPULAR PROBLEMS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-fire me-2"></i>
+
+Most Popular Problems
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ol class="list-group list-group-numbered">
+
+<li class="list-group-item d-flex justify-content-between">
+
+Two Sum
+
+<span class="badge bg-success">
+
+342 Attempts
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Binary Search
+
+<span class="badge bg-primary">
+
+295 Attempts
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Merge Intervals
+
+<span class="badge bg-info">
+
+201 Attempts
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Graph Traversal
+
+<span class="badge bg-warning text-dark">
+
+188 Attempts
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Dynamic Programming
+
+<span class="badge bg-danger">
+
+167 Attempts
+
+</span>
+
+</li>
+
+</ol>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PENDING REVIEWS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-hourglass-half me-2"></i>
+
+Problem Review Queue
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="list-group">
+
+<li class="list-group-item d-flex justify-content-between">
+
+Problems Awaiting Approval
+
+<span class="badge bg-danger">
+
+3
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Pending Test Cases
+
+<span class="badge bg-warning text-dark">
+
+6
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Editorial Pending
+
+<span class="badge bg-info">
+
+5
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Scheduled for Publishing
+
+<span class="badge bg-success">
+
+4
+
+</span>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PROBLEM INSIGHTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-lightbulb me-2"></i>
+
+Problem Performance Insights
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-3 text-center">
+
+<h3 class="text-success">
+
+93%
+
+</h3>
+
+<p class="text-muted">
+
+Highest Acceptance
+
+</p>
+
+</div>
+
+<div class="col-md-3 text-center">
+
+<h3 class="text-danger">
+
+43%
+
+</h3>
+
+<p class="text-muted">
+
+Lowest Acceptance
+
+</p>
+
+</div>
+
+<div class="col-md-3 text-center">
+
+<h3 class="text-primary">
+
+342
+
+</h3>
+
+<p class="text-muted">
+
+Maximum Attempts
+
+</p>
+
+</div>
+
+<div class="col-md-3 text-center">
+
+<h3 class="text-warning">
+
+96
+
+</h3>
+
+<p class="text-muted">
+
+Total Problems
+
+</p>
+
+</div>
+
+<hr class="mt-4">
+
+<p class="mb-0">
+
+Easy-level problems continue to receive the highest participation and acceptance. Hard problems such as Dynamic Programming and Graph Traversal show lower success rates, indicating opportunities for additional teaching materials and practice sessions.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-primary border-0 shadow">
+
+<h5>
+
+<i class="fas fa-chart-bar me-2"></i>
+
+Problem Statistics Summary
+
+</h5>
+
+<p class="mb-0">
+
+Monitor problem popularity, acceptance rates, review status, and difficulty distribution from this section. These insights help instructors improve problem quality, balance assignments, and identify topics that require additional instructional support.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= CALENDAR & SCHEDULE ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-calendar-alt me-2"></i>
+
+Upcoming Schedule
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead class="table-light">
+
+<tr>
+
+<th>Date</th>
+
+<th>Event</th>
+
+<th>Course</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>15 Jul</td>
+
+<td>Assignment 5 Release</td>
+
+<td>Data Structures Lab</td>
+
+<td><span class="badge bg-success">Scheduled</span></td>
+
+</tr>
+
+<tr>
+
+<td>17 Jul</td>
+
+<td>Programming Contest</td>
+
+<td>Competitive Coding</td>
+
+<td><span class="badge bg-primary">Upcoming</span></td>
+
+</tr>
+
+<tr>
+
+<td>20 Jul</td>
+
+<td>Lab Evaluation</td>
+
+<td>Python Lab</td>
+
+<td><span class="badge bg-warning text-dark">Reminder</span></td>
+
+</tr>
+
+<tr>
+
+<td>24 Jul</td>
+
+<td>Assignment Deadline</td>
+
+<td>Algorithms</td>
+
+<td><span class="badge bg-danger">Deadline</span></td>
+
+</tr>
+
+<tr>
+
+<td>30 Jul</td>
+
+<td>Monthly Performance Report</td>
+
+<td>Faculty</td>
+
+<td><span class="badge bg-info">Planned</span></td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= UPCOMING DEADLINES ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-clock me-2"></i>
+
+Upcoming Deadlines
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="list-group">
+
+<li class="list-group-item d-flex justify-content-between">
+
+Assignment 4
+
+<span class="badge bg-danger">
+
+2 Days
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Contest Registration
+
+<span class="badge bg-warning text-dark">
+
+4 Days
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Project Submission
+
+<span class="badge bg-primary">
+
+1 Week
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Semester Report
+
+<span class="badge bg-success">
+
+15 Days
+
+</span>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ANNOUNCEMENTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bullhorn me-2"></i>
+
+Recent Announcements
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="list-group list-group-flush">
+
+<div class="list-group-item">
+
+<strong>Assignment 5 Released</strong>
+
+<p class="mb-1 text-muted">
+
+Students can now submit solutions.
+
+</p>
+
+<small>Today</small>
+
+</div>
+
+<div class="list-group-item">
+
+<strong>New Contest Scheduled</strong>
+
+<p class="mb-1 text-muted">
+
+Contest starts this Friday.
+
+</p>
+
+<small>Yesterday</small>
+
+</div>
+
+<div class="list-group-item">
+
+<strong>Judge System Updated</strong>
+
+<p class="mb-1 text-muted">
+
+Improved execution performance.
+
+</p>
+
+<small>2 Days Ago</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= FACULTY REMINDERS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-thumbtack me-2"></i>
+
+Faculty Reminders
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="alert alert-primary">
+
+Review pending plagiarism reports.
+
+</div>
+
+<div class="alert alert-success">
+
+Publish Assignment 5 before Friday.
+
+</div>
+
+<div class="alert alert-warning">
+
+Update hidden test cases for Graph problems.
+
+</div>
+
+<div class="alert alert-danger mb-0">
+
+Approve 3 problems awaiting publication.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= UPCOMING ASSIGNMENTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-tasks me-2"></i>
+
+Upcoming Assignments
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>Assignment</th>
+
+<th>Problems</th>
+
+<th>Release</th>
+
+<th>Deadline</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Assignment 5</td>
+
+<td>5</td>
+
+<td>15 Jul</td>
+
+<td>24 Jul</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Ready
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Assignment 6</td>
+
+<td>6</td>
+
+<td>28 Jul</td>
+
+<td>08 Aug</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Draft
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Mini Contest</td>
+
+<td>8</td>
+
+<td>17 Jul</td>
+
+<td>17 Jul</td>
+
+<td>
+
+<span class="badge bg-primary">
+
+Scheduled
+
+</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-success border-0 shadow">
+
+<h5>
+
+<i class="fas fa-calendar-check me-2"></i>
+
+Schedule Overview
+
+</h5>
+
+<p class="mb-0">
+
+Track upcoming assignments, contests, evaluation schedules, deadlines, faculty reminders, and announcements from one place. This helps ensure timely publication of programming problems and smooth management of laboratory activities.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= CALENDAR & SCHEDULE ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-calendar-alt me-2"></i>
+
+Upcoming Schedule
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead class="table-light">
+
+<tr>
+
+<th>Date</th>
+
+<th>Event</th>
+
+<th>Course</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>15 Jul</td>
+
+<td>Assignment 5 Release</td>
+
+<td>Data Structures Lab</td>
+
+<td><span class="badge bg-success">Scheduled</span></td>
+
+</tr>
+
+<tr>
+
+<td>17 Jul</td>
+
+<td>Programming Contest</td>
+
+<td>Competitive Coding</td>
+
+<td><span class="badge bg-primary">Upcoming</span></td>
+
+</tr>
+
+<tr>
+
+<td>20 Jul</td>
+
+<td>Lab Evaluation</td>
+
+<td>Python Lab</td>
+
+<td><span class="badge bg-warning text-dark">Reminder</span></td>
+
+</tr>
+
+<tr>
+
+<td>24 Jul</td>
+
+<td>Assignment Deadline</td>
+
+<td>Algorithms</td>
+
+<td><span class="badge bg-danger">Deadline</span></td>
+
+</tr>
+
+<tr>
+
+<td>30 Jul</td>
+
+<td>Monthly Performance Report</td>
+
+<td>Faculty</td>
+
+<td><span class="badge bg-info">Planned</span></td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= UPCOMING DEADLINES ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-clock me-2"></i>
+
+Upcoming Deadlines
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="list-group">
+
+<li class="list-group-item d-flex justify-content-between">
+
+Assignment 4
+
+<span class="badge bg-danger">
+
+2 Days
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Contest Registration
+
+<span class="badge bg-warning text-dark">
+
+4 Days
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Project Submission
+
+<span class="badge bg-primary">
+
+1 Week
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Semester Report
+
+<span class="badge bg-success">
+
+15 Days
+
+</span>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ANNOUNCEMENTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bullhorn me-2"></i>
+
+Recent Announcements
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="list-group list-group-flush">
+
+<div class="list-group-item">
+
+<strong>Assignment 5 Released</strong>
+
+<p class="mb-1 text-muted">
+
+Students can now submit solutions.
+
+</p>
+
+<small>Today</small>
+
+</div>
+
+<div class="list-group-item">
+
+<strong>New Contest Scheduled</strong>
+
+<p class="mb-1 text-muted">
+
+Contest starts this Friday.
+
+</p>
+
+<small>Yesterday</small>
+
+</div>
+
+<div class="list-group-item">
+
+<strong>Judge System Updated</strong>
+
+<p class="mb-1 text-muted">
+
+Improved execution performance.
+
+</p>
+
+<small>2 Days Ago</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= FACULTY REMINDERS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-thumbtack me-2"></i>
+
+Faculty Reminders
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="alert alert-primary">
+
+Review pending plagiarism reports.
+
+</div>
+
+<div class="alert alert-success">
+
+Publish Assignment 5 before Friday.
+
+</div>
+
+<div class="alert alert-warning">
+
+Update hidden test cases for Graph problems.
+
+</div>
+
+<div class="alert alert-danger mb-0">
+
+Approve 3 problems awaiting publication.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= UPCOMING ASSIGNMENTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-tasks me-2"></i>
+
+Upcoming Assignments
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>Assignment</th>
+
+<th>Problems</th>
+
+<th>Release</th>
+
+<th>Deadline</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Assignment 5</td>
+
+<td>5</td>
+
+<td>15 Jul</td>
+
+<td>24 Jul</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Ready
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Assignment 6</td>
+
+<td>6</td>
+
+<td>28 Jul</td>
+
+<td>08 Aug</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Draft
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Mini Contest</td>
+
+<td>8</td>
+
+<td>17 Jul</td>
+
+<td>17 Jul</td>
+
+<td>
+
+<span class="badge bg-primary">
+
+Scheduled
+
+</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-success border-0 shadow">
+
+<h5>
+
+<i class="fas fa-calendar-check me-2"></i>
+
+Schedule Overview
+
+</h5>
+
+<p class="mb-0">
+
+Track upcoming assignments, contests, evaluation schedules, deadlines, faculty reminders, and announcements from one place. This helps ensure timely publication of programming problems and smooth management of laboratory activities.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= AI INSIGHTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-robot me-2"></i>
+
+AI Teaching Insights
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="alert alert-success">
+
+<i class="fas fa-arrow-up me-2"></i>
+
+Student performance has improved by <strong>11%</strong> compared to the previous week.
+
+</div>
+
+<div class="alert alert-warning">
+
+<i class="fas fa-lightbulb me-2"></i>
+
+Dynamic Programming and Graph problems have the lowest acceptance rates. Consider scheduling an additional practice session.
+
+</div>
+
+<div class="alert alert-info">
+
+<i class="fas fa-chart-line me-2"></i>
+
+Students solving at least <strong>3 problems per week</strong> maintain an average acceptance rate above <strong>85%</strong>.
+
+</div>
+
+<div class="alert alert-primary mb-0">
+
+<i class="fas fa-users me-2"></i>
+
+Python remains the most preferred language while C++ achieves the best runtime performance.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SYSTEM HEALTH ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-heartbeat me-2"></i>
+
+System Health
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>CPU Usage</span>
+
+<strong>38%</strong>
+
+</div>
+
+<div class="progress mb-3">
+
+<div class="progress-bar bg-success"
+
+style="width:38%;">
+
+38%
+
+</div>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>Memory Usage</span>
+
+<strong>54%</strong>
+
+</div>
+
+<div class="progress mb-3">
+
+<div class="progress-bar bg-primary"
+
+style="width:54%;">
+
+54%
+
+</div>
+
+</div>
+
+<div class="d-flex justify-content-between">
+
+<span>Disk Usage</span>
+
+<strong>41%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-warning"
+
+style="width:41%;">
+
+41%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SERVER STATUS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-server me-2"></i>
+
+Server Performance
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Judge Workers</th>
+
+<td>
+
+<span class="badge bg-success">
+
+8 Online
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Docker Containers</th>
+
+<td>
+
+<span class="badge bg-success">
+
+Healthy
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Average Queue Time</th>
+
+<td>
+
+1.2 sec
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Requests / Minute</th>
+
+<td>
+
+548
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Average Response</th>
+
+<td>
+
+142 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>System Uptime</th>
+
+<td>
+
+99.98%
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= DATABASE ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-database me-2"></i>
+
+Database Status
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Connection</th>
+
+<td>
+
+<span class="badge bg-success">
+
+Connected
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Total Records</th>
+
+<td>
+
+52,418
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Submissions Stored</th>
+
+<td>
+
+5,284
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Students</th>
+
+<td>
+
+185
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Problems</th>
+
+<td>
+
+96
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Last Backup</th>
+
+<td>
+
+Today 03:00 AM
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SECURITY ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-shield-alt me-2"></i>
+
+Security Monitoring
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-3 text-center">
+
+<h3 class="text-success">
+
+0
+
+</h3>
+
+<p class="text-muted">
+
+Critical Alerts
+
+</p>
+
+</div>
+
+<div class="col-md-3 text-center">
+
+<h3 class="text-warning">
+
+3
+
+</h3>
+
+<p class="text-muted">
+
+Warnings
+
+</p>
+
+</div>
+
+<div class="col-md-3 text-center">
+
+<h3 class="text-primary">
+
+124
+
+</h3>
+
+<p class="text-muted">
+
+Successful Logins
+
+</p>
+
+</div>
+
+<div class="col-md-3 text-center">
+
+<h3 class="text-danger">
+
+2
+
+</h3>
+
+<p class="text-muted">
+
+Blocked Attempts
+
+</p>
+
+</div>
+
+<hr class="mt-4">
+
+<p class="mb-0">
+
+The system is operating normally. Docker sandbox isolation, authentication, plagiarism detection, and submission validation services are functioning correctly. No critical security issues have been detected.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RECOMMENDATIONS ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-primary border-0 shadow">
+
+<h5>
+
+<i class="fas fa-brain me-2"></i>
+
+AI Recommendations
+
+</h5>
+
+<ul class="mb-0">
+
+<li>Introduce additional Graph and Dynamic Programming practice problems.</li>
+
+<li>Schedule a weekly coding contest to improve participation.</li>
+
+<li>Review pending plagiarism reports before publishing rankings.</li>
+
+<li>Archive inactive assignments to improve dashboard organization.</li>
+
+<li>Continue monitoring runtime and memory trends for judge optimization.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= GLOBAL SEARCH ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-search me-2"></i>
+
+Dashboard Search
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="input-group">
+
+<span class="input-group-text">
+
+<i class="fas fa-search"></i>
+
+</span>
+
+<input
+
+type="text"
+
+class="form-control"
+
+id="dashboardSearch"
+
+placeholder="Search students, problems, assignments, submissions...">
+
+<button
+
+class="btn btn-primary"
+
+id="dashboardSearchBtn">
+
+Search
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= STUDENT DETAILS MODAL ================= -->
+
+<div class="modal fade"
+
+id="studentDetailsModal"
+
+tabindex="-1"
+
+aria-hidden="true">
+
+<div class="modal-dialog modal-xl">
+
+<div class="modal-content">
+
+<div class="modal-header bg-success text-white">
+
+<h5 class="modal-title">
+
+Student Details
+
+</h5>
+
+<button
+
+type="button"
+
+class="btn-close btn-close-white"
+
+data-bs-dismiss="modal">
+
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<div class="row">
+
+<div class="col-md-6">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Name</th>
+
+<td id="studentName">
+
+Rahul Sharma
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Roll Number</th>
+
+<td>
+
+2024CSE001
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Email</th>
+
+<td>
+
+rahul@example.com
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Problems Solved</th>
+
+<td>
+
+91
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Acceptance Rate</th>
+
+<td>
+
+91%
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Average Score</th>
+
+<td>
+
+97
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+<div class="col-md-6">
+
+<canvas
+
+id="studentRadarChart"
+
+height="220">
+
+</canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+
+class="btn btn-secondary"
+
+data-bs-dismiss="modal">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PROBLEM DETAILS MODAL ================= -->
+
+<div class="modal fade"
+
+id="problemDetailsModal"
+
+tabindex="-1"
+
+aria-hidden="true">
+
+<div class="modal-dialog modal-lg">
+
+<div class="modal-content">
+
+<div class="modal-header bg-primary text-white">
+
+<h5 class="modal-title">
+
+Problem Details
+
+</h5>
+
+<button
+
+type="button"
+
+class="btn-close btn-close-white"
+
+data-bs-dismiss="modal">
+
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<table class="table table-hover">
+
+<tr>
+
+<th>Problem</th>
+
+<td>
+
+Two Sum
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Difficulty</th>
+
+<td>
+
+Easy
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Attempts</th>
+
+<td>
+
+342
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Accepted</th>
+
+<td>
+
+318
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Acceptance Rate</th>
+
+<td>
+
+93%
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Average Runtime</th>
+
+<td>
+
+22 ms
+
+</td>
+
+</tr>
+
+</table>
+
+<hr>
+
+<canvas
+
+id="problemPieChart"
+
+height="180">
+
+</canvas>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+
+class="btn btn-secondary"
+
+data-bs-dismiss="modal">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= NOTIFICATION CENTER ================= -->
+
+<div class="modal fade"
+
+id="notificationModal"
+
+tabindex="-1"
+
+aria-hidden="true">
+
+<div class="modal-dialog">
+
+<div class="modal-content">
+
+<div class="modal-header bg-warning">
+
+<h5 class="modal-title">
+
+Notification Center
+
+</h5>
+
+<button
+
+type="button"
+
+class="btn-close"
+
+data-bs-dismiss="modal">
+
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<div class="list-group">
+
+<div class="list-group-item">
+
+<i class="fas fa-check-circle text-success me-2"></i>
+
+15 new submissions accepted.
+
+</div>
+
+<div class="list-group-item">
+
+<i class="fas fa-code text-primary me-2"></i>
+
+Assignment 5 published.
+
+</div>
+
+<div class="list-group-item">
+
+<i class="fas fa-clock text-warning me-2"></i>
+
+12 submissions awaiting review.
+
+</div>
+
+<div class="list-group-item">
+
+<i class="fas fa-server text-danger me-2"></i>
+
+Judge queue currently contains pending jobs.
+
+</div>
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+
+class="btn btn-secondary"
+
+data-bs-dismiss="modal">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PAGINATION ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<nav>
+
+<ul class="pagination justify-content-center">
+
+<li class="page-item disabled">
+
+<a class="page-link">
+
+Previous
+
+</a>
+
+</li>
+
+<li class="page-item active">
+
+<a class="page-link">
+
+1
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link">
+
+2
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link">
+
+3
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link">
+
+Next
+
+</a>
+
+</li>
+
+</ul>
+
+</nav>
+
+</div>
+
+</div>
+
+<!-- ================= DASHBOARD SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-success border-0 shadow">
+
+<h5>
+
+<i class="fas fa-chart-line me-2"></i>
+
+Teacher Dashboard Summary
+
+</h5>
+
+<p class="mb-0">
+
+This dashboard provides a centralized view of programming lab management, including student progress, submissions, problem analytics, schedules, AI insights, notifications, and infrastructure monitoring. Use the available tools to efficiently manage assignments, review submissions, and improve classroom performance.
+
+</p>
+
+</div>
+
+</div>
+
+</div>

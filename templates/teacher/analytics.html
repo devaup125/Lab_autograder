@@ -1,0 +1,5250 @@
+{% extends "teacher/base_teacher.html" %}
+
+{% block title %}
+Analytics Dashboard
+{% endblock %}
+
+{% block page_title %}
+Analytics Dashboard
+{% endblock %}
+
+{% block breadcrumb %}
+
+<li class="breadcrumb-item">
+    <a href="{{ url_for('teacher.dashboard') }}">
+        Dashboard
+    </a>
+</li>
+
+<li class="breadcrumb-item active">
+    Analytics
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= HEADER ================= -->
+
+<div class="card border-0 shadow mb-4">
+
+<div class="card-body">
+
+<div class="row align-items-center">
+
+<div class="col-lg-8">
+
+<h2 class="fw-bold">
+
+<i class="fas fa-chart-line text-primary me-2"></i>
+
+Analytics Dashboard
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Monitor student performance, submission trends, problem statistics,
+and overall laboratory activity in one place.
+
+</p>
+
+</div>
+
+<div class="col-lg-4 text-end">
+
+<button
+
+class="btn btn-success me-2"
+
+id="exportAnalyticsBtn">
+
+<i class="fas fa-download me-2"></i>
+
+Export Report
+
+</button>
+
+<button
+
+class="btn btn-primary"
+
+id="refreshAnalyticsBtn">
+
+<i class="fas fa-sync-alt me-2"></i>
+
+Refresh
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= OVERVIEW CARDS ================= -->
+
+<div class="row g-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-users fa-3x text-primary mb-3"></i>
+
+<h2>
+
+{{ total_students if total_students else 185 }}
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Registered Students
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-code fa-3x text-success mb-3"></i>
+
+<h2>
+
+{{ total_submissions if total_submissions else 5284 }}
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Total Submissions
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-check-circle fa-3x text-warning mb-3"></i>
+
+<h2>
+
+{{ accepted_submissions if accepted_submissions else 4126 }}
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Accepted Solutions
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-book fa-3x text-danger mb-3"></i>
+
+<h2>
+
+{{ total_problems if total_problems else 96 }}
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Programming Problems
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK STATS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-bar me-2"></i>
+
+Overall Performance
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Acceptance Rate</span>
+
+<strong>78%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+
+class="progress-bar bg-success"
+
+style="width:78%;">
+
+78%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Average Runtime</span>
+
+<strong>31 ms</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+
+class="progress-bar bg-info"
+
+style="width:84%;">
+
+Excellent
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="d-flex justify-content-between">
+
+<span>Average Memory Usage</span>
+
+<strong>16 MB</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+
+class="progress-bar bg-warning"
+
+style="width:86%;">
+
+Efficient
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RECENT ACTIVITY ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-clock me-2"></i>
+
+Recent Activity
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th width="45%">
+
+Today's Submissions
+
+</th>
+
+<td>
+
+245
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Accepted Today
+
+</th>
+
+<td>
+
+189
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Active Students
+
+</th>
+
+<td>
+
+143
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Problems Solved Today
+
+</th>
+
+<td>
+
+61
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Most Active Language
+
+</th>
+
+<td>
+
+Python 3.11
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Average Score
+
+</th>
+
+<td>
+
+87 / 100
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ANALYTICS SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-primary border-0 shadow">
+
+<h5>
+
+<i class="fas fa-chart-pie me-2"></i>
+
+Analytics Overview
+
+</h5>
+
+<p class="mb-0">
+
+This dashboard provides real-time insights into student activity,
+problem-solving trends, submission performance, acceptance rates,
+and classroom engagement to help instructors make informed decisions.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= FILTERS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-3 mb-3">
+
+<label class="form-label">
+
+Date Range
+
+</label>
+
+<input
+type="date"
+class="form-control"
+id="dateFilter">
+
+</div>
+
+<div class="col-lg-3 mb-3">
+
+<label class="form-label">
+
+Course
+
+</label>
+
+<select class="form-select" id="courseFilter">
+
+<option value="">All Courses</option>
+
+<option>Programming Lab I</option>
+
+<option>Programming Lab II</option>
+
+<option>Data Structures Lab</option>
+
+<option>Algorithms Lab</option>
+
+</select>
+
+</div>
+
+<div class="col-lg-3 mb-3">
+
+<label class="form-label">
+
+Programming Language
+
+</label>
+
+<select class="form-select" id="languageFilter">
+
+<option value="">All Languages</option>
+
+<option>Python 3.11</option>
+
+<option>Java 21</option>
+
+<option>C17</option>
+
+<option>C++17</option>
+
+</select>
+
+</div>
+
+<div class="col-lg-3 mb-3 d-flex align-items-end">
+
+<button
+class="btn btn-primary w-100"
+id="applyAnalyticsFilter">
+
+<i class="fas fa-filter me-2"></i>
+
+Apply Filters
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ================= SUBMISSION STATISTICS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-area me-2"></i>
+
+Submission Statistics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-3">
+
+<h2 class="text-primary">
+
+5,284
+
+</h2>
+
+<p class="text-muted">
+
+Total
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h2 class="text-success">
+
+4,126
+
+</h2>
+
+<p class="text-muted">
+
+Accepted
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h2 class="text-danger">
+
+842
+
+</h2>
+
+<p class="text-muted">
+
+Rejected
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h2 class="text-warning">
+
+316
+
+</h2>
+
+<p class="text-muted">
+
+Pending
+
+</p>
+
+</div>
+
+</div>
+
+<hr>
+
+<canvas id="submissionChart" height="120"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ACCEPTANCE RATE ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-check-circle me-2"></i>
+
+Acceptance Analysis
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Accepted</span>
+
+<strong>78%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+class="progress-bar bg-success"
+style="width:78%;">
+
+78%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Rejected</span>
+
+<strong>16%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+class="progress-bar bg-danger"
+style="width:16%;">
+
+16%
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="d-flex justify-content-between">
+
+<span>Pending</span>
+
+<strong>6%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+class="progress-bar bg-warning"
+style="width:6%;">
+
+6%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PERFORMANCE BREAKDOWN ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-pie me-2"></i>
+
+Performance Breakdown
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>Score Range</th>
+
+<th>Students</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>90 - 100</td>
+
+<td>56</td>
+
+</tr>
+
+<tr>
+
+<td>80 - 89</td>
+
+<td>48</td>
+
+</tr>
+
+<tr>
+
+<td>70 - 79</td>
+
+<td>39</td>
+
+</tr>
+
+<tr>
+
+<td>60 - 69</td>
+
+<td>27</td>
+
+</tr>
+
+<tr>
+
+<td>Below 60</td>
+
+<td>15</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TREND SUMMARY ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-arrow-trend-up me-2"></i>
+
+Trend Summary
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="alert alert-success">
+
+<strong>▲ 14%</strong>
+
+increase in accepted submissions compared to last week.
+
+</div>
+
+<div class="alert alert-info">
+
+<strong>▲ 9%</strong>
+
+increase in active students.
+
+</div>
+
+<div class="alert alert-warning">
+
+Average execution time improved by
+
+<strong>6%</strong>.
+
+</div>
+
+<div class="alert alert-primary mb-0">
+
+Python remains the most preferred programming language.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-success border-0 shadow">
+
+<h5>
+
+<i class="fas fa-chart-line me-2"></i>
+
+Performance Summary
+
+</h5>
+
+<p class="mb-0">
+
+Submission statistics show a healthy acceptance rate with increasing student participation. Performance trends indicate continuous improvement in coding efficiency and problem-solving consistency across the class.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= STUDENT PERFORMANCE ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-user-graduate me-2"></i>
+
+Student Performance
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead class="table-light">
+
+<tr>
+
+<th>Rank</th>
+
+<th>Student</th>
+
+<th>Problems Solved</th>
+
+<th>Submissions</th>
+
+<th>Acceptance</th>
+
+<th>Average Score</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+#1
+
+</span>
+
+</td>
+
+<td>Rahul Sharma</td>
+
+<td>91</td>
+
+<td>112</td>
+
+<td>
+
+<span class="badge bg-success">
+
+91%
+
+</span>
+
+</td>
+
+<td>97</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<span class="badge bg-secondary">
+
+#2
+
+</span>
+
+</td>
+
+<td>Priya Singh</td>
+
+<td>88</td>
+
+<td>108</td>
+
+<td>
+
+<span class="badge bg-success">
+
+89%
+
+</span>
+
+</td>
+
+<td>95</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<span class="badge bg-warning">
+
+#3
+
+</span>
+
+</td>
+
+<td>Amit Verma</td>
+
+<td>85</td>
+
+<td>104</td>
+
+<td>
+
+<span class="badge bg-primary">
+
+86%
+
+</span>
+
+</td>
+
+<td>93</td>
+
+</tr>
+
+<tr>
+
+<td>#4</td>
+
+<td>Neha Patel</td>
+
+<td>81</td>
+
+<td>101</td>
+
+<td>
+
+<span class="badge bg-info">
+
+82%
+
+</span>
+
+</td>
+
+<td>91</td>
+
+</tr>
+
+<tr>
+
+<td>#5</td>
+
+<td>Rohit Kumar</td>
+
+<td>78</td>
+
+<td>96</td>
+
+<td>
+
+<span class="badge bg-info">
+
+80%
+
+</span>
+
+</td>
+
+<td>89</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= CLASS SUMMARY ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-users me-2"></i>
+
+Class Summary
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Total Students</th>
+
+<td>185</td>
+
+</tr>
+
+<tr>
+
+<th>Active Students</th>
+
+<td>143</td>
+
+</tr>
+
+<tr>
+
+<th>Inactive Students</th>
+
+<td>42</td>
+
+</tr>
+
+<tr>
+
+<th>Average Score</th>
+
+<td>84.7%</td>
+
+</tr>
+
+<tr>
+
+<th>Average Problems Solved</th>
+
+<td>52</td>
+
+</tr>
+
+<tr>
+
+<th>Average Submissions</th>
+
+<td>74</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TOP PERFORMERS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-trophy me-2"></i>
+
+Top Performers
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ol class="list-group list-group-numbered">
+
+<li class="list-group-item d-flex justify-content-between">
+
+Rahul Sharma
+
+<span class="badge bg-success">
+
+97%
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Priya Singh
+
+<span class="badge bg-primary">
+
+95%
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Amit Verma
+
+<span class="badge bg-info">
+
+93%
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Neha Patel
+
+<span class="badge bg-warning text-dark">
+
+91%
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Rohit Kumar
+
+<span class="badge bg-secondary">
+
+89%
+
+</span>
+
+</li>
+
+</ol>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PERFORMANCE DISTRIBUTION ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-bar me-2"></i>
+
+Performance Distribution
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>Excellent (90-100)</span>
+
+<strong>30%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-success"
+
+style="width:30%;">
+
+30%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>Good (75-89)</span>
+
+<strong>42%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-primary"
+
+style="width:42%;">
+
+42%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>Average (60-74)</span>
+
+<strong>18%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-warning"
+
+style="width:18%;">
+
+18%
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="d-flex justify-content-between">
+
+<span>Needs Improvement</span>
+
+<strong>10%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-danger"
+
+style="width:10%;">
+
+10%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PERFORMANCE SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-primary border-0 shadow">
+
+<h5>
+
+<i class="fas fa-award me-2"></i>
+
+Student Performance Insights
+
+</h5>
+
+<p class="mb-0">
+
+The majority of students are performing well, with over 70% maintaining an average score above 75%. A small group requires additional support in algorithmic problem solving, while the top performers consistently achieve excellent acceptance rates and submission quality.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= PROBLEM ANALYTICS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-puzzle-piece me-2"></i>
+
+Problem-wise Analytics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead class="table-light">
+
+<tr>
+
+<th>Problem</th>
+
+<th>Difficulty</th>
+
+<th>Attempts</th>
+
+<th>Solved</th>
+
+<th>Acceptance</th>
+
+<th>Average Score</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Two Sum</td>
+
+<td><span class="badge bg-success">Easy</span></td>
+
+<td>342</td>
+
+<td>318</td>
+
+<td>93%</td>
+
+<td>97</td>
+
+</tr>
+
+<tr>
+
+<td>Binary Search</td>
+
+<td><span class="badge bg-primary">Medium</span></td>
+
+<td>295</td>
+
+<td>232</td>
+
+<td>79%</td>
+
+<td>89</td>
+
+</tr>
+
+<tr>
+
+<td>Graph Traversal</td>
+
+<td><span class="badge bg-danger">Hard</span></td>
+
+<td>188</td>
+
+<td>94</td>
+
+<td>50%</td>
+
+<td>71</td>
+
+</tr>
+
+<tr>
+
+<td>Dynamic Programming</td>
+
+<td><span class="badge bg-danger">Hard</span></td>
+
+<td>167</td>
+
+<td>72</td>
+
+<td>43%</td>
+
+<td>66</td>
+
+</tr>
+
+<tr>
+
+<td>Merge Intervals</td>
+
+<td><span class="badge bg-primary">Medium</span></td>
+
+<td>201</td>
+
+<td>148</td>
+
+<td>74%</td>
+
+<td>84</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= DIFFICULTY BREAKDOWN ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-layer-group me-2"></i>
+
+Difficulty Statistics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Easy</span>
+
+<strong>36</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-success"
+
+style="width:38%;">
+
+38%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Medium</span>
+
+<strong>42</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-primary"
+
+style="width:44%;">
+
+44%
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="d-flex justify-content-between">
+
+<span>Hard</span>
+
+<strong>18</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-danger"
+
+style="width:18%;">
+
+18%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= MOST SOLVED / FAILED ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-medal me-2"></i>
+
+Most Solved Problems
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ol class="list-group list-group-numbered">
+
+<li class="list-group-item d-flex justify-content-between">
+
+Two Sum
+
+<span class="badge bg-success">
+
+318
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Palindrome Number
+
+<span class="badge bg-success">
+
+294
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Binary Search
+
+<span class="badge bg-success">
+
+232
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Valid Parentheses
+
+<span class="badge bg-success">
+
+218
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Merge Intervals
+
+<span class="badge bg-success">
+
+148
+
+</span>
+
+</li>
+
+</ol>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-times-circle me-2"></i>
+
+Most Challenging Problems
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ol class="list-group list-group-numbered">
+
+<li class="list-group-item d-flex justify-content-between">
+
+Dynamic Programming
+
+<span class="badge bg-danger">
+
+43%
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Graph Traversal
+
+<span class="badge bg-danger">
+
+50%
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Minimum Spanning Tree
+
+<span class="badge bg-warning text-dark">
+
+56%
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Segment Tree
+
+<span class="badge bg-warning text-dark">
+
+58%
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Trie Implementation
+
+<span class="badge bg-warning text-dark">
+
+60%
+
+</span>
+
+</li>
+
+</ol>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PROBLEM INSIGHTS ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-warning border-0 shadow">
+
+<h5>
+
+<i class="fas fa-lightbulb me-2"></i>
+
+Problem Insights
+
+</h5>
+
+<ul class="mb-0">
+
+<li>Easy problems have an average acceptance rate above <strong>90%</strong>.</li>
+
+<li>Dynamic Programming and Graph problems require additional instructional support.</li>
+
+<li>Medium-level problems generate the highest student engagement.</li>
+
+<li>Consider adding more practice problems in Graphs and Dynamic Programming.</li>
+
+<li>Students perform consistently well in Array and String-based problems.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= LANGUAGE USAGE ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-code me-2"></i>
+
+Programming Language Usage
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>Language</th>
+
+<th>Submissions</th>
+
+<th>Acceptance</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Python 3.11</td>
+
+<td>2,845</td>
+
+<td>
+
+<span class="badge bg-success">
+
+82%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Java 21</td>
+
+<td>1,184</td>
+
+<td>
+
+<span class="badge bg-primary">
+
+76%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>C++17</td>
+
+<td>923</td>
+
+<td>
+
+<span class="badge bg-info">
+
+73%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>C17</td>
+
+<td>332</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+69%
+
+</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+<hr>
+
+<canvas id="languageChart" height="180"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= LANGUAGE DISTRIBUTION ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-pie me-2"></i>
+
+Language Distribution
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Python</span>
+
+<strong>54%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+
+class="progress-bar bg-success"
+
+style="width:54%;">
+
+54%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Java</span>
+
+<strong>22%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+
+class="progress-bar bg-primary"
+
+style="width:22%;">
+
+22%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<div class="d-flex justify-content-between">
+
+<span>C++</span>
+
+<strong>18%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+
+class="progress-bar bg-info"
+
+style="width:18%;">
+
+18%
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="d-flex justify-content-between">
+
+<span>C</span>
+
+<strong>6%</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div
+
+class="progress-bar bg-warning"
+
+style="width:6%;">
+
+6%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RUNTIME ANALYSIS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-stopwatch me-2"></i>
+
+Runtime Analysis
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Fastest Runtime</th>
+
+<td class="text-success">
+
+9 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Average Runtime</th>
+
+<td>
+
+31 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Slowest Runtime</th>
+
+<td class="text-danger">
+
+1200 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Median Runtime</th>
+
+<td>
+
+26 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Top Runtime Rank</th>
+
+<td>
+
+Top 8%
+
+</td>
+
+</tr>
+
+</table>
+
+<hr>
+
+<canvas id="runtimeChart" height="180"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= MEMORY ANALYSIS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-memory me-2"></i>
+
+Memory Usage
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Lowest Usage</th>
+
+<td class="text-success">
+
+9 MB
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Average Usage</th>
+
+<td>
+
+16 MB
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Highest Usage</th>
+
+<td class="text-danger">
+
+64 MB
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Median Usage</th>
+
+<td>
+
+14 MB
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Efficiency</th>
+
+<td>
+
+Excellent
+
+</td>
+
+</tr>
+
+</table>
+
+<hr>
+
+<canvas id="memoryChart" height="180"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= FASTEST LANGUAGES ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bolt me-2"></i>
+
+Execution Performance by Language
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-hover align-middle">
+
+<thead>
+
+<tr>
+
+<th>Language</th>
+
+<th>Average Runtime</th>
+
+<th>Average Memory</th>
+
+<th>Acceptance Rate</th>
+
+<th>Overall Rating</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Python 3.11</td>
+
+<td>29 ms</td>
+
+<td>17 MB</td>
+
+<td>82%</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Excellent
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Java 21</td>
+
+<td>34 ms</td>
+
+<td>19 MB</td>
+
+<td>76%</td>
+
+<td>
+
+<span class="badge bg-primary">
+
+Very Good
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>C++17</td>
+
+<td>22 ms</td>
+
+<td>15 MB</td>
+
+<td>73%</td>
+
+<td>
+
+<span class="badge bg-info">
+
+Fastest
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>C17</td>
+
+<td>26 ms</td>
+
+<td>13 MB</td>
+
+<td>69%</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Good
+
+</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PERFORMANCE SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-info border-0 shadow">
+
+<h5>
+
+<i class="fas fa-chart-line me-2"></i>
+
+Execution Insights
+
+</h5>
+
+<ul class="mb-0">
+
+<li>Python remains the most frequently used programming language.</li>
+
+<li>C++ delivers the fastest average execution time.</li>
+
+<li>Memory consumption is stable across all supported languages.</li>
+
+<li>Python submissions achieve the highest acceptance rate.</li>
+
+<li>Overall execution performance remains within configured limits.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= ACTIVITY OVERVIEW ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-calendar-alt me-2"></i>
+
+Submission Activity
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<canvas id="activityChart" height="120"></canvas>
+
+<div class="row text-center mt-4">
+
+<div class="col-md-4">
+
+<h4 class="text-success">
+
+245
+
+</h4>
+
+<p class="text-muted">
+
+Today's Submissions
+
+</p>
+
+</div>
+
+<div class="col-md-4">
+
+<h4 class="text-primary">
+
+1,426
+
+</h4>
+
+<p class="text-muted">
+
+This Week
+
+</p>
+
+</div>
+
+<div class="col-md-4">
+
+<h4 class="text-warning">
+
+5,284
+
+</h4>
+
+<p class="text-muted">
+
+This Month
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ACTIVE STUDENTS ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-user-clock me-2"></i>
+
+Active Students
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>Today</span>
+
+<strong>143</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-success"
+
+style="width:77%;">
+
+77%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<div class="d-flex justify-content-between">
+
+<span>This Week</span>
+
+<strong>176</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-primary"
+
+style="width:95%;">
+
+95%
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="d-flex justify-content-between">
+
+<span>This Month</span>
+
+<strong>185</strong>
+
+</div>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-warning"
+
+style="width:100%;">
+
+100%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= WEEKLY TREND ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-line me-2"></i>
+
+Weekly Submission Trend
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<canvas id="weeklyTrendChart" height="200"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= MONTHLY TREND ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-area me-2"></i>
+
+Monthly Growth
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<canvas id="monthlyTrendChart" height="200"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUBMISSION HEATMAP ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-fire me-2"></i>
+
+Weekly Activity Heatmap
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-bordered text-center align-middle">
+
+<thead>
+
+<tr>
+
+<th>Time</th>
+
+<th>Mon</th>
+
+<th>Tue</th>
+
+<th>Wed</th>
+
+<th>Thu</th>
+
+<th>Fri</th>
+
+<th>Sat</th>
+
+<th>Sun</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<th>Morning</th>
+
+<td class="table-success">35</td>
+
+<td class="table-success">41</td>
+
+<td class="table-warning">28</td>
+
+<td class="table-success">44</td>
+
+<td class="table-success">47</td>
+
+<td class="table-info">20</td>
+
+<td class="table-info">18</td>
+
+</tr>
+
+<tr>
+
+<th>Afternoon</th>
+
+<td class="table-warning">52</td>
+
+<td class="table-success">63</td>
+
+<td class="table-success">71</td>
+
+<td class="table-success">68</td>
+
+<td class="table-warning">59</td>
+
+<td class="table-info">31</td>
+
+<td class="table-info">27</td>
+
+</tr>
+
+<tr>
+
+<th>Evening</th>
+
+<td class="table-danger">82</td>
+
+<td class="table-danger">91</td>
+
+<td class="table-danger">88</td>
+
+<td class="table-danger">96</td>
+
+<td class="table-danger">101</td>
+
+<td class="table-warning">55</td>
+
+<td class="table-warning">49</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= WEEKLY COMPARISON ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-balance-scale me-2"></i>
+
+Weekly Comparison
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-hover">
+
+<tr>
+
+<th>Metric</th>
+
+<th>Last Week</th>
+
+<th>This Week</th>
+
+</tr>
+
+<tr>
+
+<td>Submissions</td>
+
+<td>1,281</td>
+
+<td>1,426</td>
+
+</tr>
+
+<tr>
+
+<td>Accepted</td>
+
+<td>972</td>
+
+<td>1,108</td>
+
+</tr>
+
+<tr>
+
+<td>Active Students</td>
+
+<td>165</td>
+
+<td>176</td>
+
+</tr>
+
+<tr>
+
+<td>Acceptance Rate</td>
+
+<td>76%</td>
+
+<td>78%</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= MONTHLY INSIGHTS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-lightbulb me-2"></i>
+
+Monthly Insights
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="alert alert-success">
+
+Submission activity increased by <strong>12%</strong> compared to last month.
+
+</div>
+
+<div class="alert alert-info">
+
+Average student participation reached <strong>95%</strong>.
+
+</div>
+
+<div class="alert alert-warning">
+
+Evening remains the most active coding period.
+
+</div>
+
+<div class="alert alert-primary mb-0">
+
+Weekend participation continues to improve.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-primary border-0 shadow">
+
+<h5>
+
+<i class="fas fa-chart-bar me-2"></i>
+
+Activity Summary
+
+</h5>
+
+<p class="mb-0">
+
+Daily, weekly, and monthly activity trends indicate consistent student engagement. Evening sessions account for the highest submission volume, while overall participation and acceptance rates continue to improve across the course.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= AI INSIGHTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-robot me-2"></i>
+
+AI Performance Insights
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="alert alert-success">
+
+<i class="fas fa-arrow-up me-2"></i>
+
+Student performance has improved by <strong>11%</strong> compared to the previous evaluation period.
+
+</div>
+
+<div class="alert alert-warning">
+
+<i class="fas fa-lightbulb me-2"></i>
+
+Dynamic Programming and Graph algorithms continue to have the lowest acceptance rates.
+
+</div>
+
+<div class="alert alert-info">
+
+<i class="fas fa-chart-line me-2"></i>
+
+Students who solve at least 3 problems per week achieve an average acceptance rate above <strong>85%</strong>.
+
+</div>
+
+<div class="alert alert-primary mb-0">
+
+<i class="fas fa-users me-2"></i>
+
+Python users submit more frequently, while C++ users achieve lower average execution times.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RISK ANALYSIS ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-exclamation-triangle me-2"></i>
+
+Students Requiring Attention
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>High Risk</span>
+
+<span class="badge bg-danger">
+
+9
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>Moderate Risk</span>
+
+<span class="badge bg-warning text-dark">
+
+18
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between">
+
+<span>Excellent Progress</span>
+
+<span class="badge bg-success">
+
+61
+
+</span>
+
+</div>
+
+<hr>
+
+<p class="text-muted mb-0">
+
+Students are classified based on attendance, submissions, scores, and recent activity.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= WEAK TOPICS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-book-open me-2"></i>
+
+Weak Topics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>Topic</th>
+
+<th>Acceptance</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Dynamic Programming</td>
+
+<td>
+
+<span class="badge bg-danger">
+
+43%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Graph Algorithms</td>
+
+<td>
+
+<span class="badge bg-danger">
+
+50%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Segment Tree</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+56%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Trie</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+60%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Backtracking</td>
+
+<td>
+
+<span class="badge bg-info">
+
+68%
+
+</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= BEST TOPICS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-star me-2"></i>
+
+Best Performing Topics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>Topic</th>
+
+<th>Acceptance</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Arrays</td>
+
+<td>
+
+<span class="badge bg-success">
+
+94%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Strings</td>
+
+<td>
+
+<span class="badge bg-success">
+
+91%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Sorting</td>
+
+<td>
+
+<span class="badge bg-success">
+
+89%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Searching</td>
+
+<td>
+
+<span class="badge bg-primary">
+
+86%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Hashing</td>
+
+<td>
+
+<span class="badge bg-primary">
+
+84%
+
+</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RECOMMENDATIONS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bullseye me-2"></i>
+
+Instructor Recommendations
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-4">
+
+<div class="alert alert-success">
+
+<h6>
+
+<i class="fas fa-check-circle me-2"></i>
+
+Continue
+
+</h6>
+
+<ul class="mb-0">
+
+<li>Weekly coding contests</li>
+
+<li>Leaderboard rewards</li>
+
+<li>Hands-on lab sessions</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="alert alert-warning">
+
+<h6>
+
+<i class="fas fa-tools me-2"></i>
+
+Improve
+
+</h6>
+
+<ul class="mb-0">
+
+<li>Dynamic Programming</li>
+
+<li>Graphs & Trees</li>
+
+<li>Advanced Algorithms</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="alert alert-primary">
+
+<h6>
+
+<i class="fas fa-rocket me-2"></i>
+
+Next Steps
+
+</h6>
+
+<ul class="mb-0">
+
+<li>Add practice sheets</li>
+
+<li>Create revision contests</li>
+
+<li>Conduct doubt sessions</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PREDICTIONS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-line me-2"></i>
+
+Predicted Trends
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="list-group">
+
+<li class="list-group-item">
+
+Acceptance rate expected to reach <strong>81%</strong> next month.
+
+</li>
+
+<li class="list-group-item">
+
+Average submissions projected to increase by <strong>9%</strong>.
+
+</li>
+
+<li class="list-group-item">
+
+Python will likely remain the dominant language.
+
+</li>
+
+<li class="list-group-item">
+
+Graph-related topics need additional instructional support.
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= OVERALL INSIGHT ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-secondary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-brain me-2"></i>
+
+Overall Analytics Insight
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<p>
+
+Overall classroom performance is improving steadily. Students demonstrate strong proficiency in fundamental programming concepts such as Arrays, Strings, Sorting, and Hashing. However, advanced topics including Dynamic Programming, Graphs, and Trees continue to require additional instructional focus.
+
+</p>
+
+<p class="mb-0">
+
+Introducing targeted practice sessions, guided problem-solving workshops, and topic-specific contests is expected to improve overall success rates significantly.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-success border-0 shadow">
+
+<h5>
+
+<i class="fas fa-chart-pie me-2"></i>
+
+AI Analytics Summary
+
+</h5>
+
+<p class="mb-0">
+
+AI-powered insights indicate healthy classroom engagement and improving performance trends. Focusing on advanced algorithmic topics while maintaining consistent coding practice can further increase acceptance rates and overall student success.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= AI INSIGHTS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-robot me-2"></i>
+
+AI Performance Insights
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="alert alert-success">
+
+<i class="fas fa-arrow-up me-2"></i>
+
+Student performance has improved by <strong>11%</strong> compared to the previous evaluation period.
+
+</div>
+
+<div class="alert alert-warning">
+
+<i class="fas fa-lightbulb me-2"></i>
+
+Dynamic Programming and Graph algorithms continue to have the lowest acceptance rates.
+
+</div>
+
+<div class="alert alert-info">
+
+<i class="fas fa-chart-line me-2"></i>
+
+Students who solve at least 3 problems per week achieve an average acceptance rate above <strong>85%</strong>.
+
+</div>
+
+<div class="alert alert-primary mb-0">
+
+<i class="fas fa-users me-2"></i>
+
+Python users submit more frequently, while C++ users achieve lower average execution times.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RISK ANALYSIS ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-exclamation-triangle me-2"></i>
+
+Students Requiring Attention
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>High Risk</span>
+
+<span class="badge bg-danger">
+
+9
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>Moderate Risk</span>
+
+<span class="badge bg-warning text-dark">
+
+18
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between">
+
+<span>Excellent Progress</span>
+
+<span class="badge bg-success">
+
+61
+
+</span>
+
+</div>
+
+<hr>
+
+<p class="text-muted mb-0">
+
+Students are classified based on attendance, submissions, scores, and recent activity.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= WEAK TOPICS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-book-open me-2"></i>
+
+Weak Topics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>Topic</th>
+
+<th>Acceptance</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Dynamic Programming</td>
+
+<td>
+
+<span class="badge bg-danger">
+
+43%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Graph Algorithms</td>
+
+<td>
+
+<span class="badge bg-danger">
+
+50%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Segment Tree</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+56%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Trie</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+60%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Backtracking</td>
+
+<td>
+
+<span class="badge bg-info">
+
+68%
+
+</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= BEST TOPICS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-star me-2"></i>
+
+Best Performing Topics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>Topic</th>
+
+<th>Acceptance</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>Arrays</td>
+
+<td>
+
+<span class="badge bg-success">
+
+94%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Strings</td>
+
+<td>
+
+<span class="badge bg-success">
+
+91%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Sorting</td>
+
+<td>
+
+<span class="badge bg-success">
+
+89%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Searching</td>
+
+<td>
+
+<span class="badge bg-primary">
+
+86%
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Hashing</td>
+
+<td>
+
+<span class="badge bg-primary">
+
+84%
+
+</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RECOMMENDATIONS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bullseye me-2"></i>
+
+Instructor Recommendations
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-4">
+
+<div class="alert alert-success">
+
+<h6>
+
+<i class="fas fa-check-circle me-2"></i>
+
+Continue
+
+</h6>
+
+<ul class="mb-0">
+
+<li>Weekly coding contests</li>
+
+<li>Leaderboard rewards</li>
+
+<li>Hands-on lab sessions</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="alert alert-warning">
+
+<h6>
+
+<i class="fas fa-tools me-2"></i>
+
+Improve
+
+</h6>
+
+<ul class="mb-0">
+
+<li>Dynamic Programming</li>
+
+<li>Graphs & Trees</li>
+
+<li>Advanced Algorithms</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="alert alert-primary">
+
+<h6>
+
+<i class="fas fa-rocket me-2"></i>
+
+Next Steps
+
+</h6>
+
+<ul class="mb-0">
+
+<li>Add practice sheets</li>
+
+<li>Create revision contests</li>
+
+<li>Conduct doubt sessions</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PREDICTIONS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-chart-line me-2"></i>
+
+Predicted Trends
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="list-group">
+
+<li class="list-group-item">
+
+Acceptance rate expected to reach <strong>81%</strong> next month.
+
+</li>
+
+<li class="list-group-item">
+
+Average submissions projected to increase by <strong>9%</strong>.
+
+</li>
+
+<li class="list-group-item">
+
+Python will likely remain the dominant language.
+
+</li>
+
+<li class="list-group-item">
+
+Graph-related topics need additional instructional support.
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= OVERALL INSIGHT ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-secondary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-brain me-2"></i>
+
+Overall Analytics Insight
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<p>
+
+Overall classroom performance is improving steadily. Students demonstrate strong proficiency in fundamental programming concepts such as Arrays, Strings, Sorting, and Hashing. However, advanced topics including Dynamic Programming, Graphs, and Trees continue to require additional instructional focus.
+
+</p>
+
+<p class="mb-0">
+
+Introducing targeted practice sessions, guided problem-solving workshops, and topic-specific contests is expected to improve overall success rates significantly.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-success border-0 shadow">
+
+<h5>
+
+<i class="fas fa-chart-pie me-2"></i>
+
+AI Analytics Summary
+
+</h5>
+
+<p class="mb-0">
+
+AI-powered insights indicate healthy classroom engagement and improving performance trends. Focusing on advanced algorithmic topics while maintaining consistent coding practice can further increase acceptance rates and overall student success.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= QUICK SEARCH ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-search me-2"></i>
+
+Search Analytics
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="input-group">
+
+<span class="input-group-text">
+
+<i class="fas fa-search"></i>
+
+</span>
+
+<input
+
+type="text"
+
+class="form-control"
+
+id="analyticsSearch"
+
+placeholder="Search students, problems, programming languages...">
+
+<button
+
+class="btn btn-primary"
+
+id="searchAnalyticsBtn">
+
+Search
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= STUDENT DETAILS MODAL ================= -->
+
+<div class="modal fade"
+
+id="studentAnalyticsModal"
+
+tabindex="-1"
+
+aria-hidden="true">
+
+<div class="modal-dialog modal-xl">
+
+<div class="modal-content">
+
+<div class="modal-header bg-success text-white">
+
+<h5 class="modal-title">
+
+Student Performance Details
+
+</h5>
+
+<button
+
+type="button"
+
+class="btn-close btn-close-white"
+
+data-bs-dismiss="modal">
+
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<div class="row">
+
+<div class="col-md-6">
+
+<table class="table table-borderless">
+
+<tr>
+
+<th>Name</th>
+
+<td id="modalStudentName">
+
+Rahul Sharma
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Roll No.</th>
+
+<td>
+
+2024CSE001
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Problems Solved</th>
+
+<td>
+
+91
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Acceptance Rate</th>
+
+<td>
+
+91%
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Average Score</th>
+
+<td>
+
+97
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+<div class="col-md-6">
+
+<canvas id="studentPerformanceChart"
+
+height="180">
+
+</canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+
+class="btn btn-secondary"
+
+data-bs-dismiss="modal">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PROBLEM DETAILS MODAL ================= -->
+
+<div class="modal fade"
+
+id="problemAnalyticsModal"
+
+tabindex="-1"
+
+aria-hidden="true">
+
+<div class="modal-dialog modal-lg">
+
+<div class="modal-content">
+
+<div class="modal-header bg-primary text-white">
+
+<h5 class="modal-title">
+
+Problem Analytics
+
+</h5>
+
+<button
+
+type="button"
+
+class="btn-close btn-close-white"
+
+data-bs-dismiss="modal">
+
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<table class="table table-hover">
+
+<tr>
+
+<th>Problem</th>
+
+<td>
+
+Two Sum
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Attempts</th>
+
+<td>
+
+342
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Accepted</th>
+
+<td>
+
+318
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Acceptance Rate</th>
+
+<td>
+
+93%
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Average Runtime</th>
+
+<td>
+
+28 ms
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>Average Memory</th>
+
+<td>
+
+15 MB
+
+</td>
+
+</tr>
+
+</table>
+
+<hr>
+
+<canvas id="problemChart"
+
+height="150">
+
+</canvas>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+
+class="btn btn-secondary"
+
+data-bs-dismiss="modal">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PAGINATION ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<nav>
+
+<ul class="pagination justify-content-center">
+
+<li class="page-item disabled">
+
+<a class="page-link">
+
+Previous
+
+</a>
+
+</li>
+
+<li class="page-item active">
+
+<a class="page-link">
+
+1
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link">
+
+2
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link">
+
+3
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link">
+
+Next
+
+</a>
+
+</li>
+
+</ul>
+
+</nav>
+
+</div>
+
+</div>
+
+<!-- ================= FINAL DASHBOARD SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="alert alert-success border-0 shadow">
+
+<h5>
+
+<i class="fas fa-chart-line me-2"></i>
+
+Analytics Dashboard Summary
+
+</h5>
+
+<p class="mb-0">
+
+This analytics dashboard provides comprehensive insights into
+student performance, problem difficulty, submission trends,
+language usage, execution efficiency, and instructor recommendations.
+Use these analytics to monitor progress, identify weak areas,
+and improve laboratory learning outcomes.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+{% block scripts %}
+
+<!-- ================= CHART.JS ================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+// ================= Submission Chart =================
+
+new Chart(document.getElementById("submissionChart"),{
+
+type:"line",
+
+data:{
+
+labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+
+datasets:[{
+
+label:"Submissions",
+
+data:[120,145,165,180,210,170,195],
+
+borderColor:"#0d6efd",
+
+backgroundColor:"rgba(13,110,253,.15)",
+
+fill:true,
+
+tension:.35
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{legend:{display:true}}
+
+}
+
+});
+
+// ================= Language Chart =================
+
+new Chart(document.getElementById("languageChart"),{
+
+type:"doughnut",
+
+data:{
+
+labels:["Python","Java","C++","C"],
+
+datasets:[{
+
+data:[54,22,18,6],
+
+backgroundColor:[
+
+"#198754",
+
+"#0d6efd",
+
+"#ffc107",
+
+"#dc3545"
+
+]
+
+}]
+
+}
+
+});
+
+// ================= Runtime =================
+
+new Chart(document.getElementById("runtimeChart"),{
+
+type:"bar",
+
+data:{
+
+labels:["Python","Java","C++","C"],
+
+datasets:[{
+
+label:"Runtime (ms)",
+
+data:[29,34,22,26],
+
+backgroundColor:"#0dcaf0"
+
+}]
+
+}
+
+});
+
+// ================= Memory =================
+
+new Chart(document.getElementById("memoryChart"),{
+
+type:"bar",
+
+data:{
+
+labels:["Python","Java","C++","C"],
+
+datasets:[{
+
+label:"Memory (MB)",
+
+data:[17,19,15,13],
+
+backgroundColor:"#fd7e14"
+
+}]
+
+}
+
+});
+
+// ================= Activity =================
+
+new Chart(document.getElementById("activityChart"),{
+
+type:"line",
+
+data:{
+
+labels:["Week1","Week2","Week3","Week4"],
+
+datasets:[{
+
+label:"Activity",
+
+data:[980,1125,1260,1426],
+
+borderColor:"#198754",
+
+fill:false,
+
+tension:.3
+
+}]
+
+}
+
+});
+
+// ================= Weekly Trend =================
+
+new Chart(document.getElementById("weeklyTrendChart"),{
+
+type:"bar",
+
+data:{
+
+labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+
+datasets:[{
+
+label:"Weekly",
+
+data:[120,165,170,182,205,168,154],
+
+backgroundColor:"#6610f2"
+
+}]
+
+}
+
+});
+
+// ================= Monthly Trend =================
+
+new Chart(document.getElementById("monthlyTrendChart"),{
+
+type:"line",
+
+data:{
+
+labels:["Jan","Feb","Mar","Apr","May","Jun"],
+
+datasets:[{
+
+label:"Growth",
+
+data:[3200,3500,3810,4200,4680,5284],
+
+borderColor:"#20c997",
+
+fill:true,
+
+backgroundColor:"rgba(32,201,151,.18)"
+
+}]
+
+}
+
+});
+
+// ================= Student Modal =================
+
+const studentChart=document.getElementById("studentPerformanceChart");
+
+if(studentChart){
+
+new Chart(studentChart,{
+
+type:"radar",
+
+data:{
+
+labels:["Arrays","DP","Graphs","Trees","Strings"],
+
+datasets:[{
+
+label:"Performance",
+
+data:[95,72,68,80,97],
+
+backgroundColor:"rgba(13,110,253,.2)",
+
+borderColor:"#0d6efd"
+
+}]
+
+}
+
+});
+
+}
+
+// ================= Problem Modal =================
+
+const problemChart=document.getElementById("problemChart");
+
+if(problemChart){
+
+new Chart(problemChart,{
+
+type:"pie",
+
+data:{
+
+labels:["Accepted","Rejected"],
+
+datasets:[{
+
+data:[318,24],
+
+backgroundColor:["#198754","#dc3545"]
+
+}]
+
+}
+
+});
+
+}
+
+});
+
+</script>
+
+<!-- ================= FILTERS ================= -->
+
+<script>
+
+document.getElementById("applyAnalyticsFilter")?.addEventListener("click",()=>{
+
+showToast("Filters applied successfully.","primary");
+
+});
+
+</script>
+
+<!-- ================= EXPORT ================= -->
+
+<script>
+
+document.getElementById("exportCsvBtn")?.onclick=()=>showToast("Exporting CSV...","success");
+
+document.getElementById("exportPdfBtn")?.onclick=()=>showToast("Exporting PDF...","danger");
+
+document.getElementById("exportExcelBtn")?.onclick=()=>showToast("Exporting Excel...","success");
+
+</script>
+
+<!-- ================= PRINT ================= -->
+
+<script>
+
+document.getElementById("printAnalyticsBtn")?.onclick=function(){
+
+window.print();
+
+};
+
+</script>
+
+<!-- ================= SHARE ================= -->
+
+<script>
+
+document.getElementById("shareAnalyticsBtn")?.onclick=async()=>{
+
+try{
+
+if(navigator.share){
+
+await navigator.share({
+
+title:"Analytics Report",
+
+text:"Lab Auto Grader Analytics",
+
+url:window.location.href
+
+});
+
+}else{
+
+navigator.clipboard.writeText(window.location.href);
+
+showToast("Link copied.","success");
+
+}
+
+}catch(e){}
+
+};
+
+document.getElementById("copyReportLinkBtn")?.onclick=()=>{
+
+navigator.clipboard.writeText(window.location.href);
+
+showToast("Report link copied.","success");
+
+};
+
+</script>
+
+<!-- ================= SEARCH ================= -->
+
+<script>
+
+document.getElementById("analyticsSearch")?.addEventListener("keyup",function(){
+
+const value=this.value.toLowerCase();
+
+document.querySelectorAll("table tbody tr").forEach(row=>{
+
+row.style.display=row.innerText.toLowerCase().includes(value)
+
+?"":"none";
+
+});
+
+});
+
+</script>
+
+<!-- ================= TOAST ================= -->
+
+<script>
+
+function showToast(message,type="success"){
+
+const toast=document.createElement("div");
+
+toast.className=`toast text-bg-${type} border-0 position-fixed`;
+
+toast.style.bottom="20px";
+
+toast.style.right="20px";
+
+toast.style.zIndex="99999";
+
+toast.innerHTML=`
+
+<div class="d-flex">
+
+<div class="toast-body">
+
+${message}
+
+</div>
+
+<button class="btn-close btn-close-white me-2 m-auto"
+
+data-bs-dismiss="toast"></button>
+
+</div>
+
+`;
+
+document.body.appendChild(toast);
+
+const t=new bootstrap.Toast(toast);
+
+t.show();
+
+toast.addEventListener("hidden.bs.toast",()=>toast.remove());
+
+}
+
+</script>
+
+<!-- ================= CARD ANIMATION ================= -->
+
+<script>
+
+const observer=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.style.opacity="1";
+
+entry.target.style.transform="translateY(0)";
+
+observer.unobserve(entry.target);
+
+}
+
+});
+
+},{threshold:.1});
+
+document.querySelectorAll(".card").forEach(card=>{
+
+card.style.opacity="0";
+
+card.style.transform="translateY(20px)";
+
+card.style.transition=".35s";
+
+observer.observe(card);
+
+});
+
+</script>
+
+<!-- ================= CUSTOM CSS ================= -->
+
+<style>
+
+.card{
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 15px 35px rgba(0,0,0,.12);
+}
+
+.progress{
+height:10px;
+}
+
+.table-hover tbody tr:hover{
+background:#f8f9fa;
+}
+
+canvas{
+max-width:100%;
+}
+
+.modal-content{
+border-radius:14px;
+}
+
+@media print{
+
+.btn,
+.card-header{
+display:none!important;
+}
+
+body{
+background:white;
+}
+
+}
+
+</style>
+
+<script>
+
+window.addEventListener("load",()=>{
+
+showToast("Analytics Dashboard Loaded","success");
+
+});
+
+</script>
+
+{% endblock %}

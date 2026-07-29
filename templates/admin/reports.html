@@ -1,0 +1,641 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Reports{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="fas fa-file-alt text-primary"></i>
+
+                Reports Dashboard
+
+            </h2>
+
+            <p class="text-muted">
+
+                Generate and Export Programming Lab Reports
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <button class="btn btn-success me-2">
+
+                <i class="fas fa-file-excel"></i>
+
+                Excel
+
+            </button>
+
+            <button class="btn btn-danger me-2">
+
+                <i class="fas fa-file-pdf"></i>
+
+                PDF
+
+            </button>
+
+            <button class="btn btn-dark">
+
+                <i class="fas fa-print"></i>
+
+                Print
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Statistics -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-3">
+
+            <div class="card shadow rounded-4 border-0">
+
+                <div class="card-body text-center">
+
+                    <i class="fas fa-user-graduate fa-3x text-primary mb-3"></i>
+
+                    <h2>{{ total_students }}</h2>
+
+                    <p>Total Students</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow rounded-4 border-0">
+
+                <div class="card-body text-center">
+
+                    <i class="fas fa-chalkboard-teacher fa-3x text-success mb-3"></i>
+
+                    <h2>{{ total_teachers }}</h2>
+
+                    <p>Total Teachers</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow rounded-4 border-0">
+
+                <div class="card-body text-center">
+
+                    <i class="fas fa-code fa-3x text-warning mb-3"></i>
+
+                    <h2>{{ total_questions }}</h2>
+
+                    <p>Programming Problems</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow rounded-4 border-0">
+
+                <div class="card-body text-center">
+
+                    <i class="fas fa-laptop-code fa-3x text-danger mb-3"></i>
+
+                    <h2>{{ total_submissions }}</h2>
+
+                    <p>Submissions</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Filters -->
+
+    <div class="card shadow rounded-4 mb-4">
+
+        <div class="card-header bg-white">
+
+            <h5>
+
+                <i class="fas fa-filter"></i>
+
+                Report Filters
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="GET">
+
+                <div class="row">
+
+                    <div class="col-md-3">
+
+                        <label>From Date</label>
+
+                        <input
+                        type="date"
+                        class="form-control"
+                        name="from_date">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label>To Date</label>
+
+                        <input
+                        type="date"
+                        class="form-control"
+                        name="to_date">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label>Report Type</label>
+
+                        <select
+                        class="form-select"
+                        name="type">
+
+                            <option>All</option>
+
+                            <option>Students</option>
+
+                            <option>Teachers</option>
+
+                            <option>Problems</option>
+
+                            <option>Submissions</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label>&nbsp;</label>
+
+                        <button
+                        class="btn btn-primary w-100">
+
+                        <i class="fas fa-search"></i>
+
+                        Generate Report
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Report Table -->
+
+    <div class="card shadow rounded-4">
+
+        <div class="card-header bg-white">
+
+            <h5>
+
+                <i class="fas fa-table"></i>
+
+                Generated Report
+
+            </h5>
+
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-striped align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Name</th>
+
+                        <th>Email</th>
+
+                        <th>Role</th>
+
+                        <th>Problems</th>
+
+                        <th>Submissions</th>
+
+                        <th>Score</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for r in reports %}
+
+                    <tr>
+
+                        <td>{{ r.id }}</td>
+
+                        <td>{{ r.name }}</td>
+
+                        <td>{{ r.email }}</td>
+
+                        <td>{{ r.role }}</td>
+
+                        <td>{{ r.problems }}</td>
+
+                        <td>{{ r.submissions }}</td>
+
+                        <td>
+
+                            <span class="badge bg-success">
+
+                                {{ r.score }}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            {% if r.status=="Active" %}
+
+                            <span class="badge bg-success">
+
+                                Active
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge bg-danger">
+
+                                Inactive
+
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- ================= PAGINATION ================= -->
+
+    <div class="row mt-4">
+
+        <div class="col-md-6">
+
+            <p class="text-muted">
+
+                Showing {{ reports|length }} Records
+
+            </p>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <nav class="float-end">
+
+                <ul class="pagination">
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="#">Previous</a>
+
+                    </li>
+
+                    <li class="page-item active">
+
+                        <a class="page-link" href="#">1</a>
+
+                    </li>
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="#">2</a>
+
+                    </li>
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="#">3</a>
+
+                    </li>
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="#">Next</a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+    <!-- ================= REPORT SUMMARY ================= -->
+
+    <div class="row mt-5">
+
+        <div class="col-lg-6">
+
+            <div class="card shadow rounded-4">
+
+                <div class="card-header bg-white">
+
+                    <h5>
+
+                        <i class="fas fa-chart-pie text-primary"></i>
+
+                        Report Summary
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="summaryChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-6">
+
+            <div class="card shadow rounded-4">
+
+                <div class="card-header bg-white">
+
+                    <h5>
+
+                        <i class="fas fa-chart-line text-success"></i>
+
+                        Monthly Submissions
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="submissionChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= RECENT REPORTS ================= -->
+
+    <div class="card shadow rounded-4 mt-5">
+
+        <div class="card-header bg-white">
+
+            <h5>
+
+                <i class="fas fa-history"></i>
+
+                Recent Generated Reports
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-hover">
+
+                <thead>
+
+                <tr>
+
+                    <th>Report</th>
+
+                    <th>Generated By</th>
+
+                    <th>Date</th>
+
+                    <th>Download</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for file in recent_reports %}
+
+                <tr>
+
+                    <td>{{ file.name }}</td>
+
+                    <td>{{ file.user }}</td>
+
+                    <td>{{ file.date }}</td>
+
+                    <td>
+
+                        <a href="{{ file.path }}"
+                           class="btn btn-primary btn-sm">
+
+                            <i class="fas fa-download"></i>
+
+                            Download
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= CHART JS ================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+new Chart(document.getElementById("summaryChart"),{
+
+type:"doughnut",
+
+data:{
+
+labels:["Students","Teachers","Questions","Submissions"],
+
+datasets:[{
+
+data:[
+
+{{ total_students }},
+
+{{ total_teachers }},
+
+{{ total_questions }},
+
+{{ total_submissions }}
+
+],
+
+backgroundColor:[
+
+"#0d6efd",
+
+"#198754",
+
+"#ffc107",
+
+"#dc3545"
+
+]
+
+}]
+
+}
+
+});
+
+new Chart(document.getElementById("submissionChart"),{
+
+type:"line",
+
+data:{
+
+labels:{{ monthly_labels|tojson }},
+
+datasets:[{
+
+label:"Submissions",
+
+data:{{ monthly_submissions|tojson }},
+
+borderColor:"#0d6efd",
+
+backgroundColor:"rgba(13,110,253,.15)",
+
+fill:true,
+
+tension:.4
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{
+
+legend:{
+
+display:true
+
+}
+
+}
+
+}
+
+});
+
+</script>
+
+<!-- ================= PRINT FUNCTION ================= -->
+
+<script>
+
+function printReport(){
+
+window.print();
+
+}
+
+</script>
+
+<!-- ================= LIVE SEARCH ================= -->
+
+<script>
+
+document.querySelector("input[name='from_date']").addEventListener("change",function(){
+
+console.log("Filter Updated");
+
+});
+
+</script>
+
+{% endblock %}

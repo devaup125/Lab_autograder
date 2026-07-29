@@ -1,0 +1,3281 @@
+{% extends "student/base_student.html" %}
+
+{% block title %}
+Problems
+{% endblock %}
+
+{% block page_title %}
+Problem Set
+{% endblock %}
+
+{% block breadcrumb %}
+
+<li class="breadcrumb-item">
+    <a href="{{ url_for('student.dashboard') }}">
+        Dashboard
+    </a>
+</li>
+
+<li class="breadcrumb-item active">
+    Problems
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+
+<div class="card border-0 shadow mb-4">
+
+    <div class="card-body">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <h2 class="fw-bold">
+
+                    <i class="fas fa-laptop-code text-primary me-2"></i>
+
+                    Programming Problem Set
+
+                </h2>
+
+                <p class="text-muted mb-0">
+
+                    Practice programming problems, improve your coding skills,
+                    and climb the leaderboard.
+
+                </p>
+
+            </div>
+
+            <div class="col-lg-4 text-end">
+
+                <a href="{{ url_for('student.leaderboard') }}"
+                   class="btn btn-warning">
+
+                    <i class="fas fa-trophy me-2"></i>
+
+                    Leaderboard
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SUMMARY CARDS ================= -->
+
+<div class="row g-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-list-check fa-3x text-primary mb-3"></i>
+
+<h3>
+
+{{ total_problems if total_problems else 250 }}
+
+</h3>
+
+<p class="text-muted mb-0">
+
+Total Problems
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+
+<h3>
+
+{{ solved_count if solved_count else 98 }}
+
+</h3>
+
+<p class="text-muted mb-0">
+
+Solved
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-clock fa-3x text-warning mb-3"></i>
+
+<h3>
+
+{{ attempted_count if attempted_count else 125 }}
+
+</h3>
+
+<p class="text-muted mb-0">
+
+Attempted
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-fire fa-3x text-danger mb-3"></i>
+
+<h3>
+
+{{ streak if streak else 15 }}
+
+</h3>
+
+<p class="text-muted mb-0">
+
+Day Streak
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SEARCH ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+<div class="card-body">
+
+<div class="row g-3">
+
+<div class="col-lg-8">
+
+<div class="input-group">
+
+<span class="input-group-text">
+
+<i class="fas fa-search"></i>
+
+</span>
+
+<input
+type="text"
+class="form-control"
+id="problemSearch"
+placeholder="Search problems by title, tag or keyword...">
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<button
+class="btn btn-primary w-100">
+
+<i class="fas fa-search me-2"></i>
+
+Search Problems
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK STATS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-md-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-body text-center">
+
+<i class="fas fa-star fa-2x text-warning mb-3"></i>
+
+<h4>
+
+{{ favorite_count if favorite_count else 18 }}
+
+</h4>
+
+<p class="text-muted">
+
+Favorite Problems
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-body text-center">
+
+<i class="fas fa-award fa-2x text-success mb-3"></i>
+
+<h4>
+
+{{ easy_solved if easy_solved else 52 }}
+
+</h4>
+
+<p class="text-muted">
+
+Easy Solved
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-body text-center">
+
+<i class="fas fa-chart-line fa-2x text-info mb-3"></i>
+
+<h4>
+
+{{ acceptance_rate if acceptance_rate else "92%" }}
+
+</h4>
+
+<p class="text-muted">
+
+Acceptance Rate
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= FILTERS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-filter me-2"></i>
+
+Filter Problems
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row g-3">
+
+<!-- Difficulty -->
+
+<div class="col-lg-3">
+
+<label class="form-label">
+
+Difficulty
+
+</label>
+
+<select
+class="form-select"
+id="difficultyFilter">
+
+<option value="">
+
+All Difficulties
+
+</option>
+
+<option value="Easy">
+
+Easy
+
+</option>
+
+<option value="Medium">
+
+Medium
+
+</option>
+
+<option value="Hard">
+
+Hard
+
+</option>
+
+</select>
+
+</div>
+
+<!-- Topic -->
+
+<div class="col-lg-3">
+
+<label class="form-label">
+
+Topic
+
+</label>
+
+<select
+class="form-select"
+id="topicFilter">
+
+<option value="">
+
+All Topics
+
+</option>
+
+<option value="Arrays">
+
+Arrays
+
+</option>
+
+<option value="Strings">
+
+Strings
+
+</option>
+
+<option value="Linked List">
+
+Linked List
+
+</option>
+
+<option value="Stack">
+
+Stack
+
+</option>
+
+<option value="Queue">
+
+Queue
+
+</option>
+
+<option value="Tree">
+
+Tree
+
+</option>
+
+<option value="Graph">
+
+Graph
+
+</option>
+
+<option value="Dynamic Programming">
+
+Dynamic Programming
+
+</option>
+
+<option value="Greedy">
+
+Greedy
+
+</option>
+
+<option value="Hash Table">
+
+Hash Table
+
+</option>
+
+</select>
+
+</div>
+
+<!-- Status -->
+
+<div class="col-lg-2">
+
+<label class="form-label">
+
+Status
+
+</label>
+
+<select
+class="form-select"
+id="statusFilter">
+
+<option value="">
+
+All
+
+</option>
+
+<option value="Solved">
+
+Solved
+
+</option>
+
+<option value="Attempted">
+
+Attempted
+
+</option>
+
+<option value="Unsolved">
+
+Unsolved
+
+</option>
+
+</select>
+
+</div>
+
+<!-- Sort -->
+
+<div class="col-lg-2">
+
+<label class="form-label">
+
+Sort By
+
+</label>
+
+<select
+class="form-select"
+id="sortFilter">
+
+<option value="title">
+
+Title
+
+</option>
+
+<option value="difficulty">
+
+Difficulty
+
+</option>
+
+<option value="acceptance">
+
+Acceptance Rate
+
+</option>
+
+<option value="submissions">
+
+Submissions
+
+</option>
+
+<option value="points">
+
+Points
+
+</option>
+
+</select>
+
+</div>
+
+<!-- Favorites -->
+
+<div class="col-lg-2">
+
+<label class="form-label">
+
+Favorites
+
+</label>
+
+<div class="form-check mt-2">
+
+<input
+class="form-check-input"
+type="checkbox"
+id="favoriteOnly">
+
+<label
+class="form-check-label"
+for="favoriteOnly">
+
+Favorites Only
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="row">
+
+<div class="col-md-12 text-end">
+
+<button
+class="btn btn-outline-secondary me-2"
+id="resetFilters">
+
+<i class="fas fa-undo me-2"></i>
+
+Reset
+
+</button>
+
+<button
+class="btn btn-primary"
+id="applyFilters">
+
+<i class="fas fa-filter me-2"></i>
+
+Apply Filters
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK FILTERS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-light">
+
+<h5 class="mb-0">
+
+Quick Filters
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="d-flex flex-wrap gap-2">
+
+<button class="btn btn-outline-success btn-sm quick-filter">
+
+Easy
+
+</button>
+
+<button class="btn btn-outline-warning btn-sm quick-filter">
+
+Medium
+
+</button>
+
+<button class="btn btn-outline-danger btn-sm quick-filter">
+
+Hard
+
+</button>
+
+<button class="btn btn-outline-primary btn-sm quick-filter">
+
+Arrays
+
+</button>
+
+<button class="btn btn-outline-info btn-sm quick-filter">
+
+Strings
+
+</button>
+
+<button class="btn btn-outline-secondary btn-sm quick-filter">
+
+Trees
+
+</button>
+
+<button class="btn btn-outline-dark btn-sm quick-filter">
+
+Graphs
+
+</button>
+
+<button class="btn btn-outline-success btn-sm quick-filter">
+
+Dynamic Programming
+
+</button>
+
+<button class="btn btn-outline-primary btn-sm quick-filter">
+
+Hash Table
+
+</button>
+
+<button class="btn btn-outline-warning btn-sm quick-filter">
+
+Greedy
+
+</button>
+
+<button class="btn btn-outline-danger btn-sm quick-filter">
+
+Binary Search
+
+</button>
+
+<button class="btn btn-outline-info btn-sm quick-filter">
+
+Backtracking
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= PROBLEMS TABLE ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+<div class="card-header bg-white d-flex justify-content-between align-items-center">
+
+<h5 class="mb-0">
+
+<i class="fas fa-list me-2"></i>
+
+Programming Problems
+
+</h5>
+
+<span class="badge bg-primary">
+
+{{ total_problems if total_problems else 250 }} Problems
+
+</span>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle" id="problemTable">
+
+<thead class="table-light">
+
+<tr>
+
+<th width="5%">#</th>
+
+<th width="30%">Problem</th>
+
+<th width="12%">Difficulty</th>
+
+<th width="12%">Topic</th>
+
+<th width="10%">Acceptance</th>
+
+<th width="10%">Status</th>
+
+<th width="8%">Points</th>
+
+<th width="13%">Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<!-- Problem 1 -->
+
+<tr>
+
+<td>1</td>
+
+<td>
+
+<div>
+
+<a href="{{ url_for('student.problem_details', problem_id=1) }}"
+class="fw-bold text-decoration-none">
+
+Two Sum
+
+</a>
+
+<br>
+
+<small class="text-muted">
+
+Array • Hash Table
+
+</small>
+
+</div>
+
+</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Easy
+
+</span>
+
+</td>
+
+<td>
+
+Arrays
+
+</td>
+
+<td>
+
+59%
+
+</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Solved
+
+</span>
+
+</td>
+
+<td>
+
+100
+
+</td>
+
+<td>
+
+<a href="{{ url_for('student.problem_details', problem_id=1) }}"
+class="btn btn-sm btn-primary">
+
+View
+
+</a>
+
+</td>
+
+</tr>
+
+<!-- Problem 2 -->
+
+<tr>
+
+<td>2</td>
+
+<td>
+
+<div>
+
+<a href="{{ url_for('student.problem_details', problem_id=2) }}"
+class="fw-bold text-decoration-none">
+
+Longest Substring Without Repeating Characters
+
+</a>
+
+<br>
+
+<small class="text-muted">
+
+Strings • Sliding Window
+
+</small>
+
+</div>
+
+</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Medium
+
+</span>
+
+</td>
+
+<td>
+
+Strings
+
+</td>
+
+<td>
+
+41%
+
+</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Attempted
+
+</span>
+
+</td>
+
+<td>
+
+200
+
+</td>
+
+<td>
+
+<a href="{{ url_for('student.problem_details', problem_id=2) }}"
+class="btn btn-sm btn-primary">
+
+View
+
+</a>
+
+</td>
+
+</tr>
+
+<!-- Problem 3 -->
+
+<tr>
+
+<td>3</td>
+
+<td>
+
+<div>
+
+<a href="{{ url_for('student.problem_details', problem_id=3) }}"
+class="fw-bold text-decoration-none">
+
+Median of Two Sorted Arrays
+
+</a>
+
+<br>
+
+<small class="text-muted">
+
+Binary Search
+
+</small>
+
+</div>
+
+</td>
+
+<td>
+
+<span class="badge bg-danger">
+
+Hard
+
+</span>
+
+</td>
+
+<td>
+
+Arrays
+
+</td>
+
+<td>
+
+35%
+
+</td>
+
+<td>
+
+<span class="badge bg-secondary">
+
+Unsolved
+
+</span>
+
+</td>
+
+<td>
+
+300
+
+</td>
+
+<td>
+
+<a href="{{ url_for('student.problem_details', problem_id=3) }}"
+class="btn btn-sm btn-primary">
+
+View
+
+</a>
+
+</td>
+
+</tr>
+
+<!-- Problem 4 -->
+
+<tr>
+
+<td>4</td>
+
+<td>
+
+<div>
+
+<a href="{{ url_for('student.problem_details', problem_id=4) }}"
+class="fw-bold text-decoration-none">
+
+Valid Parentheses
+
+</a>
+
+<br>
+
+<small class="text-muted">
+
+Stack
+
+</small>
+
+</div>
+
+</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Easy
+
+</span>
+
+</td>
+
+<td>
+
+Stack
+
+</td>
+
+<td>
+
+67%
+
+</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Solved
+
+</span>
+
+</td>
+
+<td>
+
+100
+
+</td>
+
+<td>
+
+<a href="{{ url_for('student.problem_details', problem_id=4) }}"
+class="btn btn-sm btn-primary">
+
+View
+
+</a>
+
+</td>
+
+</tr>
+
+<!-- Problem 5 -->
+
+<tr>
+
+<td>5</td>
+
+<td>
+
+<div>
+
+<a href="{{ url_for('student.problem_details', problem_id=5) }}"
+class="fw-bold text-decoration-none">
+
+Merge Two Sorted Lists
+
+</a>
+
+<br>
+
+<small class="text-muted">
+
+Linked List
+
+</small>
+
+</div>
+
+</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Easy
+
+</span>
+
+</td>
+
+<td>
+
+Linked List
+
+</td>
+
+<td>
+
+64%
+
+</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Solved
+
+</span>
+
+</td>
+
+<td>
+
+100
+
+</td>
+
+<td>
+
+<a href="{{ url_for('student.problem_details', problem_id=5) }}"
+class="btn btn-sm btn-primary">
+
+View
+
+</a>
+
+</td>
+
+</tr>
+
+<!-- Problem 6 -->
+
+<tr>
+
+<td>6</td>
+
+<td>
+
+<div>
+
+<a href="{{ url_for('student.problem_details', problem_id=6) }}"
+class="fw-bold text-decoration-none">
+
+Binary Tree Level Order Traversal
+
+</a>
+
+<br>
+
+<small class="text-muted">
+
+Tree • BFS
+
+</small>
+
+</div>
+
+</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Medium
+
+</span>
+
+</td>
+
+<td>
+
+Tree
+
+</td>
+
+<td>
+
+55%
+
+</td>
+
+<td>
+
+<span class="badge bg-secondary">
+
+Unsolved
+
+</span>
+
+</td>
+
+<td>
+
+200
+
+</td>
+
+<td>
+
+<a href="{{ url_for('student.problem_details', problem_id=6) }}"
+class="btn btn-sm btn-primary">
+
+View
+
+</a>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= MORE PROBLEMS ================= -->
+
+<tbody>
+
+<!-- Problem 7 -->
+
+<tr>
+
+<td>7</td>
+
+<td>
+
+<div>
+
+<a href="{{ url_for('student.problem_details', problem_id=7) }}"
+class="fw-bold text-decoration-none">
+
+Graph Valid Tree
+
+</a>
+
+<br>
+
+<small class="text-muted">
+
+Graph • DFS • Union Find
+
+</small>
+
+</div>
+
+</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Medium
+
+</span>
+
+</td>
+
+<td>
+
+Graph
+
+</td>
+
+<td>
+
+49%
+
+</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Attempted
+
+</span>
+
+</td>
+
+<td>
+
+200
+
+</td>
+
+<td>
+
+<div class="btn-group">
+
+<a href="{{ url_for('student.problem_details', problem_id=7) }}"
+class="btn btn-sm btn-primary">
+
+View
+
+</a>
+
+<button class="btn btn-sm btn-outline-warning favorite-btn">
+
+<i class="far fa-star"></i>
+
+</button>
+
+</div>
+
+</td>
+
+</tr>
+
+<!-- Problem 8 -->
+
+<tr>
+
+<td>8</td>
+
+<td>
+
+<div>
+
+<a href="{{ url_for('student.problem_details', problem_id=8) }}"
+class="fw-bold text-decoration-none">
+
+Dijkstra Shortest Path
+
+</a>
+
+<br>
+
+<small class="text-muted">
+
+Graph • Heap
+
+</small>
+
+</div>
+
+</td>
+
+<td>
+
+<span class="badge bg-danger">
+
+Hard
+
+</span>
+
+</td>
+
+<td>
+
+Graph
+
+</td>
+
+<td>
+
+31%
+
+</td>
+
+<td>
+
+<span class="badge bg-secondary">
+
+Unsolved
+
+</span>
+
+</td>
+
+<td>
+
+300
+
+</td>
+
+<td>
+
+<div class="btn-group">
+
+<a href="{{ url_for('student.problem_details', problem_id=8) }}"
+class="btn btn-sm btn-primary">
+
+View
+
+</a>
+
+<button class="btn btn-sm btn-outline-warning favorite-btn">
+
+<i class="far fa-star"></i>
+
+</button>
+
+</div>
+
+</td>
+
+</tr>
+
+<!-- Problem 9 -->
+
+<tr>
+
+<td>9</td>
+
+<td>
+
+<div>
+
+<a href="{{ url_for('student.problem_details', problem_id=9) }}"
+class="fw-bold text-decoration-none">
+
+Coin Change
+
+</a>
+
+<br>
+
+<small class="text-muted">
+
+Dynamic Programming
+
+</small>
+
+</div>
+
+</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Medium
+
+</span>
+
+</td>
+
+<td>
+
+DP
+
+</td>
+
+<td>
+
+45%
+
+</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Solved
+
+</span>
+
+</td>
+
+<td>
+
+200
+
+</td>
+
+<td>
+
+<div class="btn-group">
+
+<a href="{{ url_for('student.problem_details', problem_id=9) }}"
+class="btn btn-sm btn-primary">
+
+View
+
+</a>
+
+<button class="btn btn-sm btn-outline-warning favorite-btn">
+
+<i class="fas fa-star text-warning"></i>
+
+</button>
+
+</div>
+
+</td>
+
+</tr>
+
+<!-- Problem 10 -->
+
+<tr>
+
+<td>10</td>
+
+<td>
+
+<div>
+
+<a href="{{ url_for('student.problem_details', problem_id=10) }}"
+class="fw-bold text-decoration-none">
+
+Longest Increasing Subsequence
+
+</a>
+
+<br>
+
+<small class="text-muted">
+
+Dynamic Programming
+
+</small>
+
+</div>
+
+</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Medium
+
+</span>
+
+</td>
+
+<td>
+
+DP
+
+</td>
+
+<td>
+
+54%
+
+</td>
+
+<td>
+
+<span class="badge bg-secondary">
+
+Unsolved
+
+</span>
+
+</td>
+
+<td>
+
+250
+
+</td>
+
+<td>
+
+<div class="dropdown">
+
+<button
+class="btn btn-sm btn-outline-secondary dropdown-toggle"
+data-bs-toggle="dropdown">
+
+Actions
+
+</button>
+
+<ul class="dropdown-menu">
+
+<li>
+
+<a class="dropdown-item"
+
+href="{{ url_for('student.problem_details', problem_id=10) }}">
+
+View Details
+
+</a>
+
+</li>
+
+<li>
+
+<a class="dropdown-item"
+
+href="{{ url_for('student.editor') }}">
+
+Solve Now
+
+</a>
+
+</li>
+
+<li>
+
+<a class="dropdown-item"
+
+href="#">
+
+Bookmark
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PROGRESS OVERVIEW ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-body text-center">
+
+<h5>
+
+Overall Progress
+
+</h5>
+
+<div class="progress mt-3" style="height:24px;">
+
+<div
+class="progress-bar bg-success"
+style="width:39%;">
+
+39%
+
+</div>
+
+</div>
+
+<p class="mt-3 text-muted">
+
+98 of 250 problems solved
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-body text-center">
+
+<h5>
+
+Current Level
+
+</h5>
+
+<h2 class="text-primary">
+
+Level 7
+
+</h2>
+
+<p class="text-muted">
+
+Keep solving to unlock Level 8
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-body text-center">
+
+<h5>
+
+Daily Goal
+
+</h5>
+
+<h2 class="text-success">
+
+4 / 5
+
+</h2>
+
+<div class="progress mt-3">
+
+<div
+class="progress-bar bg-info"
+style="width:80%;">
+
+80%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= DIFFICULTY DISTRIBUTION ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-primary text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-chart-pie me-2"></i>
+
+                    Difficulty Distribution
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Easy</span>
+
+                        <strong>52 / 80</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-success"
+
+                             style="width:65%;">
+
+                            65%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Medium</span>
+
+                        <strong>34 / 120</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-warning"
+
+                             style="width:28%;">
+
+                            28%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Hard</span>
+
+                        <strong>12 / 50</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-danger"
+
+                             style="width:24%;">
+
+                            24%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= TOPIC PROGRESS ================= -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-success text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-layer-group me-2"></i>
+
+                    Topic Progress
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <table class="table table-sm">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Topic</th>
+
+                            <th>Solved</th>
+
+                            <th>Progress</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>Arrays</td>
+
+                            <td>20 / 25</td>
+
+                            <td>80%</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Strings</td>
+
+                            <td>15 / 20</td>
+
+                            <td>75%</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Trees</td>
+
+                            <td>10 / 20</td>
+
+                            <td>50%</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Graphs</td>
+
+                            <td>6 / 18</td>
+
+                            <td>33%</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Dynamic Programming</td>
+
+                            <td>8 / 22</td>
+
+                            <td>36%</td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= ACHIEVEMENTS ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow text-center">
+
+            <div class="card-body">
+
+                <i class="fas fa-medal fa-3x text-warning mb-3"></i>
+
+                <h4>
+
+                    8
+
+                </h4>
+
+                <p class="text-muted">
+
+                    Badges Earned
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow text-center">
+
+            <div class="card-body">
+
+                <i class="fas fa-fire fa-3x text-danger mb-3"></i>
+
+                <h4>
+
+                    15 Days
+
+                </h4>
+
+                <p class="text-muted">
+
+                    Current Streak
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow text-center">
+
+            <div class="card-body">
+
+                <i class="fas fa-trophy fa-3x text-primary mb-3"></i>
+
+                <h4>
+
+                    Rank #12
+
+                </h4>
+
+                <p class="text-muted">
+
+                    Global Ranking
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= PERFORMANCE SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+    <div class="col-lg-12">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-dark text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-chart-line me-2"></i>
+
+                    Performance Summary
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row text-center">
+
+                    <div class="col-md-3">
+
+                        <h3 class="text-success">
+
+                            92%
+
+                        </h3>
+
+                        <p>
+
+                            Acceptance Rate
+
+                        </p>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <h3 class="text-primary">
+
+                            1240
+
+                        </h3>
+
+                        <p>
+
+                            Total Points
+
+                        </p>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <h3 class="text-warning">
+
+                            18 hrs
+
+                        </h3>
+
+                        <p>
+
+                            Coding Time
+
+                        </p>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <h3 class="text-danger">
+
+                            250+
+
+                        </h3>
+
+                        <p>
+
+                            Submissions
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= RECOMMENDED PROBLEMS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-primary text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-lightbulb me-2"></i>
+
+Recommended Problems
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="list-group">
+
+<a href="{{ url_for('student.problem_details', problem_id=11) }}"
+class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+
+<div>
+
+<strong>Maximum Subarray</strong>
+
+<br>
+
+<small class="text-muted">
+
+Arrays • Dynamic Programming
+
+</small>
+
+</div>
+
+<span class="badge bg-success">
+
+Easy
+
+</span>
+
+</a>
+
+<a href="{{ url_for('student.problem_details', problem_id=12) }}"
+class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+
+<div>
+
+<strong>Number of Islands</strong>
+
+<br>
+
+<small class="text-muted">
+
+Graph • DFS
+
+</small>
+
+</div>
+
+<span class="badge bg-warning text-dark">
+
+Medium
+
+</span>
+
+</a>
+
+<a href="{{ url_for('student.problem_details', problem_id=13) }}"
+class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+
+<div>
+
+<strong>Word Ladder</strong>
+
+<br>
+
+<small class="text-muted">
+
+Graph • BFS
+
+</small>
+
+</div>
+
+<span class="badge bg-danger">
+
+Hard
+
+</span>
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= FAVORITE PROBLEMS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-warning">
+
+<h5 class="mb-0">
+
+<i class="fas fa-star me-2"></i>
+
+Favorite Problems
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="list-group list-group-flush">
+
+<li class="list-group-item d-flex justify-content-between">
+
+<span>
+
+⭐ Two Sum
+
+</span>
+
+<a href="{{ url_for('student.problem_details', problem_id=1) }}"
+
+class="btn btn-sm btn-outline-primary">
+
+Open
+
+</a>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+<span>
+
+⭐ Coin Change
+
+</span>
+
+<a href="{{ url_for('student.problem_details', problem_id=9) }}"
+
+class="btn btn-sm btn-outline-primary">
+
+Open
+
+</a>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+<span>
+
+⭐ Valid Parentheses
+
+</span>
+
+<a href="{{ url_for('student.problem_details', problem_id=4) }}"
+
+class="btn btn-sm btn-outline-primary">
+
+Open
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RECENTLY SOLVED ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-success text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-history me-2"></i>
+
+Recently Solved
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>
+
+Problem
+
+</th>
+
+<th>
+
+Date
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>
+
+Two Sum
+
+</td>
+
+<td>
+
+Today
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+Valid Parentheses
+
+</td>
+
+<td>
+
+Yesterday
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+Merge Two Sorted Lists
+
+</td>
+
+<td>
+
+2 Days Ago
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+Binary Search
+
+</td>
+
+<td>
+
+4 Days Ago
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= DAILY CHALLENGE ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-danger text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-bullseye me-2"></i>
+
+Daily Challenge
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<h5>
+
+Longest Common Prefix
+
+</h5>
+
+<p class="text-muted">
+
+Solve today's featured challenge and earn
+
+<strong>+50 Bonus Points</strong>.
+
+</p>
+
+<div class="progress mb-3">
+
+<div
+
+class="progress-bar bg-danger"
+
+style="width:20%;">
+
+20%
+
+</div>
+
+</div>
+
+<a href="{{ url_for('student.editor') }}"
+
+class="btn btn-danger">
+
+Solve Challenge
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= LEARNING PATH ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-info text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-road me-2"></i>
+
+Recommended Learning Path
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-2">
+
+<div class="badge bg-success p-3 w-100">
+
+Arrays
+
+</div>
+
+</div>
+
+<div class="col-md-2">
+
+<div class="badge bg-success p-3 w-100">
+
+Strings
+
+</div>
+
+</div>
+
+<div class="col-md-2">
+
+<div class="badge bg-warning text-dark p-3 w-100">
+
+Linked List
+
+</div>
+
+</div>
+
+<div class="col-md-2">
+
+<div class="badge bg-warning text-dark p-3 w-100">
+
+Trees
+
+</div>
+
+</div>
+
+<div class="col-md-2">
+
+<div class="badge bg-secondary p-3 w-100">
+
+Graphs
+
+</div>
+
+</div>
+
+<div class="col-md-2">
+
+<div class="badge bg-secondary p-3 w-100">
+
+Dynamic Programming
+
+</div>
+
+</div>
+
+</div>
+
+<hr>
+
+<p class="mb-0 text-muted">
+
+Complete topics from left to right for the most effective learning progression.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= PAGINATION ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<nav aria-label="Problems Pagination">
+
+<ul class="pagination justify-content-center">
+
+<li class="page-item disabled">
+
+<a class="page-link" href="#">
+
+<i class="fas fa-angle-left"></i>
+
+</a>
+
+</li>
+
+<li class="page-item active">
+
+<a class="page-link" href="#">1</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link" href="#">2</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link" href="#">3</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link" href="#">4</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link" href="#">5</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link" href="#">
+
+<i class="fas fa-angle-right"></i>
+
+</a>
+
+</li>
+
+</ul>
+
+</nav>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK ACTIONS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-file-export fa-3x text-primary mb-3"></i>
+
+<h5>
+
+Export Progress
+
+</h5>
+
+<p class="text-muted">
+
+Download your coding progress.
+
+</p>
+
+<button
+id="exportProgressBtn"
+class="btn btn-primary">
+
+Export
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-download fa-3x text-success mb-3"></i>
+
+<h5>
+
+Solved List
+
+</h5>
+
+<p class="text-muted">
+
+Download solved problems.
+
+</p>
+
+<button
+id="downloadSolvedBtn"
+class="btn btn-success">
+
+Download
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-trophy fa-3x text-warning mb-3"></i>
+
+<h5>
+
+Coding Contest
+
+</h5>
+
+<p class="text-muted">
+
+Participate in contests.
+
+</p>
+
+<a
+href="{{ url_for('student.leaderboard') }}"
+class="btn btn-warning">
+
+Contest
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-chart-bar fa-3x text-danger mb-3"></i>
+
+<h5>
+
+Dashboard
+
+</h5>
+
+<p class="text-muted">
+
+View your statistics.
+
+</p>
+
+<a
+href="{{ url_for('student.dashboard') }}"
+class="btn btn-danger">
+
+Dashboard
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ACHIEVEMENT PROGRESS ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-dark text-white">
+
+<h5 class="mb-0">
+
+<i class="fas fa-medal me-2"></i>
+
+Achievement Progress
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-4">
+
+<p class="mb-2">
+
+<strong>100 Problems Solved</strong>
+
+</p>
+
+<div class="progress">
+
+<div
+class="progress-bar bg-success"
+
+style="width:98%;">
+
+98%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<p class="mb-2">
+
+<strong>30-Day Coding Streak</strong>
+
+</p>
+
+<div class="progress">
+
+<div
+class="progress-bar bg-warning"
+
+style="width:50%;">
+
+15 / 30 Days
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<p class="mb-2">
+
+<strong>Top 10 Rank</strong>
+
+</p>
+
+<div class="progress">
+
+<div
+class="progress-bar bg-primary"
+
+style="width:75%;">
+
+75%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= SHORTCUT BUTTONS ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12 text-center">
+
+<a
+href="{{ url_for('student.editor') }}"
+class="btn btn-lg btn-success me-2">
+
+<i class="fas fa-play me-2"></i>
+
+Continue Solving
+
+</a>
+
+<a
+href="{{ url_for('student.leaderboard') }}"
+class="btn btn-lg btn-warning me-2">
+
+<i class="fas fa-trophy me-2"></i>
+
+Leaderboard
+
+</a>
+
+<a
+href="{{ url_for('student.dashboard') }}"
+class="btn btn-lg btn-primary">
+
+<i class="fas fa-home me-2"></i>
+
+Dashboard
+
+</a>
+
+</div>
+
+</div>
+{% block scripts %}
+
+<!-- ================= SEARCH ================= -->
+
+<script>
+
+const searchBox=document.getElementById("problemSearch");
+
+if(searchBox){
+
+searchBox.addEventListener("keyup",function(){
+
+const value=this.value.toLowerCase();
+
+document.querySelectorAll("#problemTable tbody tr").forEach(row=>{
+
+row.style.display=row.innerText.toLowerCase().includes(value)
+
+? ""
+
+: "none";
+
+});
+
+});
+
+}
+
+</script>
+
+<!-- ================= FILTERS ================= -->
+
+<script>
+
+function applyFilters(){
+
+const difficulty=document.getElementById("difficultyFilter").value;
+
+const topic=document.getElementById("topicFilter").value;
+
+const status=document.getElementById("statusFilter").value;
+
+const rows=document.querySelectorAll("#problemTable tbody tr");
+
+rows.forEach(row=>{
+
+const text=row.innerText;
+
+let visible=true;
+
+if(difficulty && !text.includes(difficulty)) visible=false;
+
+if(topic && !text.includes(topic)) visible=false;
+
+if(status && !text.includes(status)) visible=false;
+
+row.style.display=visible?"":"none";
+
+});
+
+showToast("Filters applied.","primary");
+
+}
+
+document.getElementById("applyFilters")
+
+.addEventListener("click",applyFilters);
+
+</script>
+
+<!-- ================= RESET FILTERS ================= -->
+
+<script>
+
+document.getElementById("resetFilters")
+
+.addEventListener("click",function(){
+
+document.getElementById("difficultyFilter").value="";
+
+document.getElementById("topicFilter").value="";
+
+document.getElementById("statusFilter").value="";
+
+document.getElementById("sortFilter").value="title";
+
+document.getElementById("favoriteOnly").checked=false;
+
+searchBox.value="";
+
+document.querySelectorAll("#problemTable tbody tr")
+
+.forEach(r=>r.style.display="");
+
+showToast("Filters reset.","secondary");
+
+});
+
+</script>
+
+<!-- ================= FAVORITES ================= -->
+
+<script>
+
+document.querySelectorAll(".favorite-btn").forEach(btn=>{
+
+btn.addEventListener("click",function(){
+
+const icon=this.querySelector("i");
+
+icon.classList.toggle("far");
+
+icon.classList.toggle("fas");
+
+icon.classList.toggle("text-warning");
+
+showToast("Favorite updated.","warning");
+
+});
+
+});
+
+</script>
+
+<!-- ================= EXPORT ================= -->
+
+<script>
+
+document.getElementById("exportProgressBtn")
+
+.addEventListener("click",function(){
+
+showToast("Progress exported successfully.","success");
+
+});
+
+document.getElementById("downloadSolvedBtn")
+
+.addEventListener("click",function(){
+
+showToast("Solved problems downloaded.","success");
+
+});
+
+</script>
+
+<!-- ================= TOAST ================= -->
+
+<script>
+
+function showToast(message,type="success"){
+
+const toast=document.createElement("div");
+
+toast.className=`toast align-items-center text-bg-${type} border-0 position-fixed`;
+
+toast.style.right="20px";
+
+toast.style.bottom="20px";
+
+toast.style.zIndex="99999";
+
+toast.innerHTML=`
+
+<div class="d-flex">
+
+<div class="toast-body">
+
+${message}
+
+</div>
+
+<button
+
+type="button"
+
+class="btn-close btn-close-white me-2 m-auto"
+
+data-bs-dismiss="toast">
+
+</button>
+
+</div>
+
+`;
+
+document.body.appendChild(toast);
+
+const bsToast=new bootstrap.Toast(toast);
+
+bsToast.show();
+
+toast.addEventListener("hidden.bs.toast",()=>toast.remove());
+
+}
+
+</script>
+
+<!-- ================= CARD ANIMATION ================= -->
+
+<script>
+
+const cards=document.querySelectorAll(".card");
+
+const observer=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.style.opacity="1";
+
+entry.target.style.transform="translateY(0)";
+
+observer.unobserve(entry.target);
+
+}
+
+});
+
+},{threshold:0.1});
+
+cards.forEach(card=>{
+
+card.style.opacity="0";
+
+card.style.transform="translateY(20px)";
+
+card.style.transition="all .4s ease";
+
+observer.observe(card);
+
+});
+
+</script>
+
+<!-- ================= CUSTOM STYLES ================= -->
+
+<style>
+
+.card{
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-5px);
+
+box-shadow:0 15px 35px rgba(0,0,0,.12);
+
+}
+
+.table-hover tbody tr{
+
+transition:.2s;
+
+}
+
+.table-hover tbody tr:hover{
+
+background:#f8fafc;
+
+transform:scale(1.01);
+
+}
+
+.favorite-btn i{
+
+transition:.2s;
+
+}
+
+.favorite-btn:hover i{
+
+transform:scale(1.2);
+
+}
+
+</style>
+
+<!-- ================= PAGE LOAD ================= -->
+
+<script>
+
+window.addEventListener("load",function(){
+
+showToast("Problem Set Loaded Successfully!","success");
+
+});
+
+</script>
+
+{% endblock %}

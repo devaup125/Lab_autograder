@@ -1,0 +1,3936 @@
+{% extends "teacher/base_teacher.html" %}
+
+{% block title %}
+Students
+{% endblock %}
+
+{% block page_title %}
+Student Management
+{% endblock %}
+
+{% block breadcrumb %}
+
+<li class="breadcrumb-item">
+    <a href="{{ url_for('teacher.dashboard') }}">
+        Dashboard
+    </a>
+</li>
+
+<li class="breadcrumb-item active">
+    Students
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+
+<div class="card border-0 shadow mb-4">
+
+    <div class="card-body">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <h2 class="fw-bold">
+
+                    <i class="fas fa-user-graduate text-primary me-2"></i>
+
+                    Student Management
+
+                </h2>
+
+                <p class="text-muted mb-0">
+
+                    View student profiles, coding performance,
+                    submissions, rankings, attendance,
+                    and assignment progress.
+
+                </p>
+
+            </div>
+
+            <div class="col-lg-4 text-end">
+
+                <button
+                    class="btn btn-success me-2"
+                    id="exportStudentsBtn">
+
+                    <i class="fas fa-file-excel me-2"></i>
+
+                    Export CSV
+
+                </button>
+
+                <button
+                    class="btn btn-primary"
+                    id="refreshStudentsBtn">
+
+                    <i class="fas fa-sync-alt me-2"></i>
+
+                    Refresh
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= OVERVIEW CARDS ================= -->
+
+<div class="row">
+
+    <div class="col-lg-3 col-md-6 mb-4">
+
+        <div class="card border-0 shadow h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <h6 class="text-muted">
+
+                            Total Students
+
+                        </h6>
+
+                        <h2 class="fw-bold">
+
+                            {{ total_students if total_students else 185 }}
+
+                        </h2>
+
+                    </div>
+
+                    <div class="text-primary">
+
+                        <i class="fas fa-users fa-3x"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-4">
+
+        <div class="card border-0 shadow h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <h6 class="text-muted">
+
+                            Active Students
+
+                        </h6>
+
+                        <h2 class="fw-bold text-success">
+
+                            {{ active_students if active_students else 164 }}
+
+                        </h2>
+
+                    </div>
+
+                    <div class="text-success">
+
+                        <i class="fas fa-user-check fa-3x"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-4">
+
+        <div class="card border-0 shadow h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <h6 class="text-muted">
+
+                            Total Submissions
+
+                        </h6>
+
+                        <h2 class="fw-bold text-primary">
+
+                            {{ total_submissions if total_submissions else 5284 }}
+
+                        </h2>
+
+                    </div>
+
+                    <div class="text-primary">
+
+                        <i class="fas fa-code fa-3x"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-4">
+
+        <div class="card border-0 shadow h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <h6 class="text-muted">
+
+                            Average Score
+
+                        </h6>
+
+                        <h2 class="fw-bold text-warning">
+
+                            {{ average_score if average_score else "84%" }}
+
+                        </h2>
+
+                    </div>
+
+                    <div class="text-warning">
+
+                        <i class="fas fa-chart-line fa-3x"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= QUICK STATISTICS ================= -->
+
+<div class="row">
+
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-primary text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-chart-bar me-2"></i>
+
+                    Student Overview
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <canvas
+                    id="studentOverviewChart"
+                    height="120">
+
+                </canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-success text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-chart-pie me-2"></i>
+
+                    Performance Distribution
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <canvas
+                    id="performancePieChart"
+                    height="220">
+
+                </canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row mt-4 mb-4">
+
+    <div class="col-lg-12">
+
+        <div class="alert alert-primary border-0 shadow">
+
+            <h5>
+
+                <i class="fas fa-info-circle me-2"></i>
+
+                Student Dashboard Overview
+
+            </h5>
+
+            <p class="mb-0">
+
+                This dashboard provides a complete overview of all enrolled
+                students, including activity, coding performance,
+                submissions, rankings, and academic progress.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= SEARCH & FILTERS ================= -->
+
+<div class="card border-0 shadow mb-4">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-search me-2"></i>
+
+            Search & Filters
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-lg-4">
+
+                <label class="form-label">
+
+                    Search Student
+
+                </label>
+
+                <input
+                    type="text"
+                    class="form-control"
+                    id="studentSearch"
+                    placeholder="Name, Roll No, Email">
+
+            </div>
+
+            <div class="col-lg-2">
+
+                <label class="form-label">
+
+                    Batch
+
+                </label>
+
+                <select class="form-select" id="batchFilter">
+
+                    <option value="">All</option>
+
+                    <option>2023</option>
+
+                    <option>2024</option>
+
+                    <option>2025</option>
+
+                    <option>2026</option>
+
+                </select>
+
+            </div>
+
+            <div class="col-lg-2">
+
+                <label class="form-label">
+
+                    Section
+
+                </label>
+
+                <select class="form-select" id="sectionFilter">
+
+                    <option value="">All</option>
+
+                    <option>A</option>
+
+                    <option>B</option>
+
+                    <option>C</option>
+
+                </select>
+
+            </div>
+
+            <div class="col-lg-2">
+
+                <label class="form-label">
+
+                    Status
+
+                </label>
+
+                <select class="form-select" id="statusFilter">
+
+                    <option value="">All</option>
+
+                    <option>Active</option>
+
+                    <option>Inactive</option>
+
+                </select>
+
+            </div>
+
+            <div class="col-lg-2 d-flex align-items-end">
+
+                <button
+                    class="btn btn-primary w-100"
+                    id="filterBtn">
+
+                    <i class="fas fa-filter me-2"></i>
+
+                    Apply
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= STUDENT TABLE ================= -->
+
+<div class="card border-0 shadow">
+
+    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-user-graduate me-2"></i>
+
+            Student List
+
+        </h5>
+
+        <span class="badge bg-light text-dark">
+
+            {{ total_students if total_students else 185 }} Students
+
+        </span>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle" id="studentsTable">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Student</th>
+
+                        <th>Roll No.</th>
+
+                        <th>Section</th>
+
+                        <th>Problems Solved</th>
+
+                        <th>Acceptance</th>
+
+                        <th>Score</th>
+
+                        <th>Status</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% if students %}
+
+                    {% for student in students %}
+
+                    <tr>
+
+                        <td>{{ loop.index }}</td>
+
+                        <td>
+
+                            <strong>{{ student.full_name }}</strong><br>
+
+                            <small class="text-muted">
+
+                                {{ student.email }}
+
+                            </small>
+
+                        </td>
+
+                        <td>{{ student.roll_number }}</td>
+
+                        <td>{{ student.section }}</td>
+
+                        <td>{{ student.problems_solved }}</td>
+
+                        <td>{{ student.acceptance_rate }}%</td>
+
+                        <td>{{ student.score }}</td>
+
+                        <td>
+
+                            {% if student.is_active %}
+
+                            <span class="badge bg-success">
+
+                                Active
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge bg-secondary">
+
+                                Inactive
+
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn btn-sm btn-outline-primary">
+
+                                <i class="fas fa-eye"></i>
+
+                            </button>
+
+                            <button
+                                class="btn btn-sm btn-outline-success">
+
+                                <i class="fas fa-chart-line"></i>
+
+                            </button>
+
+                            <button
+                                class="btn btn-sm btn-outline-info">
+
+                                <i class="fas fa-envelope"></i>
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <!-- Sample Rows -->
+
+                    <tr>
+
+                        <td>1</td>
+
+                        <td>
+
+                            <strong>Rahul Sharma</strong><br>
+
+                            <small class="text-muted">
+
+                                rahul@example.com
+
+                            </small>
+
+                        </td>
+
+                        <td>2024CSE001</td>
+
+                        <td>A</td>
+
+                        <td>91</td>
+
+                        <td>91%</td>
+
+                        <td>972</td>
+
+                        <td>
+
+                            <span class="badge bg-success">
+
+                                Active
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button class="btn btn-sm btn-outline-primary">
+
+                                <i class="fas fa-eye"></i>
+
+                            </button>
+
+                            <button class="btn btn-sm btn-outline-success">
+
+                                <i class="fas fa-chart-line"></i>
+
+                            </button>
+
+                            <button class="btn btn-sm btn-outline-info">
+
+                                <i class="fas fa-envelope"></i>
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>2</td>
+
+                        <td>
+
+                            <strong>Priya Singh</strong><br>
+
+                            <small class="text-muted">
+
+                                priya@example.com
+
+                            </small>
+
+                        </td>
+
+                        <td>2024CSE002</td>
+
+                        <td>A</td>
+
+                        <td>88</td>
+
+                        <td>89%</td>
+
+                        <td>965</td>
+
+                        <td>
+
+                            <span class="badge bg-success">
+
+                                Active
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button class="btn btn-sm btn-outline-primary">
+
+                                <i class="fas fa-eye"></i>
+
+                            </button>
+
+                            <button class="btn btn-sm btn-outline-success">
+
+                                <i class="fas fa-chart-line"></i>
+
+                            </button>
+
+                            <button class="btn btn-sm btn-outline-info">
+
+                                <i class="fas fa-envelope"></i>
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                {% endif %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= PAGINATION ================= -->
+
+<div class="row mt-4 mb-4">
+
+    <div class="col-lg-12">
+
+        <nav>
+
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item disabled">
+
+                    <a class="page-link">Previous</a>
+
+                </li>
+
+                <li class="page-item active">
+
+                    <a class="page-link">1</a>
+
+                </li>
+
+                <li class="page-item">
+
+                    <a class="page-link">2</a>
+
+                </li>
+
+                <li class="page-item">
+
+                    <a class="page-link">3</a>
+
+                </li>
+
+                <li class="page-item">
+
+                    <a class="page-link">Next</a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </div>
+
+</div>
+<!-- ================= TOP PERFORMERS ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-warning">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-trophy me-2"></i>
+
+                    Top Performing Students
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>Rank</th>
+                                <th>Student</th>
+                                <th>Solved</th>
+                                <th>Acceptance</th>
+                                <th>Score</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% if top_students %}
+
+                                {% for student in top_students %}
+
+                                <tr>
+
+                                    <td>
+
+                                        {% if loop.index == 1 %}
+
+                                            🥇
+
+                                        {% elif loop.index == 2 %}
+
+                                            🥈
+
+                                        {% elif loop.index == 3 %}
+
+                                            🥉
+
+                                        {% else %}
+
+                                            #{{ loop.index }}
+
+                                        {% endif %}
+
+                                    </td>
+
+                                    <td>
+
+                                        <strong>{{ student.full_name }}</strong>
+
+                                    </td>
+
+                                    <td>{{ student.problems_solved }}</td>
+
+                                    <td>{{ student.acceptance_rate }}%</td>
+
+                                    <td>
+
+                                        <strong>{{ student.score }}</strong>
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                            <tr>
+
+                                <td>🥇</td>
+
+                                <td>Rahul Sharma</td>
+
+                                <td>91</td>
+
+                                <td>91%</td>
+
+                                <td><strong>972</strong></td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>🥈</td>
+
+                                <td>Priya Singh</td>
+
+                                <td>88</td>
+
+                                <td>89%</td>
+
+                                <td><strong>965</strong></td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>🥉</td>
+
+                                <td>Amit Verma</td>
+
+                                <td>85</td>
+
+                                <td>86%</td>
+
+                                <td><strong>951</strong></td>
+
+                            </tr>
+
+                            {% endif %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= RANKING SUMMARY ================= -->
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-success text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-medal me-2"></i>
+
+                    Ranking Summary
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Highest Score</span>
+
+                        <strong>972</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-success"
+
+                             style="width:97%;">
+
+                            97%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Average Score</span>
+
+                        <strong>84%</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-primary"
+
+                             style="width:84%;">
+
+                            84%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Participation</span>
+
+                        <strong>95%</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-warning"
+
+                             style="width:95%;">
+
+                            95%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= PROGRESS CARDS ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow text-center">
+
+            <div class="card-body">
+
+                <i class="fas fa-star fa-3x text-warning mb-3"></i>
+
+                <h3>24</h3>
+
+                <p class="text-muted mb-0">
+
+                    Excellent Students
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow text-center">
+
+            <div class="card-body">
+
+                <i class="fas fa-thumbs-up fa-3x text-success mb-3"></i>
+
+                <h3>108</h3>
+
+                <p class="text-muted mb-0">
+
+                    Good Performance
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow text-center">
+
+            <div class="card-body">
+
+                <i class="fas fa-user-clock fa-3x text-info mb-3"></i>
+
+                <h3>38</h3>
+
+                <p class="text-muted mb-0">
+
+                    Average Students
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow text-center">
+
+            <div class="card-body">
+
+                <i class="fas fa-user-times fa-3x text-danger mb-3"></i>
+
+                <h3>15</h3>
+
+                <p class="text-muted mb-0">
+
+                    Need Improvement
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= ACHIEVEMENT STATISTICS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-info text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-award me-2"></i>
+
+            Achievement Statistics
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row text-center">
+
+            <div class="col-md-3">
+
+                <h2 class="text-warning">
+
+                    18
+
+                </h2>
+
+                <p class="text-muted">
+
+                    Gold Badges
+
+                </p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h2 class="text-secondary">
+
+                    42
+
+                </h2>
+
+                <p class="text-muted">
+
+                    Silver Badges
+
+                </p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h2 class="text-danger">
+
+                    76
+
+                </h2>
+
+                <p class="text-muted">
+
+                    Bronze Badges
+
+                </p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h2 class="text-success">
+
+                    91
+
+                </h2>
+
+                <p class="text-muted">
+
+                    Perfect Scores
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="alert alert-primary border-0 shadow mt-4 mb-4">
+
+    <h5>
+
+        <i class="fas fa-chart-line me-2"></i>
+
+        Class Performance Summary
+
+    </h5>
+
+    <p class="mb-0">
+
+        The leaderboard highlights the highest-performing students based on
+        solved problems, acceptance rate, and coding score. Achievement
+        statistics help instructors identify top performers as well as
+        students who may benefit from additional guidance.
+
+    </p>
+
+</div>
+<!-- ================= SUBMISSION ANALYTICS ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-primary text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-chart-line me-2"></i>
+
+                    Weekly Submission Trend
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <canvas id="submissionTrendChart" height="120"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= SUBMISSION SUMMARY ================= -->
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-success text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-check-circle me-2"></i>
+
+                    Submission Summary
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Accepted</span>
+
+                        <strong>78%</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-success"
+
+                             style="width:78%;">
+
+                            78%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Wrong Answer</span>
+
+                        <strong>14%</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-danger"
+
+                             style="width:14%;">
+
+                            14%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Runtime Error</span>
+
+                        <strong>8%</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-warning"
+
+                             style="width:8%;">
+
+                            8%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= RECENT STUDENT ACTIVITY ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-7">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-info text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-user-clock me-2"></i>
+
+                    Recent Student Activity
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="list-group list-group-flush">
+
+                    <div class="list-group-item d-flex justify-content-between">
+
+                        <div>
+
+                            <strong>Rahul Sharma</strong>
+
+                            solved
+
+                            <strong>Graph Traversal</strong>
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            2 min ago
+
+                        </small>
+
+                    </div>
+
+                    <div class="list-group-item d-flex justify-content-between">
+
+                        <div>
+
+                            <strong>Priya Singh</strong>
+
+                            submitted
+
+                            <strong>Dynamic Programming</strong>
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            7 min ago
+
+                        </small>
+
+                    </div>
+
+                    <div class="list-group-item d-flex justify-content-between">
+
+                        <div>
+
+                            <strong>Amit Verma</strong>
+
+                            earned
+
+                            <span class="badge bg-warning text-dark">
+
+                                Gold Badge
+
+                            </span>
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            15 min ago
+
+                        </small>
+
+                    </div>
+
+                    <div class="list-group-item d-flex justify-content-between">
+
+                        <div>
+
+                            <strong>Neha Patel</strong>
+
+                            joined today's coding contest
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            20 min ago
+
+                        </small>
+
+                    </div>
+
+                    <div class="list-group-item d-flex justify-content-between">
+
+                        <div>
+
+                            <strong>Rohit Kumar</strong>
+
+                            completed Assignment 4
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            35 min ago
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= RUNTIME & MEMORY ================= -->
+
+    <div class="col-lg-5">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-warning">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-microchip me-2"></i>
+
+                    Runtime & Memory
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <table class="table table-borderless">
+
+                    <tr>
+
+                        <th>Fastest Runtime</th>
+
+                        <td class="text-success">
+
+                            9 ms
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Average Runtime</th>
+
+                        <td>
+
+                            31 ms
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Highest Memory</th>
+
+                        <td>
+
+                            64 MB
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Average Memory</th>
+
+                        <td>
+
+                            18 MB
+
+                        </td>
+
+                    </tr>
+
+                </table>
+
+                <hr>
+
+                <canvas id="runtimeChart" height="140"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= PERFORMANCE TREND ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-chart-area me-2"></i>
+
+            Class Performance Trend
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <canvas id="performanceTrendChart" height="110"></canvas>
+
+    </div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="alert alert-success border-0 shadow mt-4 mb-4">
+
+    <h5>
+
+        <i class="fas fa-chart-bar me-2"></i>
+
+        Submission Analytics Summary
+
+    </h5>
+
+    <p class="mb-0">
+
+        This section provides insights into weekly submission activity,
+        student participation, acceptance rates, runtime statistics,
+        memory consumption, and overall class performance trends.
+        These metrics help instructors monitor engagement and identify
+        opportunities for additional academic support.
+
+    </p>
+
+</div>
+<!-- ================= ATTENDANCE DASHBOARD ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-primary text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-calendar-check me-2"></i>
+
+                    Attendance Overview
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <table class="table table-borderless">
+
+                    <tr>
+                        <th>Overall Attendance</th>
+                        <td><strong>92%</strong></td>
+                    </tr>
+
+                    <tr>
+                        <th>Present Today</th>
+                        <td>171 Students</td>
+                    </tr>
+
+                    <tr>
+                        <th>Absent Today</th>
+                        <td>14 Students</td>
+                    </tr>
+
+                    <tr>
+                        <th>Late Arrivals</th>
+                        <td>5 Students</td>
+                    </tr>
+
+                </table>
+
+                <hr>
+
+                <canvas id="attendanceChart" height="180"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= ASSIGNMENT PROGRESS ================= -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-success text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-tasks me-2"></i>
+
+                    Assignment Progress
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Assignment 1</span>
+
+                        <strong>100%</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-success"
+                             style="width:100%;">
+
+                            100%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Assignment 2</span>
+
+                        <strong>92%</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-primary"
+                             style="width:92%;">
+
+                            92%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Assignment 3</span>
+
+                        <strong>81%</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-warning"
+                             style="width:81%;">
+
+                            81%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Assignment 4</span>
+
+                        <strong>68%</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-danger"
+                             style="width:68%;">
+
+                            68%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= LEADERBOARD ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-warning">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-trophy me-2"></i>
+
+            Leaderboard
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>Rank</th>
+                        <th>Student</th>
+                        <th>Solved</th>
+                        <th>Score</th>
+                        <th>Streak</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+
+                        <td>🥇</td>
+
+                        <td>Rahul Sharma</td>
+
+                        <td>91</td>
+
+                        <td>972</td>
+
+                        <td>
+
+                            <span class="badge bg-success">
+
+                                🔥 28 Days
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>🥈</td>
+
+                        <td>Priya Singh</td>
+
+                        <td>88</td>
+
+                        <td>965</td>
+
+                        <td>
+
+                            <span class="badge bg-primary">
+
+                                🔥 24 Days
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>🥉</td>
+
+                        <td>Amit Verma</td>
+
+                        <td>85</td>
+
+                        <td>951</td>
+
+                        <td>
+
+                            <span class="badge bg-warning text-dark">
+
+                                🔥 20 Days
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= STUDENT COMPARISON ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-info text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-balance-scale me-2"></i>
+
+                    Student Comparison
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <canvas id="comparisonChart" height="120"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= TOP CONTRIBUTORS ================= -->
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-dark text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-users me-2"></i>
+
+                    Top Contributors
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <ul class="list-group">
+
+                    <li class="list-group-item d-flex justify-content-between">
+
+                        Rahul Sharma
+
+                        <span class="badge bg-success">
+
+                            91 Problems
+
+                        </span>
+
+                    </li>
+
+                    <li class="list-group-item d-flex justify-content-between">
+
+                        Priya Singh
+
+                        <span class="badge bg-primary">
+
+                            88 Problems
+
+                        </span>
+
+                    </li>
+
+                    <li class="list-group-item d-flex justify-content-between">
+
+                        Amit Verma
+
+                        <span class="badge bg-warning text-dark">
+
+                            85 Problems
+
+                        </span>
+
+                    </li>
+
+                    <li class="list-group-item d-flex justify-content-between">
+
+                        Neha Patel
+
+                        <span class="badge bg-info">
+
+                            81 Problems
+
+                        </span>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="alert alert-primary border-0 shadow mt-4 mb-4">
+
+    <h5>
+
+        <i class="fas fa-info-circle me-2"></i>
+
+        Attendance & Progress Summary
+
+    </h5>
+
+    <p class="mb-0">
+
+        Monitor attendance, assignment completion,
+        coding streaks, leaderboard rankings,
+        and contribution statistics to evaluate
+        student engagement throughout the semester.
+
+    </p>
+
+</div>
+<!-- ================= STUDENT PROFILE MODAL ================= -->
+
+<div class="modal fade"
+     id="studentProfileModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-xl">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+
+                <h5 class="modal-title">
+
+                    <i class="fas fa-user-graduate me-2"></i>
+
+                    Student Profile
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <div class="col-md-4 text-center">
+
+                        <img
+                            src="{{ url_for('static', filename='images/default-avatar.png') }}"
+                            class="rounded-circle img-thumbnail mb-3"
+                            width="160"
+                            height="160"
+                            alt="Student">
+
+                        <h4 id="profileStudentName">
+
+                            Rahul Sharma
+
+                        </h4>
+
+                        <span class="badge bg-success">
+
+                            Active
+
+                        </span>
+
+                    </div>
+
+                    <div class="col-md-8">
+
+                        <table class="table table-borderless">
+
+                            <tr>
+                                <th>Roll Number</th>
+                                <td id="profileRoll">2024CSE001</td>
+                            </tr>
+
+                            <tr>
+                                <th>Email</th>
+                                <td id="profileEmail">rahul@example.com</td>
+                            </tr>
+
+                            <tr>
+                                <th>Branch</th>
+                                <td>CSE</td>
+                            </tr>
+
+                            <tr>
+                                <th>Section</th>
+                                <td>A</td>
+                            </tr>
+
+                            <tr>
+                                <th>Problems Solved</th>
+                                <td>91</td>
+                            </tr>
+
+                            <tr>
+                                <th>Acceptance Rate</th>
+                                <td>91%</td>
+                            </tr>
+
+                            <tr>
+                                <th>Total Score</th>
+                                <td>972</td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <canvas
+                    id="studentProfileChart"
+                    height="120">
+
+                </canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= PERFORMANCE MODAL ================= -->
+
+<div class="modal fade"
+     id="performanceModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-success text-white">
+
+                <h5 class="modal-title">
+
+                    <i class="fas fa-chart-line me-2"></i>
+
+                    Performance Details
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <table class="table table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Category</th>
+
+                            <th>Solved</th>
+
+                            <th>Accuracy</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Arrays</td>
+                            <td>25</td>
+                            <td>95%</td>
+                        </tr>
+
+                        <tr>
+                            <td>Strings</td>
+                            <td>18</td>
+                            <td>90%</td>
+                        </tr>
+
+                        <tr>
+                            <td>Trees</td>
+                            <td>15</td>
+                            <td>84%</td>
+                        </tr>
+
+                        <tr>
+                            <td>Graphs</td>
+                            <td>13</td>
+                            <td>80%</td>
+                        </tr>
+
+                        <tr>
+                            <td>Dynamic Programming</td>
+                            <td>20</td>
+                            <td>86%</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+                <canvas
+                    id="performanceModalChart"
+                    height="120">
+
+                </canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= EMAIL MODAL ================= -->
+
+<div class="modal fade"
+     id="emailModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-info text-white">
+
+                <h5 class="modal-title">
+
+                    <i class="fas fa-envelope me-2"></i>
+
+                    Send Email
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Recipient
+
+                    </label>
+
+                    <input
+                        type="email"
+                        class="form-control"
+                        value="student@example.com">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Subject
+
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Subject">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Message
+
+                    </label>
+
+                    <textarea
+                        class="form-control"
+                        rows="8"
+                        placeholder="Write your message..."></textarea>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    class="btn btn-primary">
+
+                    <i class="fas fa-paper-plane me-2"></i>
+
+                    Send Email
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SUBMISSION HISTORY MODAL ================= -->
+
+<div class="modal fade"
+     id="submissionHistoryModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-xl">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-dark text-white">
+
+                <h5 class="modal-title">
+
+                    <i class="fas fa-history me-2"></i>
+
+                    Submission History
+
+                </h5>
+
+                <button
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <table class="table table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Date</th>
+
+                            <th>Problem</th>
+
+                            <th>Language</th>
+
+                            <th>Status</th>
+
+                            <th>Runtime</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>10 Jul 2026</td>
+                            <td>Two Sum</td>
+                            <td>Python</td>
+                            <td><span class="badge bg-success">Accepted</span></td>
+                            <td>21 ms</td>
+                        </tr>
+
+                        <tr>
+                            <td>09 Jul 2026</td>
+                            <td>Binary Search</td>
+                            <td>Java</td>
+                            <td><span class="badge bg-danger">Wrong Answer</span></td>
+                            <td>30 ms</td>
+                        </tr>
+
+                        <tr>
+                            <td>08 Jul 2026</td>
+                            <td>Graph Traversal</td>
+                            <td>C++</td>
+                            <td><span class="badge bg-success">Accepted</span></td>
+                            <td>15 ms</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= TEACHER NOTES ================= -->
+
+<div class="modal fade"
+     id="teacherNotesModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-warning">
+
+                <h5 class="modal-title">
+
+                    <i class="fas fa-sticky-note me-2"></i>
+
+                    Teacher Notes
+
+                </h5>
+
+                <button
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <textarea
+                    class="form-control"
+                    rows="10"
+                    placeholder="Private notes about this student..."></textarea>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Close
+
+                </button>
+
+                <button
+                    class="btn btn-success">
+
+                    Save Notes
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= EXPORT REPORTS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-file-export me-2"></i>
+
+            Export Reports
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-md-3">
+
+                <button class="btn btn-success w-100">
+
+                    <i class="fas fa-file-csv me-2"></i>
+
+                    Export CSV
+
+                </button>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <button class="btn btn-danger w-100">
+
+                    <i class="fas fa-file-pdf me-2"></i>
+
+                    Export PDF
+
+                </button>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <button class="btn btn-primary w-100">
+
+                    <i class="fas fa-file-excel me-2"></i>
+
+                    Export Excel
+
+                </button>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <button class="btn btn-dark w-100">
+
+                    <i class="fas fa-print me-2"></i>
+
+                    Print Report
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= BULK ACTIONS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-success text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-users-cog me-2"></i>
+
+            Bulk Student Actions
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+
+                <button class="btn btn-outline-primary w-100">
+
+                    <i class="fas fa-envelope me-2"></i>
+
+                    Send Bulk Email
+
+                </button>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <button class="btn btn-outline-success w-100">
+
+                    <i class="fas fa-award me-2"></i>
+
+                    Award Certificates
+
+                </button>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <button class="btn btn-outline-danger w-100">
+
+                    <i class="fas fa-ban me-2"></i>
+
+                    Suspend Selected
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= NOTIFICATION CENTER ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-warning">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-bell me-2"></i>
+
+            Notification Center
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="list-group">
+
+            <div class="list-group-item">
+
+                <i class="fas fa-check-circle text-success me-2"></i>
+
+                15 students completed Assignment 4 today.
+
+            </div>
+
+            <div class="list-group-item">
+
+                <i class="fas fa-exclamation-circle text-warning me-2"></i>
+
+                6 students have not submitted Assignment 4.
+
+            </div>
+
+            <div class="list-group-item">
+
+                <i class="fas fa-user-clock text-primary me-2"></i>
+
+                Coding contest begins tomorrow at 10:00 AM.
+
+            </div>
+
+            <div class="list-group-item">
+
+                <i class="fas fa-star text-warning me-2"></i>
+
+                Rahul Sharma reached a 30-day coding streak.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= CERTIFICATES ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-info text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-certificate me-2"></i>
+
+            Certificates
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <button class="btn btn-outline-success w-100">
+
+                    Generate Excellence Certificates
+
+                </button>
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <button class="btn btn-outline-primary w-100">
+
+                    Generate Participation Certificates
+
+                </button>
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <button class="btn btn-outline-warning w-100">
+
+                    Generate Contest Certificates
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= REPORT GENERATOR ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-chart-bar me-2"></i>
+
+            Student Report Generator
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <label class="form-label">
+
+                    Report Type
+
+                </label>
+
+                <select class="form-select">
+
+                    <option>Overall Performance</option>
+                    <option>Assignment Report</option>
+                    <option>Attendance Report</option>
+                    <option>Submission Report</option>
+
+                </select>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <label class="form-label">
+
+                    Time Period
+
+                </label>
+
+                <select class="form-select">
+
+                    <option>This Week</option>
+                    <option>This Month</option>
+                    <option>This Semester</option>
+                    <option>Entire Course</option>
+
+                </select>
+
+            </div>
+
+            <div class="col-md-4 d-flex align-items-end">
+
+                <button class="btn btn-primary w-100">
+
+                    <i class="fas fa-download me-2"></i>
+
+                    Generate Report
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="alert alert-success border-0 shadow mt-4 mb-4">
+
+    <h5>
+
+        <i class="fas fa-info-circle me-2"></i>
+
+        Report & Communication Center
+
+    </h5>
+
+    <p class="mb-0">
+
+        Generate reports, send bulk emails, create certificates,
+        manage notifications, and perform administrative actions
+        for multiple students from a single dashboard.
+
+    </p>
+
+</div>
+<!-- ================= AI INSIGHTS ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-primary text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-robot me-2"></i>
+
+                    AI Learning Insights
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="alert alert-success">
+
+                    <i class="fas fa-arrow-up me-2"></i>
+
+                    Overall class performance has improved by
+                    <strong>11%</strong> over the last four weeks.
+
+                </div>
+
+                <div class="alert alert-info">
+
+                    <i class="fas fa-lightbulb me-2"></i>
+
+                    Students who solve at least
+                    <strong>3 problems per week</strong>
+                    maintain an average acceptance rate above
+                    <strong>85%</strong>.
+
+                </div>
+
+                <div class="alert alert-warning">
+
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+
+                    Dynamic Programming and Graph problems continue
+                    to have the lowest success rate.
+
+                </div>
+
+                <div class="alert alert-primary mb-0">
+
+                    <i class="fas fa-chart-line me-2"></i>
+
+                    Python remains the preferred programming language,
+                    while C++ submissions show the fastest execution time.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= CLASS HEALTH ================= -->
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-success text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-heartbeat me-2"></i>
+
+                    Class Health
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Overall Progress</span>
+
+                        <strong>91%</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-success"
+                             style="width:91%;">
+
+                            91%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Assignment Completion</span>
+
+                        <strong>88%</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-primary"
+                             style="width:88%;">
+
+                            88%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <div class="d-flex justify-content-between">
+
+                        <span>Attendance</span>
+
+                        <strong>92%</strong>
+
+                    </div>
+
+                    <div class="progress mt-2">
+
+                        <div class="progress-bar bg-warning"
+                             style="width:92%;">
+
+                            92%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= AT-RISK STUDENTS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-danger text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-user-times me-2"></i>
+
+            Students Requiring Attention
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>Student</th>
+                        <th>Attendance</th>
+                        <th>Assignments</th>
+                        <th>Acceptance</th>
+                        <th>Risk Level</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+
+                        <td>Rohit Kumar</td>
+                        <td>71%</td>
+                        <td>58%</td>
+                        <td>49%</td>
+
+                        <td>
+
+                            <span class="badge bg-danger">
+
+                                High
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>Anjali Singh</td>
+                        <td>79%</td>
+                        <td>70%</td>
+                        <td>56%</td>
+
+                        <td>
+
+                            <span class="badge bg-warning text-dark">
+
+                                Medium
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>Vivek Patel</td>
+                        <td>82%</td>
+                        <td>74%</td>
+                        <td>63%</td>
+
+                        <td>
+
+                            <span class="badge bg-info">
+
+                                Low
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= LEARNING ANALYTICS ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-info text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-chart-area me-2"></i>
+
+                    Learning Analytics
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <canvas id="learningAnalyticsChart"
+                        height="220">
+
+                </canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= AI RECOMMENDATIONS ================= -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-warning">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-brain me-2"></i>
+
+                    AI Recommendations
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <ul class="list-group">
+
+                    <li class="list-group-item">
+
+                        Increase Graph practice sessions.
+
+                    </li>
+
+                    <li class="list-group-item">
+
+                        Schedule one coding contest every week.
+
+                    </li>
+
+                    <li class="list-group-item">
+
+                        Encourage students with low attendance
+                        to participate regularly.
+
+                    </li>
+
+                    <li class="list-group-item">
+
+                        Recommend Dynamic Programming revision
+                        for struggling students.
+
+                    </li>
+
+                    <li class="list-group-item">
+
+                        Send reminders to students with pending
+                        assignments.
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= PERFORMANCE PREDICTION ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-chart-line me-2"></i>
+
+            Predicted Performance
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <canvas id="predictionChart"
+                height="120">
+
+        </canvas>
+
+    </div>
+
+</div>
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="alert alert-primary border-0 shadow mt-4 mb-4">
+
+    <h5>
+
+        <i class="fas fa-info-circle me-2"></i>
+
+        AI Academic Summary
+
+    </h5>
+
+    <p class="mb-0">
+
+        AI-powered insights identify learning trends,
+        predict student performance, highlight at-risk
+        students, and recommend interventions that help
+        instructors improve engagement and academic outcomes.
+
+    </p>
+
+</div>
+<!-- ================= ADVANCED SEARCH & BULK ACTIONS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-search-plus me-2"></i>
+
+            Advanced Search & Bulk Actions
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+
+                <label class="form-label">Search by Name / Roll No.</label>
+
+                <input type="text"
+                       class="form-control"
+                       id="advancedSearch"
+                       placeholder="Search students...">
+
+            </div>
+
+            <div class="col-md-3">
+
+                <label class="form-label">Programming Language</label>
+
+                <select class="form-select">
+
+                    <option>All Languages</option>
+                    <option>Python</option>
+                    <option>Java</option>
+                    <option>C</option>
+                    <option>C++</option>
+
+                </select>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <label class="form-label">Score Range</label>
+
+                <select class="form-select">
+
+                    <option>All Scores</option>
+                    <option>90 - 100</option>
+                    <option>75 - 89</option>
+                    <option>60 - 74</option>
+                    <option>Below 60</option>
+
+                </select>
+
+            </div>
+
+            <div class="col-md-2 d-grid">
+
+                <label class="form-label">&nbsp;</label>
+
+                <button class="btn btn-primary">
+
+                    <i class="fas fa-filter me-2"></i>
+
+                    Filter
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= BULK MANAGEMENT ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-success text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-tasks me-2"></i>
+
+            Bulk Student Management
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row text-center">
+
+            <div class="col-md-3 mb-3">
+
+                <button class="btn btn-outline-primary w-100">
+
+                    <i class="fas fa-envelope fa-2x mb-2"></i><br>
+
+                    Send Email
+
+                </button>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <button class="btn btn-outline-success w-100">
+
+                    <i class="fas fa-award fa-2x mb-2"></i><br>
+
+                    Award Badges
+
+                </button>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <button class="btn btn-outline-warning w-100">
+
+                    <i class="fas fa-file-export fa-2x mb-2"></i><br>
+
+                    Export Selected
+
+                </button>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <button class="btn btn-outline-danger w-100">
+
+                    <i class="fas fa-user-slash fa-2x mb-2"></i><br>
+
+                    Disable Accounts
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= DASHBOARD SUMMARY ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-body text-center">
+
+                <i class="fas fa-users text-primary fa-3x mb-3"></i>
+
+                <h3>185</h3>
+
+                <p class="text-muted">
+
+                    Total Registered Students
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-body text-center">
+
+                <i class="fas fa-code text-success fa-3x mb-3"></i>
+
+                <h3>5,284</h3>
+
+                <p class="text-muted">
+
+                    Total Code Submissions
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-body text-center">
+
+                <i class="fas fa-trophy text-warning fa-3x mb-3"></i>
+
+                <h3>91%</h3>
+
+                <p class="text-muted">
+
+                    Overall Success Rate
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= QUICK ACTION TOOLBAR ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-info text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-bolt me-2"></i>
+
+            Quick Action Toolbar
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="d-flex flex-wrap gap-2">
+
+            <button class="btn btn-primary">
+
+                <i class="fas fa-user-plus me-2"></i>
+
+                Add Student
+
+            </button>
+
+            <button class="btn btn-success">
+
+                <i class="fas fa-file-import me-2"></i>
+
+                Import Students
+
+            </button>
+
+            <button class="btn btn-warning">
+
+                <i class="fas fa-download me-2"></i>
+
+                Download Report
+
+            </button>
+
+            <button class="btn btn-danger">
+
+                <i class="fas fa-sync me-2"></i>
+
+                Refresh Data
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= NAVIGATION FOOTER ================= -->
+
+<div class="alert alert-info border-0 shadow mt-4 mb-5">
+
+    <div class="row align-items-center">
+
+        <div class="col-lg-9">
+
+            <h5>
+
+                <i class="fas fa-user-graduate me-2"></i>
+
+                Student Dashboard Complete
+
+            </h5>
+
+            <p class="mb-0">
+
+                Review student progress, monitor performance,
+                communicate with students, export reports,
+                and manage classroom activities from a single dashboard.
+
+            </p>
+
+        </div>
+
+        <div class="col-lg-3 text-end">
+
+            <a href="{{ url_for('teacher.dashboard') }}"
+               class="btn btn-primary">
+
+                <i class="fas fa-arrow-left me-2"></i>
+
+                Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ================= ADVANCED SEARCH & BULK ACTIONS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-search-plus me-2"></i>
+
+            Advanced Search & Bulk Actions
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+
+                <label class="form-label">Search by Name / Roll No.</label>
+
+                <input type="text"
+                       class="form-control"
+                       id="advancedSearch"
+                       placeholder="Search students...">
+
+            </div>
+
+            <div class="col-md-3">
+
+                <label class="form-label">Programming Language</label>
+
+                <select class="form-select">
+
+                    <option>All Languages</option>
+                    <option>Python</option>
+                    <option>Java</option>
+                    <option>C</option>
+                    <option>C++</option>
+
+                </select>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <label class="form-label">Score Range</label>
+
+                <select class="form-select">
+
+                    <option>All Scores</option>
+                    <option>90 - 100</option>
+                    <option>75 - 89</option>
+                    <option>60 - 74</option>
+                    <option>Below 60</option>
+
+                </select>
+
+            </div>
+
+            <div class="col-md-2 d-grid">
+
+                <label class="form-label">&nbsp;</label>
+
+                <button class="btn btn-primary">
+
+                    <i class="fas fa-filter me-2"></i>
+
+                    Filter
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= BULK MANAGEMENT ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-success text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-tasks me-2"></i>
+
+            Bulk Student Management
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row text-center">
+
+            <div class="col-md-3 mb-3">
+
+                <button class="btn btn-outline-primary w-100">
+
+                    <i class="fas fa-envelope fa-2x mb-2"></i><br>
+
+                    Send Email
+
+                </button>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <button class="btn btn-outline-success w-100">
+
+                    <i class="fas fa-award fa-2x mb-2"></i><br>
+
+                    Award Badges
+
+                </button>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <button class="btn btn-outline-warning w-100">
+
+                    <i class="fas fa-file-export fa-2x mb-2"></i><br>
+
+                    Export Selected
+
+                </button>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <button class="btn btn-outline-danger w-100">
+
+                    <i class="fas fa-user-slash fa-2x mb-2"></i><br>
+
+                    Disable Accounts
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= DASHBOARD SUMMARY ================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-body text-center">
+
+                <i class="fas fa-users text-primary fa-3x mb-3"></i>
+
+                <h3>185</h3>
+
+                <p class="text-muted">
+
+                    Total Registered Students
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-body text-center">
+
+                <i class="fas fa-code text-success fa-3x mb-3"></i>
+
+                <h3>5,284</h3>
+
+                <p class="text-muted">
+
+                    Total Code Submissions
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-body text-center">
+
+                <i class="fas fa-trophy text-warning fa-3x mb-3"></i>
+
+                <h3>91%</h3>
+
+                <p class="text-muted">
+
+                    Overall Success Rate
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= QUICK ACTION TOOLBAR ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+    <div class="card-header bg-info text-white">
+
+        <h5 class="mb-0">
+
+            <i class="fas fa-bolt me-2"></i>
+
+            Quick Action Toolbar
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="d-flex flex-wrap gap-2">
+
+            <button class="btn btn-primary">
+
+                <i class="fas fa-user-plus me-2"></i>
+
+                Add Student
+
+            </button>
+
+            <button class="btn btn-success">
+
+                <i class="fas fa-file-import me-2"></i>
+
+                Import Students
+
+            </button>
+
+            <button class="btn btn-warning">
+
+                <i class="fas fa-download me-2"></i>
+
+                Download Report
+
+            </button>
+
+            <button class="btn btn-danger">
+
+                <i class="fas fa-sync me-2"></i>
+
+                Refresh Data
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= NAVIGATION FOOTER ================= -->
+
+<div class="alert alert-info border-0 shadow mt-4 mb-5">
+
+    <div class="row align-items-center">
+
+        <div class="col-lg-9">
+
+            <h5>
+
+                <i class="fas fa-user-graduate me-2"></i>
+
+                Student Dashboard Complete
+
+            </h5>
+
+            <p class="mb-0">
+
+                Review student progress, monitor performance,
+                communicate with students, export reports,
+                and manage classroom activities from a single dashboard.
+
+            </p>
+
+        </div>
+
+        <div class="col-lg-3 text-end">
+
+            <a href="{{ url_for('teacher.dashboard') }}"
+               class="btn btn-primary">
+
+                <i class="fas fa-arrow-left me-2"></i>
+
+                Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,2751 @@
+{% extends "student/base_student.html" %}
+
+{% block title %}
+Leaderboard
+{% endblock %}
+
+{% block page_title %}
+Leaderboard
+{% endblock %}
+
+{% block breadcrumb %}
+
+<li class="breadcrumb-item">
+    <a href="{{ url_for('student.dashboard') }}">
+        Dashboard
+    </a>
+</li>
+
+<li class="breadcrumb-item active">
+    Leaderboard
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= HEADER ================= -->
+
+<div class="card shadow border-0 mb-4">
+
+<div class="card-body">
+
+<div class="row align-items-center">
+
+<div class="col-lg-8">
+
+<h2 class="fw-bold">
+
+🏆 Programming Leaderboard
+
+</h2>
+
+<p class="text-muted mb-0">
+
+Compete with other students and improve your ranking by solving more programming problems.
+
+</p>
+
+</div>
+
+<div class="col-lg-4 text-end">
+
+<a href="{{ url_for('student.problems') }}"
+class="btn btn-primary btn-lg">
+
+<i class="fas fa-code me-2"></i>
+
+Solve More Problems
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= CURRENT RANK ================= -->
+
+<div class="row g-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card shadow border-0 text-center">
+
+<div class="card-body">
+
+<i class="fas fa-trophy fa-3x text-warning mb-3"></i>
+
+<h3>
+
+#{{ current_rank if current_rank else 12 }}
+
+</h3>
+
+<p class="text-muted">
+
+Current Rank
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card shadow border-0 text-center">
+
+<div class="card-body">
+
+<i class="fas fa-star fa-3x text-primary mb-3"></i>
+
+<h3>
+
+{{ total_points if total_points else 1240 }}
+
+</h3>
+
+<p class="text-muted">
+
+Total Points
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card shadow border-0 text-center">
+
+<div class="card-body">
+
+<i class="fas fa-fire fa-3x text-danger mb-3"></i>
+
+<h3>
+
+{{ streak if streak else 15 }}
+
+Days
+
+</h3>
+
+<p class="text-muted">
+
+Coding Streak
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card shadow border-0 text-center">
+
+<div class="card-body">
+
+<i class="fas fa-code fa-3x text-success mb-3"></i>
+
+<h3>
+
+{{ solved_count if solved_count else 98 }}
+
+</h3>
+
+<p class="text-muted">
+
+Problems Solved
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TOP 3 PODIUM ================= -->
+
+<div class="row mt-5 justify-content-center">
+
+<!-- Second Place -->
+
+<div class="col-lg-3 col-md-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<div class="display-1">
+
+🥈
+
+</div>
+
+<h4>
+
+Priya Singh
+
+</h4>
+
+<p class="text-muted">
+
+960 Points
+
+</p>
+
+<span class="badge bg-secondary">
+
+Rank #2
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- First Place -->
+
+<div class="col-lg-3 col-md-4">
+
+<div class="card border-0 shadow-lg text-center border border-warning">
+
+<div class="card-body">
+
+<div class="display-1">
+
+🥇
+
+</div>
+
+<h3 class="fw-bold">
+
+Rahul Sharma
+
+</h3>
+
+<p class="text-muted">
+
+980 Points
+
+</p>
+
+<span class="badge bg-warning text-dark">
+
+Champion
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Third Place -->
+
+<div class="col-lg-3 col-md-4">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<div class="display-1">
+
+🥉
+
+</div>
+
+<h4>
+
+Aman Verma
+
+</h4>
+
+<p class="text-muted">
+
+940 Points
+
+</p>
+
+<span class="badge bg-danger">
+
+Rank #3
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK STATS ================= -->
+
+<div class="row mt-5">
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-body text-center">
+
+<i class="fas fa-users fa-3x text-primary mb-3"></i>
+
+<h2>
+
+250+
+
+</h2>
+
+<p class="text-muted">
+
+Active Students
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-body text-center">
+
+<i class="fas fa-laptop-code fa-3x text-success mb-3"></i>
+
+<h2>
+
+500+
+
+</h2>
+
+<p class="text-muted">
+
+Problems Solved Today
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-body text-center">
+
+<i class="fas fa-medal fa-3x text-warning mb-3"></i>
+
+<h2>
+
+50+
+
+</h2>
+
+<p class="text-muted">
+
+Achievements Awarded
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= SEARCH & FILTER ================= -->
+
+<div class="card shadow border-0 mt-4">
+
+<div class="card-body">
+
+<div class="row g-3 align-items-center">
+
+<div class="col-lg-5">
+
+<div class="input-group">
+
+<span class="input-group-text">
+
+<i class="fas fa-search"></i>
+
+</span>
+
+<input
+type="text"
+class="form-control"
+id="searchInput"
+placeholder="Search student...">
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<select
+class="form-select"
+id="courseFilter">
+
+<option value="">
+
+All Courses
+
+</option>
+
+<option>
+
+Python
+
+</option>
+
+<option>
+
+Java
+
+</option>
+
+<option>
+
+C Programming
+
+</option>
+
+<option>
+
+C++
+
+</option>
+
+</select>
+
+</div>
+
+<div class="col-lg-2">
+
+<select
+class="form-select"
+id="batchFilter">
+
+<option value="">
+
+All Batches
+
+</option>
+
+<option>
+
+2024
+
+</option>
+
+<option>
+
+2025
+
+</option>
+
+<option>
+
+2026
+
+</option>
+
+</select>
+
+</div>
+
+<div class="col-lg-2">
+
+<button
+class="btn btn-primary w-100">
+
+<i class="fas fa-filter me-2"></i>
+
+Apply
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= LEADERBOARD TABLE ================= -->
+
+<div class="card shadow border-0 mt-4">
+
+<div class="card-header bg-white d-flex justify-content-between">
+
+<h5 class="mb-0">
+
+Complete Leaderboard
+
+</h5>
+
+<span class="badge bg-primary">
+
+Top Students
+
+</span>
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table
+class="table table-hover align-middle"
+id="leaderboardTable">
+
+<thead class="table-light">
+
+<tr>
+
+<th>
+
+Rank
+
+</th>
+
+<th>
+
+Student
+
+</th>
+
+<th>
+
+Course
+
+</th>
+
+<th>
+
+Solved
+
+</th>
+
+<th>
+
+Accuracy
+
+</th>
+
+<th>
+
+Points
+
+</th>
+
+<th>
+
+Badge
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>
+
+🥇 1
+
+</td>
+
+<td>
+
+Rahul Sharma
+
+</td>
+
+<td>
+
+Python
+
+</td>
+
+<td>
+
+145
+
+</td>
+
+<td>
+
+98%
+
+</td>
+
+<td>
+
+980
+
+</td>
+
+<td>
+
+<span class="badge bg-warning text-dark">
+
+Champion
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+🥈 2
+
+</td>
+
+<td>
+
+Priya Singh
+
+</td>
+
+<td>
+
+Java
+
+</td>
+
+<td>
+
+140
+
+</td>
+
+<td>
+
+97%
+
+</td>
+
+<td>
+
+960
+
+</td>
+
+<td>
+
+<span class="badge bg-secondary">
+
+Elite
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+🥉 3
+
+</td>
+
+<td>
+
+Aman Verma
+
+</td>
+
+<td>
+
+C++
+
+</td>
+
+<td>
+
+138
+
+</td>
+
+<td>
+
+96%
+
+</td>
+
+<td>
+
+940
+
+</td>
+
+<td>
+
+<span class="badge bg-danger">
+
+Master
+
+</span>
+
+</td>
+
+</tr>
+
+<tr class="table-primary">
+
+<td>
+
+{{ current_rank if current_rank else 12 }}
+
+</td>
+
+<td>
+
+<strong>
+
+{{ session.get('student_name','You') }}
+
+</strong>
+
+</td>
+
+<td>
+
+Python
+
+</td>
+
+<td>
+
+{{ solved_count if solved_count else 98 }}
+
+</td>
+
+<td>
+
+92%
+
+</td>
+
+<td>
+
+{{ total_points if total_points else 1240 }}
+
+</td>
+
+<td>
+
+<span class="badge bg-primary">
+
+You
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+13
+
+</td>
+
+<td>
+
+Rohit Kumar
+
+</td>
+
+<td>
+
+Python
+
+</td>
+
+<td>
+
+96
+
+</td>
+
+<td>
+
+91%
+
+</td>
+
+<td>
+
+1220
+
+</td>
+
+<td>
+
+<span class="badge bg-success">
+
+Expert
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+14
+
+</td>
+
+<td>
+
+Sneha Patel
+
+</td>
+
+<td>
+
+Java
+
+</td>
+
+<td>
+
+95
+
+</td>
+
+<td>
+
+90%
+
+</td>
+
+<td>
+
+1195
+
+</td>
+
+<td>
+
+<span class="badge bg-info">
+
+Advanced
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+15
+
+</td>
+
+<td>
+
+Akash Gupta
+
+</td>
+
+<td>
+
+C
+
+</td>
+
+<td>
+
+94
+
+</td>
+
+<td>
+
+90%
+
+</td>
+
+<td>
+
+1180
+
+</td>
+
+<td>
+
+<span class="badge bg-dark">
+
+Pro
+
+</span>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PAGINATION ================= -->
+
+<nav class="mt-4">
+
+<ul class="pagination justify-content-center">
+
+<li class="page-item disabled">
+
+<a class="page-link">
+
+Previous
+
+</a>
+
+</li>
+
+<li class="page-item active">
+
+<a class="page-link">
+
+1
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link">
+
+2
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link">
+
+3
+
+</a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link">
+
+Next
+
+</a>
+
+</li>
+
+</ul>
+
+</nav>
+<!-- ================= LEADERBOARD TABS ================= -->
+
+<div class="card border-0 shadow mt-4">
+
+<div class="card-header bg-white">
+
+<ul class="nav nav-tabs card-header-tabs" id="leaderboardTabs">
+
+<li class="nav-item">
+
+<button class="nav-link active"
+data-bs-toggle="tab"
+data-bs-target="#weekly">
+
+Weekly
+
+</button>
+
+</li>
+
+<li class="nav-item">
+
+<button class="nav-link"
+data-bs-toggle="tab"
+data-bs-target="#monthly">
+
+Monthly
+
+</button>
+
+</li>
+
+<li class="nav-item">
+
+<button class="nav-link"
+data-bs-toggle="tab"
+data-bs-target="#alltime">
+
+All Time
+
+</button>
+
+</li>
+
+</ul>
+
+</div>
+
+<div class="card-body">
+
+<div class="tab-content">
+
+<!-- Weekly -->
+
+<div class="tab-pane fade show active"
+id="weekly">
+
+<div class="row text-center">
+
+<div class="col-md-4">
+
+<h2 class="text-success">
+
+52
+
+</h2>
+
+<p>
+
+Problems Solved
+
+</p>
+
+</div>
+
+<div class="col-md-4">
+
+<h2 class="text-primary">
+
+640
+
+</h2>
+
+<p>
+
+Points Earned
+
+</p>
+
+</div>
+
+<div class="col-md-4">
+
+<h2 class="text-warning">
+
++5
+
+</h2>
+
+<p>
+
+Rank Improved
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Monthly -->
+
+<div class="tab-pane fade"
+id="monthly">
+
+<div class="row text-center">
+
+<div class="col-md-4">
+
+<h2 class="text-success">
+
+186
+
+</h2>
+
+<p>
+
+Problems Solved
+
+</p>
+
+</div>
+
+<div class="col-md-4">
+
+<h2 class="text-primary">
+
+2140
+
+</h2>
+
+<p>
+
+Points Earned
+
+</p>
+
+</div>
+
+<div class="col-md-4">
+
+<h2 class="text-danger">
+
++12
+
+</h2>
+
+<p>
+
+Rank Improved
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- All Time -->
+
+<div class="tab-pane fade"
+id="alltime">
+
+<div class="row text-center">
+
+<div class="col-md-4">
+
+<h2 class="text-success">
+
+982
+
+</h2>
+
+<p>
+
+Problems Solved
+
+</p>
+
+</div>
+
+<div class="col-md-4">
+
+<h2 class="text-primary">
+
+12400
+
+</h2>
+
+<p>
+
+Points Earned
+
+</p>
+
+</div>
+
+<div class="col-md-4">
+
+<h2 class="text-warning">
+
+Top 15
+
+</h2>
+
+<p>
+
+Overall Rank
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PERFORMANCE SUMMARY ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-code fa-3x text-primary mb-3"></i>
+
+<h3>
+
+{{ solved_count if solved_count else 98 }}
+
+</h3>
+
+<p class="text-muted">
+
+Problems Solved
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+
+<h3>
+
+92%
+
+</h3>
+
+<p class="text-muted">
+
+Acceptance Rate
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-fire fa-3x text-danger mb-3"></i>
+
+<h3>
+
+15 Days
+
+</h3>
+
+<p class="text-muted">
+
+Coding Streak
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card border-0 shadow text-center">
+
+<div class="card-body">
+
+<i class="fas fa-award fa-3x text-warning mb-3"></i>
+
+<h3>
+
+8
+
+</h3>
+
+<p class="text-muted">
+
+Badges Earned
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RANK MOVEMENT ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Rank Movement
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="list-group">
+
+<li class="list-group-item d-flex justify-content-between">
+
+Current Rank
+
+<span class="badge bg-primary">
+
+#{{ current_rank if current_rank else 12 }}
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Previous Week
+
+<span class="badge bg-success">
+
+#17
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Improvement
+
+<span class="badge bg-warning text-dark">
+
+▲ 5 Places
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Best Rank
+
+<span class="badge bg-info">
+
+#9
+
+</span>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= PERSONAL SUMMARY ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Personal Summary
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-3">
+
+<strong>
+
+Current Level
+
+</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-success"
+
+style="width:78%;">
+
+Level 7
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<strong>
+
+Next Badge Progress
+
+</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-primary"
+
+style="width:64%;">
+
+64%
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<strong>
+
+Target Rank
+
+</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-warning"
+
+style="width:55%;">
+
+Top 10
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= ACHIEVEMENT BADGES ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+🏅 Achievement Badges
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-4 mb-4">
+
+<i class="fas fa-medal fa-3x text-warning"></i>
+
+<h6 class="mt-2">
+
+Problem Solver
+
+</h6>
+
+<small class="text-muted">
+
+100 Problems
+
+</small>
+
+</div>
+
+<div class="col-4 mb-4">
+
+<i class="fas fa-fire fa-3x text-danger"></i>
+
+<h6 class="mt-2">
+
+Hot Streak
+
+</h6>
+
+<small class="text-muted">
+
+15 Days
+
+</small>
+
+</div>
+
+<div class="col-4 mb-4">
+
+<i class="fas fa-bolt fa-3x text-primary"></i>
+
+<h6 class="mt-2">
+
+Fast Coder
+
+</h6>
+
+<small class="text-muted">
+
+&lt;0.1 sec
+
+</small>
+
+</div>
+
+<div class="col-4">
+
+<i class="fas fa-crown fa-3x text-warning"></i>
+
+<h6 class="mt-2">
+
+Elite
+
+</h6>
+
+<small class="text-muted">
+
+Top 10%
+
+</small>
+
+</div>
+
+<div class="col-4">
+
+<i class="fas fa-brain fa-3x text-success"></i>
+
+<h6 class="mt-2">
+
+DSA Master
+
+</h6>
+
+<small class="text-muted">
+
+250 Problems
+
+</small>
+
+</div>
+
+<div class="col-4">
+
+<i class="fas fa-code fa-3x text-info"></i>
+
+<h6 class="mt-2">
+
+Python Expert
+
+</h6>
+
+<small class="text-muted">
+
+Level 5
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= HALL OF FAME ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+🌟 Hall of Fame
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="list-group">
+
+<div class="list-group-item d-flex justify-content-between">
+
+<span>
+
+🥇 Rahul Sharma
+
+</span>
+
+<span class="badge bg-warning text-dark">
+
+980 pts
+
+</span>
+
+</div>
+
+<div class="list-group-item d-flex justify-content-between">
+
+<span>
+
+🥈 Priya Singh
+
+</span>
+
+<span class="badge bg-secondary">
+
+960 pts
+
+</span>
+
+</div>
+
+<div class="list-group-item d-flex justify-content-between">
+
+<span>
+
+🥉 Aman Verma
+
+</span>
+
+<span class="badge bg-danger">
+
+940 pts
+
+</span>
+
+</div>
+
+<div class="list-group-item d-flex justify-content-between">
+
+<span>
+
+⭐ Best Streak
+
+</span>
+
+<span>
+
+30 Days
+
+</span>
+
+</div>
+
+<div class="list-group-item d-flex justify-content-between">
+
+<span>
+
+🚀 Fastest Submission
+
+</span>
+
+<span>
+
+0.02 sec
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= RECENT RANK CHANGES ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+📈 Recent Rank Changes
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-sm">
+
+<thead>
+
+<tr>
+
+<th>
+
+Student
+
+</th>
+
+<th>
+
+Movement
+
+</th>
+
+<th>
+
+Rank
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>
+
+Rahul Sharma
+
+</td>
+
+<td>
+
+<span class="text-success">
+
+▲ +2
+
+</span>
+
+</td>
+
+<td>
+
+#1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+{{ session.get('student_name','You') }}
+
+</td>
+
+<td>
+
+<span class="text-success">
+
+▲ +5
+
+</span>
+
+</td>
+
+<td>
+
+#{{ current_rank if current_rank else 12 }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+Sneha Patel
+
+</td>
+
+<td>
+
+<span class="text-danger">
+
+▼ -1
+
+</span>
+
+</td>
+
+<td>
+
+#14
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+Akash Gupta
+
+</td>
+
+<td>
+
+<span class="text-success">
+
+▲ +3
+
+</span>
+
+</td>
+
+<td>
+
+#15
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TOP CONTRIBUTORS ================= -->
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+👑 Top Contributors
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<ul class="list-group">
+
+<li class="list-group-item d-flex justify-content-between">
+
+Problem Discussions
+
+<span class="badge bg-primary">
+
+Rahul
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Editorials Written
+
+<span class="badge bg-success">
+
+Priya
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Fastest Solutions
+
+<span class="badge bg-warning text-dark">
+
+Aman
+
+</span>
+
+</li>
+
+<li class="list-group-item d-flex justify-content-between">
+
+Most Helpful
+
+<span class="badge bg-info">
+
+Devanshu
+
+</span>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= MILESTONES ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+🎯 Upcoming Milestones
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="row text-center">
+
+<div class="col-md-3">
+
+<h4 class="text-primary">
+
+100
+
+</h4>
+
+<p>
+
+Problems Solved
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h4 class="text-success">
+
+1500
+
+</h4>
+
+<p>
+
+Total Points
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h4 class="text-warning">
+
+Top 10
+
+</h4>
+
+<p>
+
+Leaderboard Goal
+
+</p>
+
+</div>
+
+<div class="col-md-3">
+
+<h4 class="text-danger">
+
+30 Days
+
+</h4>
+
+<p>
+
+Coding Streak
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- ================= CHART.JS ================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- ================= CHART SECTION ================= -->
+
+<div class="row mt-4">
+
+    <!-- Rank Distribution -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-white">
+
+                <h5 class="mb-0">
+
+                    Rank Distribution
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <canvas id="rankChart" height="250"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Score Progress -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow">
+
+            <div class="card-header bg-white">
+
+                <h5 class="mb-0">
+
+                    Score Progress
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <canvas id="scoreChart" height="250"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= WEEKLY PERFORMANCE ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Weekly Performance
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<canvas id="weeklyChart" height="120"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= COMPARISON ================= -->
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Comparison
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-4">
+
+<strong>
+
+Your Score
+
+</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-primary"
+
+style="width:82%;">
+
+1240
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<strong>
+
+Top Student
+
+</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-success"
+
+style="width:98%;">
+
+1480
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<strong>
+
+Class Average
+
+</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-warning"
+
+style="width:68%;">
+
+980
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= MONTHLY TREND ================= -->
+
+<div class="row mt-4 mb-4">
+
+<div class="col-lg-12">
+
+<div class="card border-0 shadow">
+
+<div class="card-header bg-white">
+
+<h5 class="mb-0">
+
+Monthly Leaderboard Trend
+
+</h5>
+
+</div>
+
+<div class="card-body">
+
+<canvas id="trendChart" height="90"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= CHART INITIALIZATION ================= -->
+
+<script>
+
+// Rank Distribution
+
+new Chart(document.getElementById("rankChart"),{
+
+type:"doughnut",
+
+data:{
+
+labels:["Top 10","Top 25","Top 50","Others"],
+
+datasets:[{
+
+data:[10,15,25,50],
+
+backgroundColor:[
+
+"#f59e0b",
+
+"#2563eb",
+
+"#16a34a",
+
+"#cbd5e1"
+
+]
+
+}]
+
+}
+
+});
+
+// Score Progress
+
+new Chart(document.getElementById("scoreChart"),{
+
+type:"line",
+
+data:{
+
+labels:["Jan","Feb","Mar","Apr","May","Jun"],
+
+datasets:[{
+
+label:"Points",
+
+data:[450,600,760,920,1100,1240],
+
+borderColor:"#2563eb",
+
+backgroundColor:"rgba(37,99,235,.15)",
+
+fill:true,
+
+tension:.4
+
+}]
+
+}
+
+});
+
+// Weekly Performance
+
+new Chart(document.getElementById("weeklyChart"),{
+
+type:"bar",
+
+data:{
+
+labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+
+datasets:[{
+
+label:"Problems Solved",
+
+data:[3,5,7,6,4,8,5],
+
+backgroundColor:"#16a34a"
+
+}]
+
+}
+
+});
+
+// Monthly Trend
+
+new Chart(document.getElementById("trendChart"),{
+
+type:"line",
+
+data:{
+
+labels:["Week 1","Week 2","Week 3","Week 4"],
+
+datasets:[{
+
+label:"Leaderboard Rank",
+
+data:[18,16,14,12],
+
+borderColor:"#dc2626",
+
+backgroundColor:"rgba(220,38,38,.15)",
+
+fill:true,
+
+tension:.4
+
+}]
+
+},
+
+options:{
+
+scales:{
+
+y:{
+
+reverse:true
+
+}
+
+}
+
+}
+
+});
+
+</script>
+{% block scripts %}
+
+<!-- ================= LIVE SEARCH ================= -->
+
+<script>
+
+document.getElementById("searchInput").addEventListener("keyup",function(){
+
+const value=this.value.toLowerCase();
+
+const rows=document.querySelectorAll("#leaderboardTable tbody tr");
+
+rows.forEach(row=>{
+
+const text=row.innerText.toLowerCase();
+
+row.style.display=text.includes(value)?"":"none";
+
+});
+
+});
+
+</script>
+
+<!-- ================= SORT TABLE ================= -->
+
+<script>
+
+function sortLeaderboard(column){
+
+const table=document.getElementById("leaderboardTable");
+
+const tbody=table.tBodies[0];
+
+const rows=Array.from(tbody.rows);
+
+rows.sort((a,b)=>{
+
+const A=a.cells[column].innerText.trim();
+
+const B=b.cells[column].innerText.trim();
+
+const numA=parseFloat(A.replace(/[^\d.]/g,""));
+
+const numB=parseFloat(B.replace(/[^\d.]/g,""));
+
+if(!isNaN(numA) && !isNaN(numB)){
+
+return numB-numA;
+
+}
+
+return A.localeCompare(B);
+
+});
+
+rows.forEach(r=>tbody.appendChild(r));
+
+}
+
+</script>
+
+<!-- ================= TABLE HEADER EVENTS ================= -->
+
+<script>
+
+const headers=document.querySelectorAll("#leaderboardTable thead th");
+
+headers.forEach((header,index)=>{
+
+header.style.cursor="pointer";
+
+header.title="Click to sort";
+
+header.addEventListener("click",()=>{
+
+sortLeaderboard(index);
+
+});
+
+});
+
+</script>
+
+<!-- ================= CARD ANIMATION ================= -->
+
+<script>
+
+const cards=document.querySelectorAll(".card");
+
+const observer=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.style.opacity="1";
+
+entry.target.style.transform="translateY(0)";
+
+observer.unobserve(entry.target);
+
+}
+
+});
+
+},{threshold:0.1});
+
+cards.forEach(card=>{
+
+card.style.opacity="0";
+
+card.style.transform="translateY(25px)";
+
+card.style.transition="all .5s ease";
+
+observer.observe(card);
+
+});
+
+</script>
+
+<!-- ================= AUTO REFRESH ================= -->
+
+<script>
+
+function refreshLeaderboard(){
+
+console.log("Refreshing leaderboard...");
+
+// Future AJAX refresh can be added here.
+
+}
+
+setInterval(refreshLeaderboard,300000);
+
+</script>
+
+<!-- ================= EXPORT CSV ================= -->
+
+<script>
+
+function exportLeaderboard(){
+
+const table=document.getElementById("leaderboardTable");
+
+let csv=[];
+
+for(let row of table.rows){
+
+let cols=[];
+
+for(let cell of row.cells){
+
+cols.push('"' + cell.innerText.replace(/"/g,'""') + '"');
+
+}
+
+csv.push(cols.join(","));
+
+}
+
+const blob=new Blob([csv.join("\n")],{
+
+type:"text/csv"
+
+});
+
+const link=document.createElement("a");
+
+link.href=URL.createObjectURL(blob);
+
+link.download="leaderboard.csv";
+
+link.click();
+
+}
+
+</script>
+
+<!-- ================= EXPORT BUTTON ================= -->
+
+<div class="text-end my-4">
+
+<button
+class="btn btn-success"
+onclick="exportLeaderboard()">
+
+<i class="fas fa-file-csv me-2"></i>
+
+Export Leaderboard
+
+</button>
+
+</div>
+
+<!-- ================= TOAST MESSAGE ================= -->
+
+<script>
+
+function showToast(message,type="success"){
+
+const toast=document.createElement("div");
+
+toast.className=`toast align-items-center text-bg-${type} border-0 position-fixed`;
+
+toast.style.bottom="20px";
+
+toast.style.right="20px";
+
+toast.style.zIndex="99999";
+
+toast.innerHTML=`
+
+<div class="d-flex">
+
+<div class="toast-body">
+
+${message}
+
+</div>
+
+<button class="btn-close btn-close-white me-2 m-auto"
+
+data-bs-dismiss="toast">
+
+</button>
+
+</div>
+
+`;
+
+document.body.appendChild(toast);
+
+const bsToast=new bootstrap.Toast(toast);
+
+bsToast.show();
+
+toast.addEventListener("hidden.bs.toast",()=>toast.remove());
+
+}
+
+</script>
+
+<!-- ================= PAGE LOAD ================= -->
+
+<script>
+
+window.addEventListener("load",function(){
+
+showToast("Leaderboard loaded successfully!");
+
+});
+
+</script>
+
+<!-- ================= CUSTOM STYLES ================= -->
+
+<style>
+
+.table-hover tbody tr{
+
+transition:.2s;
+
+}
+
+.table-hover tbody tr:hover{
+
+transform:scale(1.01);
+
+background:#f8fafc;
+
+}
+
+.card{
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-5px);
+
+box-shadow:0 15px 35px rgba(0,0,0,.12);
+
+}
+
+thead th:hover{
+
+color:#2563eb;
+
+}
+
+</style>
+
+{% endblock %}

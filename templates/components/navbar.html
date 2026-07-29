@@ -1,0 +1,284 @@
+<!-- ================= TOP NAVBAR ================= -->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+
+<div class="container-fluid">
+
+    <!-- Sidebar Toggle -->
+
+    <button
+        class="btn btn-outline-light me-3"
+        id="sidebarToggle">
+
+        <i class="fas fa-bars"></i>
+
+    </button>
+
+    <!-- Brand -->
+
+    <a class="navbar-brand fw-bold"
+       href="{{ url_for('home') }}">
+
+        <i class="fas fa-laptop-code text-info"></i>
+
+        Lab Auto Grader
+
+    </a>
+
+    <!-- Mobile Toggle -->
+
+    <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarContent">
+
+        <span class="navbar-toggler-icon"></span>
+
+    </button>
+
+    <div
+        class="collapse navbar-collapse"
+        id="navbarContent">
+
+        <!-- Search -->
+
+        <form class="d-flex mx-auto w-50">
+
+            <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Search students, problems..."
+
+                name="search">
+
+            <button
+                class="btn btn-primary"
+                type="submit">
+
+                <i class="fas fa-search"></i>
+
+            </button>
+
+        </form>
+
+        <!-- Right Menu -->
+
+        <ul class="navbar-nav ms-auto align-items-center">
+
+            <!-- Theme -->
+
+            <li class="nav-item me-3">
+
+                <button
+                    class="btn btn-outline-light"
+                    id="themeToggle">
+
+                    <i class="fas fa-moon"></i>
+
+                </button>
+
+            </li>
+
+            <!-- Notifications -->
+
+            <li class="nav-item dropdown me-3">
+
+                <a
+                    class="nav-link position-relative"
+                    href="#"
+                    data-bs-toggle="dropdown">
+
+                    <i class="fas fa-bell fa-lg"></i>
+
+                    {% if notification_count %}
+
+                    <span
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                        {{ notification_count }}
+
+                    </span>
+
+                    {% endif %}
+
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow">
+
+                    <li>
+
+                        <h6 class="dropdown-header">
+
+                            Notifications
+
+                        </h6>
+
+                    </li>
+
+                    {% if notifications %}
+
+                    {% for n in notifications %}
+
+                    <li>
+
+                        <a
+                            class="dropdown-item"
+                            href="#">
+
+                            <strong>
+
+                                {{ n.title }}
+
+                            </strong>
+
+                            <br>
+
+                            <small class="text-muted">
+
+                                {{ n.message }}
+
+                            </small>
+
+                        </a>
+
+                    </li>
+
+                    {% endfor %}
+
+                    {% else %}
+
+                    <li>
+
+                        <span class="dropdown-item text-muted">
+
+                            No Notifications
+
+                        </span>
+
+                    </li>
+
+                    {% endif %}
+
+                </ul>
+
+            </li>
+
+            <!-- Profile -->
+
+            <li class="nav-item dropdown">
+
+                <a
+                    class="nav-link dropdown-toggle d-flex align-items-center"
+                    href="#"
+                    data-bs-toggle="dropdown">
+
+                    <img
+                        src="{{ current_user.photo if current_user.photo else url_for('static', filename='images/default-user.png') }}"
+                        class="rounded-circle me-2"
+                        width="40"
+                        height="40">
+
+                    <span>
+
+                        {{ current_user.name }}
+
+                    </span>
+
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow">
+
+                    <li>
+
+                        <h6 class="dropdown-header">
+
+                            {{ current_user.role|title }}
+
+                        </h6>
+
+                    </li>
+
+                    <li>
+
+                        <a
+                            class="dropdown-item"
+                            href="{{ url_for(current_user.role + '.profile') }}">
+
+                            <i class="fas fa-user me-2"></i>
+
+                            My Profile
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a
+                            class="dropdown-item"
+                            href="{{ url_for(current_user.role + '.settings') }}">
+
+                            <i class="fas fa-cog me-2"></i>
+
+                            Settings
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <hr class="dropdown-divider">
+
+                    </li>
+
+                    <li>
+
+                        <a
+                            class="dropdown-item text-danger"
+                            href="{{ url_for('auth.logout') }}">
+
+                            <i class="fas fa-sign-out-alt me-2"></i>
+
+                            Logout
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+</nav>
+
+<!-- ================= SCRIPT ================= -->
+
+<script>
+
+document.getElementById("themeToggle").addEventListener("click",function(){
+
+document.body.classList.toggle("dark-theme");
+
+let icon=this.querySelector("i");
+
+icon.classList.toggle("fa-moon");
+
+icon.classList.toggle("fa-sun");
+
+});
+
+document.getElementById("sidebarToggle").addEventListener("click",function(){
+
+document.body.classList.toggle("sidebar-collapse");
+
+});
+
+</script>

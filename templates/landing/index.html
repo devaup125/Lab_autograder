@@ -1,0 +1,4121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+Lab Auto Grader |
+Programming Lab Automation System
+
+</title>
+
+<!-- Bootstrap -->
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<!-- Font Awesome -->
+
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+rel="stylesheet">
+
+<!-- Google Font -->
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<style>
+
+*{
+
+margin:0;
+
+padding:0;
+
+box-sizing:border-box;
+
+font-family:'Poppins',sans-serif;
+
+}
+
+body{
+
+background:#f8fafc;
+
+overflow-x:hidden;
+
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+
+background:rgba(15,23,42,.95);
+
+backdrop-filter:blur(15px);
+
+padding:18px 0;
+
+transition:.3s;
+
+}
+
+.navbar-brand{
+
+font-size:28px;
+
+font-weight:700;
+
+color:white!important;
+
+}
+
+.nav-link{
+
+color:white!important;
+
+margin-left:20px;
+
+font-weight:500;
+
+transition:.3s;
+
+}
+
+.nav-link:hover{
+
+color:#38bdf8!important;
+
+}
+
+.btn-login{
+
+border-radius:50px;
+
+padding:10px 28px;
+
+font-weight:600;
+
+}
+
+/* ================= HERO ================= */
+
+.hero{
+
+min-height:100vh;
+
+display:flex;
+
+align-items:center;
+
+background:
+
+linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+
+position:relative;
+
+overflow:hidden;
+
+color:white;
+
+}
+
+.hero::before{
+
+content:"";
+
+position:absolute;
+
+width:350px;
+
+height:350px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.08);
+
+top:-120px;
+
+right:-120px;
+
+}
+
+.hero::after{
+
+content:"";
+
+position:absolute;
+
+width:220px;
+
+height:220px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.08);
+
+bottom:-80px;
+
+left:-70px;
+
+}
+
+.hero h1{
+
+font-size:64px;
+
+font-weight:700;
+
+line-height:1.2;
+
+}
+
+.hero p{
+
+font-size:18px;
+
+margin-top:25px;
+
+line-height:1.9;
+
+color:#dbeafe;
+
+}
+
+.hero-image{
+
+text-align:center;
+
+}
+
+.hero-image i{
+
+font-size:250px;
+
+color:#38bdf8;
+
+animation:float 4s infinite ease-in-out;
+
+}
+
+.btn-custom{
+
+padding:14px 36px;
+
+border-radius:50px;
+
+font-weight:600;
+
+margin-top:25px;
+
+}
+
+@keyframes float{
+
+0%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-18px);
+
+}
+
+100%{
+
+transform:translateY(0);
+
+}
+
+}
+
+/* ================= SECTION ================= */
+
+.section-title{
+
+font-size:42px;
+
+font-weight:700;
+
+color:#0f172a;
+
+margin-bottom:20px;
+
+}
+
+.section-text{
+
+font-size:18px;
+
+line-height:1.8;
+
+color:#64748b;
+
+}
+
+.info-card{
+
+background:white;
+
+padding:30px;
+
+border-radius:20px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+transition:.3s;
+
+height:100%;
+
+}
+
+.info-card:hover{
+
+transform:translateY(-8px);
+
+}
+
+.info-card i{
+
+font-size:50px;
+
+margin-bottom:20px;
+
+color:#2563eb;
+
+}
+
+@media(max-width:992px){
+
+.hero{
+
+text-align:center;
+
+padding-top:100px;
+
+}
+
+.hero h1{
+
+font-size:46px;
+
+}
+
+.hero-image{
+
+margin-top:50px;
+
+}
+
+.hero-image i{
+
+font-size:170px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar navbar-expand-lg fixed-top">
+
+<div class="container">
+
+<a
+class="navbar-brand"
+
+href="{{ url_for('home') }}">
+
+<i class="fas fa-laptop-code text-info"></i>
+
+Lab Auto Grader
+
+</a>
+
+<button
+
+class="navbar-toggler"
+
+data-bs-toggle="collapse"
+
+data-bs-target="#navbarMenu">
+
+<span class="navbar-toggler-icon"></span>
+
+</button>
+
+<div
+
+class="collapse navbar-collapse"
+
+id="navbarMenu">
+
+<ul class="navbar-nav ms-auto align-items-lg-center">
+
+<li class="nav-item">
+
+<a
+class="nav-link"
+
+href="{{ url_for('home') }}">
+
+Home
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+class="nav-link"
+
+href="{{ url_for('landing.about') }}">
+
+About
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+class="nav-link"
+
+href="{{ url_for('landing.features') }}">
+
+Features
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+class="nav-link"
+
+href="{{ url_for('landing.contact') }}">
+
+Contact
+
+</a>
+
+</li>
+
+<li class="nav-item ms-lg-3">
+
+<a
+href="{{ url_for('auth.student_login') }}"
+
+class="btn btn-info btn-login">
+
+Login
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</nav>
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+<div class="container">
+
+<div class="row align-items-center">
+
+<div class="col-lg-6">
+
+<h1>
+
+Programming Lab
+
+<br>
+
+Automation System
+
+</h1>
+
+<p>
+
+A modern web-based platform for automated programming
+assignment evaluation using Docker containers,
+Monaco Editor,
+hidden test cases,
+real-time analytics,
+and interactive dashboards for Students,
+Teachers,
+and Administrators.
+
+</p>
+
+<div class="mt-4">
+
+<a
+
+href="{{ url_for('auth.student_login') }}"
+
+class="btn btn-info btn-custom me-3">
+
+<i class="fas fa-rocket me-2"></i>
+
+Get Started
+
+</a>
+
+<a
+
+href="{{ url_for('landing.features') }}"
+
+class="btn btn-outline-light btn-custom">
+
+Learn More
+
+</a>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="hero-image">
+
+<i class="fas fa-laptop-code"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ================= HERO STATISTICS ================= -->
+
+<section class="py-5 bg-white">
+
+<div class="container">
+
+<div class="row text-center g-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card">
+
+<i class="fas fa-user-graduate"></i>
+
+<h2 class="counter text-primary">
+
+1000+
+
+</h2>
+
+<h5>
+
+Students
+
+</h5>
+
+<p>
+
+Active students using the platform.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card">
+
+<i class="fas fa-code"></i>
+
+<h2 class="counter text-success">
+
+5000+
+
+</h2>
+
+<h5>
+
+Submissions
+
+</h5>
+
+<p>
+
+Programming assignments evaluated automatically.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card">
+
+<i class="fas fa-book"></i>
+
+<h2 class="counter text-warning">
+
+100+
+
+</h2>
+
+<h5>
+
+Programming Problems
+
+</h5>
+
+<p>
+
+Coding challenges with hidden test cases.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card">
+
+<i class="fas fa-server"></i>
+
+<h2 class="counter text-danger">
+
+99.9%
+
+</h2>
+
+<h5>
+
+System Uptime
+
+</h5>
+
+<p>
+
+Reliable and secure cloud-ready platform.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= PLATFORM HIGHLIGHTS ================= -->
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Everything You Need in One Platform
+
+</h2>
+
+<p class="section-text">
+
+Designed for modern colleges and universities to simplify
+programming laboratory management.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-4">
+
+<div class="info-card text-center">
+
+<i class="fas fa-code"></i>
+
+<h4>
+
+Interactive Coding
+
+</h4>
+
+<p>
+
+Write programs using the Monaco Editor with syntax highlighting,
+themes, auto-completion and multi-language support.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="info-card text-center">
+
+<i class="fab fa-docker"></i>
+
+<h4>
+
+Docker Sandbox
+
+</h4>
+
+<p>
+
+Every submission runs inside an isolated Docker container
+for secure and consistent execution.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="info-card text-center">
+
+<i class="fas fa-check-circle"></i>
+
+<h4>
+
+Automatic Grading
+
+</h4>
+
+<p>
+
+Evaluate submissions instantly using hidden and public
+test cases with detailed feedback.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= USER PORTALS ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Designed for Everyone
+
+</h2>
+
+<p class="section-text">
+
+Dedicated dashboards for every role in the programming laboratory.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<!-- Student -->
+
+<div class="col-lg-4">
+
+<div class="info-card text-center">
+
+<i class="fas fa-user-graduate text-primary"></i>
+
+<h4>
+
+Student Portal
+
+</h4>
+
+<p>
+
+Solve coding assignments, practice programming,
+view submissions, monitor progress,
+and compete on the leaderboard.
+
+</p>
+
+<a
+
+href="{{ url_for('auth.student_login') }}"
+
+class="btn btn-primary mt-3">
+
+Student Login
+
+</a>
+
+</div>
+
+</div>
+
+<!-- Teacher -->
+
+<div class="col-lg-4">
+
+<div class="info-card text-center">
+
+<i class="fas fa-chalkboard-teacher text-success"></i>
+
+<h4>
+
+Teacher Portal
+
+</h4>
+
+<p>
+
+Create assignments, manage test cases,
+evaluate submissions,
+track student performance and generate reports.
+
+</p>
+
+<a
+
+href="{{ url_for('auth.teacher_login') }}"
+
+class="btn btn-success mt-3">
+
+Teacher Login
+
+</a>
+
+</div>
+
+</div>
+
+<!-- Admin -->
+
+<div class="col-lg-4">
+
+<div class="info-card text-center">
+
+<i class="fas fa-user-shield text-danger"></i>
+
+<h4>
+
+Administrator Portal
+
+</h4>
+
+<p>
+
+Manage users, configure the platform,
+view analytics, monitor activity,
+and control the complete system.
+
+</p>
+
+<a
+
+href="{{ url_for('auth.admin_login') }}"
+
+class="btn btn-danger mt-3">
+
+Admin Login
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ================= CORE FEATURES ================= -->
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Core Features
+
+</h2>
+
+<p class="section-text">
+
+Everything required for a modern programming laboratory in one platform.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card text-center">
+
+<i class="fas fa-code"></i>
+
+<h4>
+
+Monaco Editor
+
+</h4>
+
+<p>
+
+Professional online IDE with syntax highlighting,
+IntelliSense,
+themes and auto-completion.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card text-center">
+
+<i class="fab fa-docker"></i>
+
+<h4>
+
+Docker Execution
+
+</h4>
+
+<p>
+
+Execute every submission securely inside isolated
+Docker containers.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card text-center">
+
+<i class="fas fa-vial"></i>
+
+<h4>
+
+Hidden Test Cases
+
+</h4>
+
+<p>
+
+Automatic evaluation using public and hidden
+test cases for fair assessment.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card text-center">
+
+<i class="fas fa-chart-line"></i>
+
+<h4>
+
+Real-Time Analytics
+
+</h4>
+
+<p>
+
+Track student performance,
+submissions,
+accuracy and progress.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= MONACO + DOCKER ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="row align-items-center">
+
+<div class="col-lg-6">
+
+<h2 class="section-title">
+
+Professional Coding Environment
+
+</h2>
+
+<p class="section-text">
+
+Students solve programming assignments using the Monaco Editor,
+the same editor that powers Visual Studio Code.
+
+Features include syntax highlighting,
+code formatting,
+auto-completion,
+multiple themes and language support.
+
+</p>
+
+<ul class="list-group shadow">
+
+<li class="list-group-item">
+
+<i class="fas fa-check text-success me-2"></i>
+
+VS Code Experience
+
+</li>
+
+<li class="list-group-item">
+
+<i class="fas fa-check text-success me-2"></i>
+
+Multiple Programming Languages
+
+</li>
+
+<li class="list-group-item">
+
+<i class="fas fa-check text-success me-2"></i>
+
+Auto Save
+
+</li>
+
+<li class="list-group-item">
+
+<i class="fas fa-check text-success me-2"></i>
+
+Dark & Light Themes
+
+</li>
+
+<li class="list-group-item">
+
+<i class="fas fa-check text-success me-2"></i>
+
+Keyboard Shortcuts
+
+</li>
+
+</ul>
+
+</div>
+
+<div class="col-lg-6 text-center">
+
+<i class="fas fa-laptop-code"
+
+style="font-size:220px;color:#2563eb;"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= AUTOMATIC EVALUATION ================= -->
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Automatic Evaluation Engine
+
+</h2>
+
+<p class="section-text">
+
+Every submission follows a secure evaluation workflow.
+
+</p>
+
+</div>
+
+<div class="row text-center g-4">
+
+<div class="col-md-2">
+
+<div class="info-card">
+
+<h2 class="text-primary">
+
+1
+
+</h2>
+
+<p>
+
+Submit Code
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-2">
+
+<div class="info-card">
+
+<h2 class="text-success">
+
+2
+
+</h2>
+
+<p>
+
+Docker Sandbox
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-2">
+
+<div class="info-card">
+
+<h2 class="text-warning">
+
+3
+
+</h2>
+
+<p>
+
+Compile
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-2">
+
+<div class="info-card">
+
+<h2 class="text-danger">
+
+4
+
+</h2>
+
+<p>
+
+Run Test Cases
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-2">
+
+<div class="info-card">
+
+<h2 class="text-info">
+
+5
+
+</h2>
+
+<p>
+
+Generate Score
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-2">
+
+<div class="info-card">
+
+<h2 class="text-secondary">
+
+6
+
+</h2>
+
+<p>
+
+Update Leaderboard
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= LEADERBOARD PREVIEW ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Leaderboard Preview
+
+</h2>
+
+<p class="section-text">
+
+Healthy competition motivates students to improve continuously.
+
+</p>
+
+</div>
+
+<div class="table-responsive shadow rounded-4">
+
+<table class="table table-hover align-middle mb-0">
+
+<thead class="table-dark">
+
+<tr>
+
+<th>Rank</th>
+
+<th>Student</th>
+
+<th>Problems Solved</th>
+
+<th>Score</th>
+
+<th>Accuracy</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>
+
+🥇 1
+
+</td>
+
+<td>
+
+Rahul Sharma
+
+</td>
+
+<td>
+
+98
+
+</td>
+
+<td>
+
+980
+
+</td>
+
+<td>
+
+99%
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+🥈 2
+
+</td>
+
+<td>
+
+Priya Singh
+
+</td>
+
+<td>
+
+95
+
+</td>
+
+<td>
+
+950
+
+</td>
+
+<td>
+
+98%
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+🥉 3
+
+</td>
+
+<td>
+
+Aman Verma
+
+</td>
+
+<td>
+
+92
+
+</td>
+
+<td>
+
+920
+
+</td>
+
+<td>
+
+97%
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+4
+
+</td>
+
+<td>
+
+Neha Gupta
+
+</td>
+
+<td>
+
+88
+
+</td>
+
+<td>
+
+880
+
+</td>
+
+<td>
+
+96%
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+<!-- ================= SECURITY ================= -->
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="row align-items-center">
+
+<div class="col-lg-6">
+
+<i class="fas fa-shield-alt"
+
+style="font-size:230px;color:#2563eb;"></i>
+
+</div>
+
+<div class="col-lg-6">
+
+<h2 class="section-title">
+
+Enterprise Grade Security
+
+</h2>
+
+<p class="section-text">
+
+Every student submission is executed inside isolated Docker
+containers with strict security controls, ensuring that
+untrusted code cannot affect the server or other users.
+
+</p>
+
+<ul class="list-group shadow">
+
+<li class="list-group-item">
+
+<i class="fas fa-check-circle text-success me-2"></i>
+
+Docker Isolation
+
+</li>
+
+<li class="list-group-item">
+
+<i class="fas fa-check-circle text-success me-2"></i>
+
+CPU & Memory Limits
+
+</li>
+
+<li class="list-group-item">
+
+<i class="fas fa-check-circle text-success me-2"></i>
+
+Execution Timeout
+
+</li>
+
+<li class="list-group-item">
+
+<i class="fas fa-check-circle text-success me-2"></i>
+
+No Network Access
+
+</li>
+
+<li class="list-group-item">
+
+<i class="fas fa-check-circle text-success me-2"></i>
+
+Automatic Cleanup
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= ANALYTICS ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Analytics Dashboard
+
+</h2>
+
+<p class="section-text">
+
+Powerful insights for teachers and administrators.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-4">
+
+<div class="info-card text-center">
+
+<i class="fas fa-chart-line"></i>
+
+<h4>
+
+Submission Analytics
+
+</h4>
+
+<p>
+
+View daily, weekly and monthly submission statistics
+using interactive reports.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="info-card text-center">
+
+<i class="fas fa-user-graduate"></i>
+
+<h4>
+
+Student Progress
+
+</h4>
+
+<p>
+
+Track coding improvement,
+scores,
+accuracy,
+and solved problems.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="info-card text-center">
+
+<i class="fas fa-file-export"></i>
+
+<h4>
+
+Export Reports
+
+</h4>
+
+<p>
+
+Download reports in CSV,
+Excel and PDF formats.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= CLOUD ARCHITECTURE ================= -->
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Cloud Ready Architecture
+
+</h2>
+
+<p class="section-text">
+
+Designed for scalability,
+high availability and secure deployments.
+
+</p>
+
+</div>
+
+<div class="row text-center g-4">
+
+<div class="col-md-3">
+
+<div class="info-card">
+
+<i class="fas fa-users"></i>
+
+<h5>
+
+Users
+
+</h5>
+
+<p>
+
+Students & Faculty
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="info-card">
+
+<i class="fas fa-globe"></i>
+
+<h5>
+
+Flask Server
+
+</h5>
+
+<p>
+
+Application Layer
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="info-card">
+
+<i class="fab fa-docker"></i>
+
+<h5>
+
+Docker Engine
+
+</h5>
+
+<p>
+
+Secure Execution
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="info-card">
+
+<i class="fas fa-database"></i>
+
+<h5>
+
+SQLite Database
+
+</h5>
+
+<p>
+
+Persistent Storage
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= WHY CHOOSE US ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Why Institutions Choose Lab Auto Grader
+
+</h2>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-3">
+
+<div class="info-card text-center">
+
+<i class="fas fa-clock"></i>
+
+<h4>
+
+Save Time
+
+</h4>
+
+<p>
+
+Reduce manual evaluation workload by more than 90%.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="info-card text-center">
+
+<i class="fas fa-award"></i>
+
+<h4>
+
+Fair Evaluation
+
+</h4>
+
+<p>
+
+Every submission is checked using identical test cases.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="info-card text-center">
+
+<i class="fas fa-chart-bar"></i>
+
+<h4>
+
+Better Insights
+
+</h4>
+
+<p>
+
+Monitor performance using detailed analytics and reports.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="info-card text-center">
+
+<i class="fas fa-laptop-code"></i>
+
+<h4>
+
+Modern Learning
+
+</h4>
+
+<p>
+
+Provide students with a professional coding experience.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ================= SCREENSHOT GALLERY ================= -->
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Platform Preview
+
+</h2>
+
+<p class="section-text">
+
+Explore the modern interface of the Lab Auto Grader System.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow rounded-4 h-100">
+
+<img
+src="{{ url_for('static', filename='images/homepage.png') }}"
+class="card-img-top"
+alt="Homepage">
+
+<div class="card-body">
+
+<h5>Landing Page</h5>
+
+<p class="text-muted">
+
+Professional homepage with quick navigation and role-based access.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow rounded-4 h-100">
+
+<img
+src="{{ url_for('static', filename='images/student_dashboard.png') }}"
+class="card-img-top"
+alt="Student Dashboard">
+
+<div class="card-body">
+
+<h5>Student Dashboard</h5>
+
+<p class="text-muted">
+
+Practice coding, submit assignments, and monitor progress.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow rounded-4 h-100">
+
+<img
+src="{{ url_for('static', filename='images/admin_dashboard.png') }}"
+class="card-img-top"
+alt="Admin Dashboard">
+
+<div class="card-body">
+
+<h5>Admin Dashboard</h5>
+
+<p class="text-muted">
+
+Manage users, questions, reports, and platform settings.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= TECHNOLOGY STACK ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Technology Stack
+
+</h2>
+
+<p class="section-text">
+
+Built using modern technologies for performance, security, and scalability.
+
+</p>
+
+</div>
+
+<div class="row text-center g-4">
+
+<div class="col-lg-2 col-md-4 col-6">
+
+<div class="info-card">
+
+<i class="fab fa-python fa-3x text-primary mb-3"></i>
+
+<h5>Python</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-2 col-md-4 col-6">
+
+<div class="info-card">
+
+<i class="fas fa-fire fa-3x text-danger mb-3"></i>
+
+<h5>Flask</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-2 col-md-4 col-6">
+
+<div class="info-card">
+
+<i class="fab fa-docker fa-3x text-info mb-3"></i>
+
+<h5>Docker</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-2 col-md-4 col-6">
+
+<div class="info-card">
+
+<i class="fas fa-database fa-3x text-success mb-3"></i>
+
+<h5>SQLite</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-2 col-md-4 col-6">
+
+<div class="info-card">
+
+<i class="fab fa-js fa-3x text-warning mb-3"></i>
+
+<h5>JavaScript</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-2 col-md-4 col-6">
+
+<div class="info-card">
+
+<i class="fas fa-code fa-3x text-secondary mb-3"></i>
+
+<h5>Monaco Editor</h5>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= PROJECT ACHIEVEMENTS ================= -->
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Project Achievements
+
+</h2>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card text-center">
+
+<i class="fas fa-award fa-3x text-warning mb-3"></i>
+
+<h2>100%</h2>
+
+<h5>Automated Evaluation</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card text-center">
+
+<i class="fas fa-stopwatch fa-3x text-primary mb-3"></i>
+
+<h2>&lt;2s</h2>
+
+<h5>Average Execution</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card text-center">
+
+<i class="fab fa-docker fa-3x text-info mb-3"></i>
+
+<h2>Secure</h2>
+
+<h5>Docker Sandbox</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card text-center">
+
+<i class="fas fa-users fa-3x text-success mb-3"></i>
+
+<h2>3 Roles</h2>
+
+<h5>Student • Teacher • Admin</h5>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= AI ROADMAP ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Future AI Features
+
+</h2>
+
+<p class="section-text">
+
+The roadmap for the next generation of intelligent programming education.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-4">
+
+<div class="info-card">
+
+<i class="fas fa-robot"></i>
+
+<h4>AI Code Review</h4>
+
+<p>
+
+Automatically review source code and provide quality suggestions.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="info-card">
+
+<i class="fas fa-brain"></i>
+
+<h4>AI Hint Generator</h4>
+
+<p>
+
+Offer intelligent hints while encouraging independent problem solving.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="info-card">
+
+<i class="fas fa-copy"></i>
+
+<h4>Plagiarism Detection</h4>
+
+<p>
+
+Detect copied submissions using similarity analysis and AI.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ================= TESTIMONIALS ================= -->
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+What Our Users Say
+
+</h2>
+
+<p class="section-text">
+
+Students and faculty love using Lab Auto Grader.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-4">
+
+<div class="info-card">
+
+<div class="mb-3">
+
+<i class="fas fa-star text-warning"></i>
+<i class="fas fa-star text-warning"></i>
+<i class="fas fa-star text-warning"></i>
+<i class="fas fa-star text-warning"></i>
+<i class="fas fa-star text-warning"></i>
+
+</div>
+
+<p>
+
+"The platform reduced our lab evaluation workload dramatically.
+Students receive instant feedback and can improve much faster."
+
+</p>
+
+<hr>
+
+<h6>
+
+Faculty Member
+
+</h6>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="info-card">
+
+<div class="mb-3">
+
+<i class="fas fa-star text-warning"></i>
+<i class="fas fa-star text-warning"></i>
+<i class="fas fa-star text-warning"></i>
+<i class="fas fa-star text-warning"></i>
+<i class="fas fa-star text-warning"></i>
+
+</div>
+
+<p>
+
+"The Monaco Editor feels exactly like VS Code and Docker execution
+makes submissions reliable."
+
+</p>
+
+<hr>
+
+<h6>
+
+Computer Science Student
+
+</h6>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="info-card">
+
+<div class="mb-3">
+
+<i class="fas fa-star text-warning"></i>
+<i class="fas fa-star text-warning"></i>
+<i class="fas fa-star text-warning"></i>
+<i class="fas fa-star text-warning"></i>
+<i class="fas fa-star text-warning"></i>
+
+</div>
+
+<p>
+
+"The reports, analytics and leaderboards help us monitor
+student progress efficiently."
+
+</p>
+
+<hr>
+
+<h6>
+
+Lab Administrator
+
+</h6>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= FAQ ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Frequently Asked Questions
+
+</h2>
+
+</div>
+
+<div class="accordion shadow" id="homeFAQ">
+
+<div class="accordion-item">
+
+<h2 class="accordion-header">
+
+<button class="accordion-button"
+
+data-bs-toggle="collapse"
+
+data-bs-target="#faqOne">
+
+Which programming languages are supported?
+
+</button>
+
+</h2>
+
+<div id="faqOne"
+
+class="accordion-collapse collapse show"
+
+data-bs-parent="#homeFAQ">
+
+<div class="accordion-body">
+
+Currently Python, Java, C and C++ are supported with secure
+Docker-based execution.
+
+</div>
+
+</div>
+
+</div>
+
+<div class="accordion-item">
+
+<h2 class="accordion-header">
+
+<button class="accordion-button collapsed"
+
+data-bs-toggle="collapse"
+
+data-bs-target="#faqTwo">
+
+Is code execution secure?
+
+</button>
+
+</h2>
+
+<div id="faqTwo"
+
+class="accordion-collapse collapse"
+
+data-bs-parent="#homeFAQ">
+
+<div class="accordion-body">
+
+Yes. Every submission executes inside an isolated Docker
+container with execution limits.
+
+</div>
+
+</div>
+
+</div>
+
+<div class="accordion-item">
+
+<h2 class="accordion-header">
+
+<button class="accordion-button collapsed"
+
+data-bs-toggle="collapse"
+
+data-bs-target="#faqThree">
+
+Can teachers create custom assignments?
+
+</button>
+
+</h2>
+
+<div id="faqThree"
+
+class="accordion-collapse collapse"
+
+data-bs-parent="#homeFAQ">
+
+<div class="accordion-body">
+
+Teachers can create problems, upload hidden/public test cases,
+manage deadlines and evaluate submissions.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= PLATFORM NUMBERS ================= -->
+
+<section class="py-5 bg-primary text-white">
+
+<div class="container">
+
+<div class="row text-center">
+
+<div class="col-lg-3 col-md-6 mb-4">
+
+<h1 class="display-4 fw-bold">
+
+1000+
+
+</h1>
+
+<p>
+
+Registered Students
+
+</p>
+
+</div>
+
+<div class="col-lg-3 col-md-6 mb-4">
+
+<h1 class="display-4 fw-bold">
+
+250+
+
+</h1>
+
+<p>
+
+Assignments
+
+</p>
+
+</div>
+
+<div class="col-lg-3 col-md-6 mb-4">
+
+<h1 class="display-4 fw-bold">
+
+15000+
+
+</h1>
+
+<p>
+
+Code Executions
+
+</p>
+
+</div>
+
+<div class="col-lg-3 col-md-6 mb-4">
+
+<h1 class="display-4 fw-bold">
+
+99.9%
+
+</h1>
+
+<p>
+
+Availability
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= CALL TO ACTION ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center">
+
+<h2 class="display-5 fw-bold">
+
+Ready to Modernize Your Programming Lab?
+
+</h2>
+
+<p class="lead mt-3 text-muted">
+
+Start using Lab Auto Grader today and experience secure,
+automated and intelligent programming evaluation.
+
+</p>
+
+<div class="mt-4">
+
+<a
+
+href="{{ url_for('auth.student_login') }}"
+
+class="btn btn-primary btn-lg me-3">
+
+<i class="fas fa-user-graduate me-2"></i>
+
+Student Login
+
+</a>
+
+<a
+
+href="{{ url_for('auth.teacher_login') }}"
+
+class="btn btn-success btn-lg me-3">
+
+<i class="fas fa-chalkboard-teacher me-2"></i>
+
+Teacher Login
+
+</a>
+
+<a
+
+href="{{ url_for('auth.admin_login') }}"
+
+class="btn btn-dark btn-lg">
+
+<i class="fas fa-user-shield me-2"></i>
+
+Admin Login
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ================= LATEST UPDATES ================= -->
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Latest Updates
+
+</h2>
+
+<p class="section-text">
+
+Stay informed about new features and platform improvements.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-4">
+
+<div class="info-card">
+
+<span class="badge bg-primary mb-3">
+
+New
+
+</span>
+
+<h4>
+
+AI Evaluation Coming Soon
+
+</h4>
+
+<p>
+
+Future releases will include AI-powered code review,
+performance suggestions,
+and intelligent hints.
+
+</p>
+
+<a href="#" class="btn btn-outline-primary">
+
+Read More
+
+</a>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="info-card">
+
+<span class="badge bg-success mb-3">
+
+Update
+
+</span>
+
+<h4>
+
+Docker Sandbox Improved
+
+</h4>
+
+<p>
+
+Enhanced security,
+lower execution time,
+and better resource management.
+
+</p>
+
+<a href="#" class="btn btn-outline-success">
+
+View Details
+
+</a>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="info-card">
+
+<span class="badge bg-warning text-dark mb-3">
+
+Upcoming
+
+</span>
+
+<h4>
+
+Multi-Language Support
+
+</h4>
+
+<p>
+
+JavaScript,
+Go,
+Rust,
+PHP,
+and Kotlin support will be added.
+
+</p>
+
+<a href="#" class="btn btn-outline-warning">
+
+Roadmap
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= ACHIEVEMENTS ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Achievements
+
+</h2>
+
+</div>
+
+<div class="row g-4 text-center">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card">
+
+<i class="fas fa-award fa-3x text-warning mb-3"></i>
+
+<h3>
+
+100%
+
+</h3>
+
+<p>
+
+Automated Evaluation
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card">
+
+<i class="fas fa-shield-alt fa-3x text-success mb-3"></i>
+
+<h3>
+
+Secure
+
+</h3>
+
+<p>
+
+Docker Execution
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card">
+
+<i class="fas fa-clock fa-3x text-primary mb-3"></i>
+
+<h3>
+
+&lt;2 sec
+
+</h3>
+
+<p>
+
+Average Execution
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card">
+
+<i class="fas fa-chart-line fa-3x text-danger mb-3"></i>
+
+<h3>
+
+99.9%
+
+</h3>
+
+<p>
+
+Platform Reliability
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= PARTNER INSTITUTIONS ================= -->
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Designed For
+
+</h2>
+
+<p class="section-text">
+
+Suitable for educational institutions of every size.
+
+</p>
+
+</div>
+
+<div class="row g-4 text-center">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card">
+
+<i class="fas fa-university fa-3x text-primary mb-3"></i>
+
+<h5>
+
+Universities
+
+</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card">
+
+<i class="fas fa-school fa-3x text-success mb-3"></i>
+
+<h5>
+
+Engineering Colleges
+
+</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card">
+
+<i class="fas fa-laptop-code fa-3x text-warning mb-3"></i>
+
+<h5>
+
+Coding Bootcamps
+
+</h5>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="info-card">
+
+<i class="fas fa-chalkboard-teacher fa-3x text-danger mb-3"></i>
+
+<h5>
+
+Training Institutes
+
+</h5>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= COMMUNITY ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Join Our Community
+
+</h2>
+
+<p class="section-text">
+
+Learn, collaborate and grow with students,
+teachers and developers.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-4">
+
+<div class="info-card text-center">
+
+<i class="fab fa-github fa-4x text-dark mb-4"></i>
+
+<h4>
+
+GitHub
+
+</h4>
+
+<p>
+
+Explore the project repository and contribute.
+
+</p>
+
+<a href="#" class="btn btn-dark">
+
+View Repository
+
+</a>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="info-card text-center">
+
+<i class="fab fa-linkedin fa-4x text-primary mb-4"></i>
+
+<h4>
+
+LinkedIn
+
+</h4>
+
+<p>
+
+Stay updated with announcements
+and project news.
+
+</p>
+
+<a href="#" class="btn btn-primary">
+
+Follow
+
+</a>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="info-card text-center">
+
+<i class="fab fa-discord fa-4x text-info mb-4"></i>
+
+<h4>
+
+Community
+
+</h4>
+
+<p>
+
+Join discussions,
+ask questions,
+and collaborate.
+
+</p>
+
+<a href="#" class="btn btn-info text-white">
+
+Join Now
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= NEWSLETTER ================= -->
+
+<section class="py-5 bg-primary text-white">
+
+<div class="container">
+
+<div class="row align-items-center">
+
+<div class="col-lg-6">
+
+<h2>
+
+Subscribe to Our Newsletter
+
+</h2>
+
+<p>
+
+Receive updates about features,
+security improvements,
+and platform releases.
+
+</p>
+
+</div>
+
+<div class="col-lg-6">
+
+<form class="row g-2">
+
+<div class="col-md-8">
+
+<input
+type="email"
+class="form-control form-control-lg"
+placeholder="Enter your email">
+
+</div>
+
+<div class="col-md-4">
+
+<button
+class="btn btn-warning btn-lg w-100">
+
+Subscribe
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ================= DEVELOPMENT TEAM ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Meet the Team
+
+</h2>
+
+<p class="section-text">
+
+The people behind the development of Lab Auto Grader.
+
+</p>
+
+</div>
+
+<div class="row g-4 justify-content-center">
+
+<!-- Developer -->
+
+<div class="col-lg-5">
+
+<div class="info-card text-center">
+
+<img
+src="{{ url_for('static', filename='images/developer.jpg') }}"
+class="rounded-circle shadow mb-4"
+width="140"
+height="140"
+alt="Developer">
+
+<h3>
+
+Devanshu Ranjan Upadhyay
+
+</h3>
+
+<span class="badge bg-primary mb-3">
+
+Full Stack Developer
+
+</span>
+
+<p>
+
+Designed and developed the complete Lab Auto Grader platform
+using Flask, Docker, SQLite, Bootstrap 5 and Monaco Editor.
+
+</p>
+
+<div class="mt-3">
+
+<a href="#" class="btn btn-dark me-2">
+
+<i class="fab fa-github me-2"></i>
+
+GitHub
+
+</a>
+
+<a href="#" class="btn btn-primary">
+
+<i class="fab fa-linkedin me-2"></i>
+
+LinkedIn
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Guide -->
+
+<div class="col-lg-5">
+
+<div class="info-card text-center">
+
+<img
+src="{{ url_for('static', filename='images/guide.jpg') }}"
+class="rounded-circle shadow mb-4"
+width="140"
+height="140"
+alt="Guide">
+
+<h3>
+
+Dr. Umesh Kumar Pandey
+
+</h3>
+
+<span class="badge bg-success mb-3">
+
+Project Guide
+
+</span>
+
+<p>
+
+Provided academic guidance,
+technical direction and valuable support throughout
+the development lifecycle.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= DEVELOPMENT TIMELINE ================= -->
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Project Timeline
+
+</h2>
+
+<p class="section-text">
+
+The journey of building Lab Auto Grader.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-md-3">
+
+<div class="info-card text-center">
+
+<h2 class="text-primary">
+
+Phase 1
+
+</h2>
+
+<h5>
+
+Planning
+
+</h5>
+
+<p>
+
+Requirement gathering,
+system design and architecture.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="info-card text-center">
+
+<h2 class="text-success">
+
+Phase 2
+
+</h2>
+
+<h5>
+
+Development
+
+</h5>
+
+<p>
+
+Authentication,
+dashboards,
+question management and execution engine.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="info-card text-center">
+
+<h2 class="text-warning">
+
+Phase 3
+
+</h2>
+
+<h5>
+
+Testing
+
+</h5>
+
+<p>
+
+Docker execution,
+security testing and optimization.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="info-card text-center">
+
+<h2 class="text-danger">
+
+Phase 4
+
+</h2>
+
+<h5>
+
+Deployment
+
+</h5>
+
+<p>
+
+Final deployment,
+documentation and future improvements.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= PRODUCT ROADMAP ================= -->
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+Product Roadmap
+
+</h2>
+
+<p class="section-text">
+
+Upcoming features planned for future releases.
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-6">
+
+<div class="info-card">
+
+<h4>
+
+Version 2.0
+
+</h4>
+
+<ul>
+
+<li>AI Code Review</li>
+
+<li>Plagiarism Detection</li>
+
+<li>Interactive Coding Hints</li>
+
+<li>Advanced Analytics</li>
+
+<li>Cloud Deployment</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="info-card">
+
+<h4>
+
+Version 3.0
+
+</h4>
+
+<ul>
+
+<li>Android Application</li>
+
+<li>Video Solutions</li>
+
+<li>Code Collaboration</li>
+
+<li>Multi-University Support</li>
+
+<li>AI Interview Practice</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= SUCCESS STORY ================= -->
+
+<section class="py-5 bg-primary text-white">
+
+<div class="container text-center">
+
+<h2 class="display-5 fw-bold">
+
+Building the Future of Programming Education
+
+</h2>
+
+<p class="lead mt-4">
+
+Lab Auto Grader helps educational institutions automate
+programming laboratory evaluation, reduce manual work,
+improve learning outcomes and provide students with
+a professional coding experience.
+
+</p>
+
+<div class="mt-4">
+
+<a
+href="{{ url_for('landing.features') }}"
+class="btn btn-warning btn-lg me-3">
+
+Explore Features
+
+</a>
+
+<a
+href="{{ url_for('landing.contact') }}"
+class="btn btn-light btn-lg">
+
+Contact Us
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+<!-- ================= FOOTER ================= -->
+
+<footer class="bg-dark text-white pt-5 pb-3">
+
+<div class="container">
+
+<div class="row gy-4">
+
+<!-- About -->
+
+<div class="col-lg-4">
+
+<h4>
+
+<i class="fas fa-laptop-code text-info me-2"></i>
+
+Lab Auto Grader
+
+</h4>
+
+<p class="mt-3 text-light">
+
+A modern Programming Laboratory Automation System designed
+to automate code evaluation, improve programming education,
+and provide a secure coding environment using Docker and Monaco Editor.
+
+</p>
+
+<div class="mt-4">
+
+<a href="#" class="text-white me-3">
+
+<i class="fab fa-github fa-2x"></i>
+
+</a>
+
+<a href="#" class="text-white me-3">
+
+<i class="fab fa-linkedin fa-2x"></i>
+
+</a>
+
+<a href="#" class="text-white me-3">
+
+<i class="fab fa-youtube fa-2x"></i>
+
+</a>
+
+<a href="#" class="text-white">
+
+<i class="fab fa-discord fa-2x"></i>
+
+</a>
+
+</div>
+
+</div>
+
+<!-- Quick Links -->
+
+<div class="col-lg-2">
+
+<h5>
+
+Quick Links
+
+</h5>
+
+<ul class="list-unstyled mt-3">
+
+<li class="mb-2">
+
+<a
+href="{{ url_for('home') }}"
+class="text-decoration-none text-light">
+
+Home
+
+</a>
+
+</li>
+
+<li class="mb-2">
+
+<a
+href="{{ url_for('landing.about') }}"
+class="text-decoration-none text-light">
+
+About
+
+</a>
+
+</li>
+
+<li class="mb-2">
+
+<a
+href="{{ url_for('landing.features') }}"
+class="text-decoration-none text-light">
+
+Features
+
+</a>
+
+</li>
+
+<li class="mb-2">
+
+<a
+href="{{ url_for('landing.contact') }}"
+class="text-decoration-none text-light">
+
+Contact
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+<!-- Technologies -->
+
+<div class="col-lg-3">
+
+<h5>
+
+Technology Stack
+
+</h5>
+
+<ul class="list-unstyled mt-3">
+
+<li class="mb-2">
+
+<i class="fab fa-python text-warning me-2"></i>
+
+Python
+
+</li>
+
+<li class="mb-2">
+
+<i class="fas fa-fire text-danger me-2"></i>
+
+Flask
+
+</li>
+
+<li class="mb-2">
+
+<i class="fab fa-docker text-info me-2"></i>
+
+Docker
+
+</li>
+
+<li class="mb-2">
+
+<i class="fas fa-database text-success me-2"></i>
+
+SQLite
+
+</li>
+
+<li class="mb-2">
+
+<i class="fab fa-js text-warning me-2"></i>
+
+JavaScript
+
+</li>
+
+<li class="mb-2">
+
+<i class="fas fa-code text-primary me-2"></i>
+
+Monaco Editor
+
+</li>
+
+</ul>
+
+</div>
+
+<!-- Contact -->
+
+<div class="col-lg-3">
+
+<h5>
+
+Contact Information
+
+</h5>
+
+<p class="mt-3">
+
+<i class="fas fa-envelope text-info me-2"></i>
+
+devaup05@gmail.com
+
+</p>
+
+<p>
+
+<i class="fas fa-phone text-success me-2"></i>
+
++91 9044189390
+
+</p>
+
+<p>
+
+<i class="fas fa-map-marker-alt text-danger me-2"></i>
+
+Prayagraj, Uttar Pradesh, India
+
+</p>
+
+<p>
+
+<i class="fas fa-clock text-warning me-2"></i>
+
+Mon - Fri : 09:00 AM - 05:00 PM
+
+</p>
+
+</div>
+
+</div>
+
+<hr class="border-secondary my-4">
+
+<!-- Bottom Footer -->
+
+<div class="row align-items-center">
+
+<div class="col-md-6">
+
+<p class="mb-0">
+
+© 2026 Lab Auto Grader. All Rights Reserved.
+
+</p>
+
+</div>
+
+<div class="col-md-6 text-md-end">
+
+<p class="mb-0">
+
+Developed with
+
+<i class="fas fa-heart text-danger"></i>
+
+by
+
+<strong>
+
+Devanshu Ranjan Upadhyay
+
+</strong>
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</footer>
+
+<style>
+
+footer a{
+
+transition:.3s;
+
+}
+
+footer a:hover{
+
+color:#38bdf8 !important;
+
+padding-left:5px;
+
+}
+
+footer i{
+
+transition:.3s;
+
+}
+
+footer .fab:hover{
+
+transform:scale(1.2);
+
+}
+
+</style>
+<!-- ================= SCROLL TO TOP ================= -->
+
+<button
+id="scrollTopBtn"
+class="btn btn-primary rounded-circle shadow">
+
+<i class="fas fa-arrow-up"></i>
+
+</button>
+
+<style>
+
+#scrollTopBtn{
+
+position:fixed;
+
+bottom:25px;
+
+right:25px;
+
+width:55px;
+
+height:55px;
+
+display:none;
+
+z-index:9999;
+
+border-radius:50%;
+
+}
+
+.info-card{
+
+transition:.4s;
+
+}
+
+.info-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:0 20px 40px rgba(0,0,0,.15);
+
+}
+
+html{
+
+scroll-behavior:smooth;
+
+}
+
+</style>
+
+<!-- ================= BOOTSTRAP ================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ================= NAVBAR EFFECT ================= -->
+
+<script>
+
+window.addEventListener("scroll",function(){
+
+const navbar=document.querySelector(".navbar");
+
+if(window.scrollY>50){
+
+navbar.style.background="rgba(15,23,42,.98)";
+
+navbar.style.boxShadow="0 10px 25px rgba(0,0,0,.2)";
+
+}else{
+
+navbar.style.background="rgba(15,23,42,.95)";
+
+navbar.style.boxShadow="none";
+
+}
+
+});
+
+</script>
+
+<!-- ================= SCROLL TO TOP ================= -->
+
+<script>
+
+const scrollBtn=document.getElementById("scrollTopBtn");
+
+window.addEventListener("scroll",function(){
+
+if(window.scrollY>300){
+
+scrollBtn.style.display="block";
+
+}else{
+
+scrollBtn.style.display="none";
+
+}
+
+});
+
+scrollBtn.onclick=function(){
+
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
+};
+
+</script>
+
+<!-- ================= COUNTER ANIMATION ================= -->
+
+<script>
+
+const counters=document.querySelectorAll(".counter");
+
+const animateCounter=(counter)=>{
+
+let target=parseInt(counter.innerText.replace(/[^0-9]/g,""));
+
+if(isNaN(target)) return;
+
+let count=0;
+
+const increment=Math.max(1,Math.ceil(target/80));
+
+function update(){
+
+count+=increment;
+
+if(count<target){
+
+counter.innerText=count+"+";
+
+requestAnimationFrame(update);
+
+}else{
+
+const original=counter.dataset.original || counter.textContent;
+
+counter.textContent=original;
+
+}
+
+}
+
+update();
+
+};
+
+const counterObserver=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+animateCounter(entry.target);
+
+counterObserver.unobserve(entry.target);
+
+}
+
+});
+
+},{threshold:0.5});
+
+counters.forEach(counter=>{
+
+counter.dataset.original=counter.textContent;
+
+counterObserver.observe(counter);
+
+});
+
+</script>
+
+<!-- ================= FADE-IN ANIMATION ================= -->
+
+<script>
+
+const cards=document.querySelectorAll(".info-card");
+
+const fadeObserver=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.style.opacity="1";
+
+entry.target.style.transform="translateY(0)";
+
+fadeObserver.unobserve(entry.target);
+
+}
+
+});
+
+},{threshold:0.15});
+
+cards.forEach(card=>{
+
+card.style.opacity="0";
+
+card.style.transform="translateY(40px)";
+
+card.style.transition="all .6s ease";
+
+fadeObserver.observe(card);
+
+});
+
+</script>
+
+<!-- ================= BUTTON RIPPLE EFFECT ================= -->
+
+<script>
+
+document.querySelectorAll(".btn").forEach(button=>{
+
+button.addEventListener("click",function(e){
+
+const ripple=document.createElement("span");
+
+const rect=this.getBoundingClientRect();
+
+const size=Math.max(rect.width,rect.height);
+
+ripple.style.width=size+"px";
+
+ripple.style.height=size+"px";
+
+ripple.style.left=(e.clientX-rect.left-size/2)+"px";
+
+ripple.style.top=(e.clientY-rect.top-size/2)+"px";
+
+ripple.style.position="absolute";
+
+ripple.style.borderRadius="50%";
+
+ripple.style.background="rgba(255,255,255,.35)";
+
+ripple.style.transform="scale(0)";
+
+ripple.style.animation="ripple .6s linear";
+
+ripple.style.pointerEvents="none";
+
+this.style.position="relative";
+
+this.style.overflow="hidden";
+
+this.appendChild(ripple);
+
+setTimeout(()=>ripple.remove(),600);
+
+});
+
+});
+
+</script>
+
+<style>
+
+@keyframes ripple{
+
+to{
+
+transform:scale(4);
+
+opacity:0;
+
+}
+
+}
+
+</style>
+
+</body>
+
+</html>
